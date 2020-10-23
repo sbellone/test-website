@@ -1,0 +1,1140 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Full Text Search in your Database: Algolia vs Elasticsearch - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="We created Algolia to answer the shortcomings of database full text search. It&#039;s a SaaS API dedicated to solving app and web developers&#039; struggles."/>
+<meta name="robots" content="noodp"/>
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=1535' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Ffull-text-search-in-your-database-algolia-versus-elasticsearch%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Ffull-text-search-in-your-database-algolia-versus-elasticsearch%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=1B8A023CF6D08F2E220B71081514D713');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Full Text Search in your Database: Algolia vs Elasticsearch"/>
+  <meta property="og:url" content="https://blog.algolia.com/full-text-search-in-your-database-algolia-versus-elasticsearch/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Most applications and websites are built on top of a database. It can be a traditional relational database like MySQL or a NoSQL database like MongoDB. The problem is that none of these databases offer a satisfying full text search feature. Although they often have similar features (using LIKE opera"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png"/>
+  <meta property="article:published_time" content="2013-09-06T15:13:36+00:00"/>
+  <meta property="article:modified_time" content="2015-05-22T22:17:06+00:00" />
+  <meta property="og:updated_time" content="2015-05-22T22:17:06+00:00" />
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Full Text Search in your Database: Algolia vs Elasticsearch"/>
+  <meta itemprop="description" content="Most applications and websites are built on top of a database. It can be a traditional relational database like MySQL or a NoSQL database like MongoDB. The problem is that none of these databases offer a satisfying full text search feature. Although they often have similar features (using LIKE opera"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Full Text Search in your Database: Algolia vs Elasticsearch"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/full-text-search-in-your-database-algolia-versus-elasticsearch/"/>
+  <meta name="twitter:description" content="Most applications and websites are built on top of a database. It can be a traditional relational database like MySQL or a NoSQL database like MongoDB. The problem is that none of these databases offer a satisfying full text search feature. Although they often have similar features (using LIKE opera"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-1535 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-1535" class="cf post-1535 post type-post status-publish format-standard has-post-thumbnail hentry category-technology tag-search tag-ux" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Full Text Search in your Database: Algolia vs Elasticsearch</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/25760a5d4e793e491f26da5db64bb738?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">julien</span> |
+                    <time class="updated entry-time" datetime="2013-09-06" itemprop="datePublished">September 6, 2013</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/full-text-search-in-your-database-algolia-versus-elasticsearch/" title="Full Text Search in your Database: Algolia vs Elasticsearch">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png 720w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">Most applications and websites are built on top of a database. It can be a traditional relational database like MySQL or a NoSQL database like MongoDB. The problem is that none of these databases offer a satisfying full text search feature. Although they often have similar features (using LIKE operand in MySQL, using text index in MongoDB), these are poor alternatives, as all developers have experienced.</p>
+<p>Algolia was built to answer the shortcomings of database full-text search. It is a SaaS API dedicated to solving application and website developers&#8217; struggles in providing end users with a fast, reliable, and relevant search feature.</p>
+<p>Until now, Elasticsearch has been the fall-back solution for developers. Although a beautiful product for big data analysis or document search, it hasn’t been designed for object searches. Algolia has. The purpose of this blog post is to answer a question we’re frequently asked: If Algolia brings a specific answer when Elasticsearch offers a broad set of tools, how do they compare for database search?</p>
+<p>We decided to put both to the test. Using the IMDB database of 400k actors and 2M movies/TV series, we decided to build and measure the performance of both search services keeping everything else constant. We didn&#8217;t limit our test to crude keyword search but aimed at building a first-class user experience, returning instant results after each keystroke, factoring popularity in the ranking, and tolerating user mistakes gracefully.</p>
+<p><span id="more-1535"></span></p>
+<h1><a id="what-we-learned" class="anchor" href="#what-we-learned" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>What we learned</h1>
+<p>In this first section, we sum up our findings. Technical details about the test are described in the <a href="#UnderTheHood">second part of this article.</a></p>
+<h2><a id="raw-performance" class="anchor" href="#raw-performance" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Raw performance</h2>
+<p>In the benchmark below, you can see Algolia consistently performing between 12 and 200 times faster than Elasticsearch<em> – <i>for every search query we performed.</i></em></p>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th>Algolia 1 Shard</th>
+<th>Algolia 5 Shards</th>
+<th>ES 1 Shard</th>
+<th>ES 5 Shards</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>geo</td>
+<td>&lt; 1ms</td>
+<td>2ms</td>
+<td>101ms</td>
+<td>36ms</td>
+</tr>
+<tr>
+<td>george clo</td>
+<td>2ms</td>
+<td>3ms</td>
+<td>121ms</td>
+<td>51ms</td>
+</tr>
+<tr>
+<td>b</td>
+<td>&lt; 1ms</td>
+<td>2ms</td>
+<td>147ms</td>
+<td>60ms</td>
+</tr>
+<tr>
+<td>batman</td>
+<td>2ms</td>
+<td>2ms</td>
+<td>94ms</td>
+<td>29ms</td>
+</tr>
+<tr>
+<td>world w</td>
+<td>5ms</td>
+<td>2ms</td>
+<td>134ms</td>
+<td>68ms</td>
+</tr>
+<tr>
+<td>e</td>
+<td>&lt; 1ms</td>
+<td>2ms</td>
+<td>202ms</td>
+<td>81ms</td>
+</tr>
+<tr>
+<td>emilia</td>
+<td>&lt; 1ms</td>
+<td>2ms</td>
+<td>102ms</td>
+<td>31ms</td>
+</tr>
+<tr>
+<td>alexandre b</td>
+<td>18ms</td>
+<td>9ms</td>
+<td>243ms</td>
+<td>109ms</td>
+</tr>
+</tbody>
+</table>
+<p>We understand however that it’s not all about performance, and here’s why: do we want to give the user a search result in the quickest possible time or do we want to give the user <i>what they are looking for</i> in the quickest possible time? We decided for the latter.</p>
+<h2><a id="user-experience" class="anchor" href="#user-experience" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>User Experience</h2>
+<p>There are a lot of things that should happen “behind the scenes” that result in the user quickly finding what it is they are looking for:</p>
+<ol>
+<li><strong>Instant Search</strong>. Users have been used to search engines auto-completing queries, instead of suggesting actual results. Here we want to go a step further: index-wide results are presented and updated every time a key is entered, in real time. Type a letter and get the best result immediately.</li>
+<li><strong>Balance Relevance and Popularity</strong>. In the IMDB example, if we search for “geor”, then we want all results where the actor’s name is ‘George’ (i.e. relevance) and we want ‘George Clooney’ to be top of that list because he is the most popular (defined by how many times users have visited his page/looked him up on IMDB). While straightforward with Algolia, mixing relevance and popularity is nothing short of impossible in Elasticsearch. Either you sort by relevance or by using a popularity attribute, you cannot mix both.</li>
+<li><strong>Handle Typos Intelligently</strong>. Users often mistype when entering search queries. A good user experience would be to find ‘George Clooney’ when searching for ‘gorge cloney’ for example. Algolia provides out-of-the-box typo-tolerance that works on both words and prefixes, and intelligently highlights the results. This allows end-users to understand search results even with typos. Unfortunately, Elasticsearch fuzzy matching does not work out of the box, is complex to customize, and does not provide the ability to highlight prefixes.</li>
+</ol>
+<h2><a id="performance-or-user-experience-both" class="anchor" href="#performance-or-user-experience-both" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Performance or User Experience? Both.</h2>
+<p>By doing a terrific job on database full-text search, having intuitive configuration of both relevance and matching and by having robust typo tolerance that works out of the box, Algolia helps the user get what they are looking for in the quickest time possible. On desktop but on mobile in particular, this makes a huge difference on time spent executing a search.</p>
+<p>Elasticsearch is a great toolbox that can be used to build both intranet search and big data analytics. However, addressing such diverse use cases leads to a difficult integration. One size doesn’t fit all. Algolia’s focus on object search makes it much better for this purpose: faster integration, better performance, superior user experience. And don’t forget you also need to host your Elasticsearch somewhere.</p>
+<h1><a id="under-the-hood" class="anchor" href="#under-the-hood" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><a name="UnderTheHood"></a>Under the hood</h1>
+<p>That&#8217;s all good but the most technical of you may want to know more about the actual implementation of this benchmark. Here we go.</p>
+<p>In order to have a point of reference, we used the same hardware: a Xeon E3 1245v2 (Quad-core 3.4Ghz) with 32GB of RAM and 240GB of SSD (2 SSD in raid 0). We did a test with 1 shard and another with 5 shards, and used Elasticsearch version 0.90.2 which is based on Lucene 4.3.1. Note that the number of shards is not exposed in the Algolia API since it is automatically determined in the back-end for scalability and is not triggered for small datasets.</p>
+<h2><a id="data-set" class="anchor" href="#data-set" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Data Set</h2>
+<p>At the end of July 2013, we extracted from IMDB a list of 400k actors/actresses and 2M movies/TV series. In order to factor popularity in the relevance, we computed an integer rank for each object with the following approaches:</p>
+<ul>
+<li>Actors: We used the weekly ranking of IMDB at the end of July for actors and actresses. The result was a rank of 1 for the best male or female actor and then an increasing value according to the IMDB weekly rank.</li>
+<li>Movies: We sorted movies according to the following formula: log(nb_voters) * rating. We then chose to use the position of movie in the sorted vector as a rank (1 for the best movie).</li>
+</ul>
+<p>At this step, we had a set of 2.4M entries from IMDB containing actors and movies with a indication of relevance. Check out the data set with <a href="http://demos.algolia.com/imdb/imdb.json.bz2">all objects and ranks in JSON</a>.</p>
+<p>Here is an example of a movie:</p>
+<pre class="lang:js decode:true">{
+    "name": "The Shawshank Redemption",
+    "url": "/title/tt0111161/",
+    "rating": 9.3,
+    "year": "(1994)",
+    "nb_voters": 1010572,
+    "rank": 1
+}</pre>
+<p>An example of a TV Series:</p>
+<pre class="lang:js decode:true">{
+    "name": "Game of Thrones",
+    "url": "/title/tt2178784/",
+    "rating": 9.8,
+    "year": "(2011 TV Series)",
+    "nb_voters": 13312,
+    "episode": "The Rains of Castamere",
+    "rank": 330
+}</pre>
+<p>And an example of an actor:</p>
+<pre class="lang:js decode:true">{
+    "name": "George Clooney",
+    "url": "/name/nm0000123/",
+    "rank": 109
+}</pre>
+<p>To have a relevant search, we wanted to search first in the &#8216;name&#8217;, then in the &#8216;year&#8217; and finally in the &#8216;episode&#8217; attribute. We also wanted queries to match across the three attributes to be able to answer searches like &#8216;Shawshank Redemption 1994&#8217; or &#8216;Game of Thrones rains of castamere&#8217;</p>
+<h2><a id="indexing" class="anchor" href="#indexing" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Indexing</h2>
+<p>Algolia and Elasticsearch are schema less and directly support indexing of our objects. To do the indexing on Algolia we used its <a title="Algolia Search API Client for Ruby" href="https://github.com/algolia/algoliasearch-client-ruby" target="_blank">ruby client</a> with the following code:</p>
+<pre class="lang:ruby decode:true">index = Algolia::Index.new("imdb")
+batch = JSON.parse(File.read("imdb.json"))
+index.add_objects(batch)</pre>
+<p>For Elasticsearch, we converted our objects in the bulk indexing format. We wrote a small ruby script to split data in several files and then imported them with CURL.</p>
+<pre class="lang:ruby decode:true">require 'json'
+
+count = 0
+output_count = 1
+output = File.open("final-es-bulk-1.txt", "w")
+File.open("imdb.json", "r:utf-8") do |input|
+    imdb = JSON.parse(input.read);
+    imdb.each do |entry|
+        count += 1
+        if ((count % 200000) == 0) then
+            output.close
+            output_count += 1
+            output = File.open("final-es-bulk-" + output_count.to_s + ".txt", "w")
+        end
+        meta = {}
+        meta["index"] = {}
+        meta["index"]["_index"] = "imdb"
+        meta["index"]["_type"] = "imdb"
+        meta["index"]["_id"] = count.to_s
+        output.write(meta.to_json)
+        output.write("n")
+        output.write(entry.to_json)
+        output.write("n")
+    end
+end
+output.close</pre>
+<p>To assess performance, we directly imported data locally on the indexing host. Here were the indexing times:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>1 Shard</th>
+<th>5 Shards</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Algolia</td>
+<td>82s</td>
+<td>38s</td>
+</tr>
+<tr>
+<td>ElasticSearch</td>
+<td>148s</td>
+<td>68s</td>
+</tr>
+</tbody>
+</table>
+<p style="margin: 20px 30px; padding: 10px; border: 1px solid #ccc;"><strong>Sidenote: Why we didn&#8217;t use a suggest plugin for Elasticsearch<br />
+</strong>A shortcut to providing instant search in Elasticsearch is to use the <a href=" http://www.elasticsearch.org/guide/reference/api/search/completion-suggest/">autocomplete feature</a> or<a href="https://github.com/spinscale/elasticsearch-suggest-plugin"> suggest plugin</a>. These modules, much faster than standard search, are used in several sites such as <a href="https://soundcloud.com/">SoundCloud</a>. They however don&#8217;t support multi attributes search and thus cannot be used in our situation. What&#8217;s more, they may hinder the user experience. In SoundCloud for example, you can get a suggestion for &#8220;Pink Floy The Dark Side of the moon&#8221; if you enter the text in that exact order, but if you enter &#8220;Dark side of the moon Pink Floyd&#8221;, you won&#8217;t get any result. Annoying.</p>
+<h2><a id="first-query" class="anchor" href="#first-query" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>First Query</h2>
+<p>Indexing is actually very easy with the two solutions!</p>
+<p>With Algolia, a single line of ruby was enough to perform our first search:</p>
+<pre class="lang:ruby decode:true">res = index.search("batman")</pre>
+<p>For ElasticSearch, we selected the <a href="https://github.com/karmi/tire">tire ruby client</a> and our query translated in:</p>
+<pre class="lang:ruby decode:true">s = Tire.search "imdb" do
+    query do
+        string "batman"
+    end
+end</pre>
+<h2><a id="searchable-content" class="anchor" href="#searchable-content" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Searchable content</h2>
+<p>Now that we had indexed all our data, we wanted to specify in which attribute to search. As explained before, we wanted to search in these three attributes: &#8216;name&#8217;, then &#8216;year&#8217; and finally &#8216;episode&#8217;. Other attributes should not be used for search.</p>
+<p>With Algolia, we can specify the list of fields in the index settings via the « attributesToIndex » parameters, they are sorted by decreasing order of importance so you do not need any to set any boost. A single line of code was enough to change them:</p>
+<pre class="lang:ruby decode:true">index.set_settings({"attributesToIndex" =&gt; ["name", "year", "episode"]})</pre>
+<p>With Elasticsearch, we can specify fields directly in the query and use boosts for each of them. The choice of the boost value is important as it directly impacts the &#8220;_score&#8221; value. It is, however, an opaque value that requires a trial and error process to get right.</p>
+<pre class="lang:ruby decode:true">s = Tire.search "imdb" do
+    query do
+        string "batman", :fields =&gt; ["name^5", "year^2", "episode"]
+    end
+end</pre>
+<h2><a id="customize-ranking" class="anchor" href="#customize-ranking" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Customize ranking</h2>
+<p>Here, the first difficulties started. As a reminder, we wanted to take into account the popularity of actors and movies, so that the query ‘geo’ would return ‘George Clooney’ as first result since it is the most famous actor starting with ‘geo’. To do so, we used the rank value that we computed.</p>
+<p>In Algolia, we simply changed the customRanking setting:</p>
+<pre class="lang:ruby decode:true">index.set_settings({"customRanking" =&gt; ["asc(rank)"]})</pre>
+<p>To add a sort criteria in the query of ElasticSearch, we modified the query directly:</p>
+<pre class="lang:ruby decode:true">s = Tire.search "imdb" do
+    query do
+        string "the rains", 
+        :fields =&gt; ["name^5", "year^2", "episode"],
+        :default_operator =&gt; "AND"
+    end 
+    sort do 
+        by :rank, "asc" 
+        by :_score 
+    end 
+end</pre>
+<p>This sorting configuration might seem pretty explicit, but it is in fact quite dangerous as it conflicts with the boost on fields. To better understand the problem, let&#8217;s look at the query &#8216;the rains&#8217;:</p>
+<pre class="lang:js decode:true">"hits": [
+{
+    "_index": "imdb",
+    "_type": "imdb",
+    "_id": "330",
+    "_score": 1.5647705,
+    "_source": {
+        "name": "Game of Thrones",
+        "url": "/title/tt2178784/",
+        "rating": 9.8,
+        "year": "(2011 TV Series)",
+        "nb_voters": 13312,
+        "episode": "The Rains of Castamere",
+        "rank": 330
+    },
+    "sort": [
+        330,
+        1.5647705
+    ]
+},
+{
+    "_index": "imdb",
+    "_type": "imdb",
+    "_id": "21986",
+    "_score": 7.3712673,
+    "_source": {
+         "name": "Before the Rains",
+         "url": "/title/tt0870195/",
+         "rating": 6.6,
+         "year": "(2007)",
+         "nb_voters": 1299,
+         "rank": 15188
+    },
+    "sort": [
+        15188,
+        7.3712673
+    ]
+},
+{
+    "_index": "imdb",
+    "_type": "imdb",
+    "_id": "24324",
+    "_score": 7.371266,
+    "_source": {
+        "name": "The Rains Came",
+        "url": "/title/tt0031835/",
+        "rating": 6.8,
+        "year": "(1939)",
+        "nb_voters": 881,
+        "rank": 16232
+    },
+    "sort": [
+        16232,
+        7.371266
+    ]
+},
+...</pre>
+<p>It might be counterintuitive that the result that matches in the &#8220;episode&#8221; attribute is found before results in the &#8220;name&#8221; attribute without respecting the boost. The boost has an impact on the &#8220;_score&#8221; float value that is smaller when it matches the episode attribute and not the name. The problem here is that merging the user defined &#8220;rank&#8221; with the floating value &#8220;_score&#8221; is complex:</p>
+<ul>
+<li>If  &#8220;_score&#8221; is before &#8220;rank&#8221; in the sort criteria, &#8220;rank&#8221; is not used since each hit has a different float value for &#8220;_score&#8221;.</li>
+<li>If &#8220;rank&#8221; is before &#8220;_score&#8221; in the sort criteria, attribute order is not taken into account.</li>
+</ul>
+<p>In Algolia the ranking is handled differently. Instead of having a unique float value for ranking, we compute a set of integer values that are explicit and easy to understand. You can see them on the first three results of the query &#8216;the rains&#8217;:</p>
+<pre class="lang:js decode:true">"hits": [
+{
+    "name": "The Rains Came",
+    "url": "/title/tt0031835/",
+    "rating": 6.8,
+    "year": "(1939)",
+    "nb_voters": 881,
+    "rank": 16232,
+    "objectID": "24324",
+    "_highlightResult": {
+        "name": {
+            "value": "&lt;em&gt;The&lt;/em&gt; &lt;em&gt;Rains&lt;/em&gt; Came",
+            "matchLevel": "full"
+        },
+        "year": {
+            "value": "(1939)",
+            "matchLevel": "none"
+        }
+    },
+    "_rankingInfo": {
+        "nbTypos": 0,
+        "firstMatchedWord": 0,
+        "proximityDistance": 1,
+        "userScore": 2379657,
+        "geoDistance": 0,
+        "geoPrecision": 1,
+        "nbExactWords": 2
+    }
+},
+{
+    "name": "The Rains of Ranchipur",
+    "url": "/title/tt0048538/",
+    "rating": 5.7,
+    "year": "(1955)",
+    "nb_voters": 495,
+    "rank": 25569,
+    "objectID": "62175",
+    "_highlightResult": {
+        "name": {
+             "value": "&lt;em&gt;The&lt;/em&gt; &lt;em&gt;Rains&lt;/em&gt; of Ranchipur",
+             "matchLevel": "full"
+        },
+        "year": {
+            "value": "(1955)",
+            "matchLevel": "none"
+        }
+    },
+    "_rankingInfo": {
+        "nbTypos": 0,
+        "firstMatchedWord": 0,
+        "proximityDistance": 1,
+        "userScore": 2323136,
+        "geoDistance": 0,
+        "geoPrecision": 1,
+        "nbExactWords": 2
+    }
+},
+{
+    "name": "Before the Rains",
+    "url": "/title/tt0870195/",
+    "rating": 6.6,
+    "year": "(2007)",
+    "nb_voters": 1299,
+    "rank": 15188,
+    "objectID": "21986",
+    "_highlightResult": {
+        "name": {
+            "value": "Before &lt;em&gt;the&lt;/em&gt; &lt;em&gt;Rains&lt;/em&gt;",
+            "matchLevel": "full"
+        },
+        "year": {
+            "value": "(2007)",
+            "matchLevel": "none"
+        }
+
+    },
+    "_rankingInfo": {
+        "nbTypos": 0,
+        "firstMatchedWord": 1,
+        "proximityDistance": 1,
+        "userScore": 2384081,
+        "geoDistance": 0,
+        "geoPrecision": 1,
+        "nbExactWords": 2
+    }
+},
+...</pre>
+<p>The ordering of attributes is strictly respected. As we didn&#8217;t specify otherwise, results are ranked with the default ordering that performs:</p>
+<ol>
+<li><span style="line-height: 13px;">First a sort by number of typos (defined by nbTypos value, in increasing order)</span></li>
+<li>Then, a sort by geo-distance. It is only used when the query is done inside a given geographic area and is applicable in this case.</li>
+<li>Then, a sort by proximity between matched query words in objects (defined by proximityDistance, in increasing order). If query words are next to each other, the value is 1, is there is one word between two query words, the value is 2, etc.</li>
+<li>Then, a sort according to the matched attribute and the position of the word in the attribute (defined by firstMatchedWord, in increasing order). This is the criteria that respect the order of attributes defined in &#8220;attributesToIndex&#8221; setting.</li>
+<li>Then, a sort on the number of exact words that matched (defined by nbExactWords, by decreassing order). It is often relevant since last query word is interpreted as prefixe by default.</li>
+<li>Finally, a sort by user provided custom ranking (defined by customScore attribute, by decreasing order).</li>
+</ol>
+<p>This explicit way of ranking results gives you a full understanding of how results are ranked, by opposition to having a float value that is very difficult to understand. For example in the two first results, all integers are identical except for the &#8220;userScore&#8221;, which indicates that the custom ranking was used to make the difference between these two objects.</p>
+<p>The most important thing about Algolia ranking is that you are able to easily customize it without giving up other criteria. In this case, we introduced a popularity rank on movies/actors while still considering matching attribute as more important in the overall ranking rules. The ordering of criteria can of course be changed if we had wanted to consider the custom ranking score more important than the matching attribute.</p>
+<h2><a id="instant-search" class="anchor" href="#instant-search" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Instant Search</h2>
+<p>Going further,  we wanted to provide an Instant Search, also called search-as-you-type. In order to do that, we needed to interpret the last query word as a prefix.</p>
+<p>In ElasticSearch, you can enable wildcards and add one at the end of the last query word, here is an example with the query &#8216;word w&#8217;:</p>
+<pre class="lang:ruby decode:true">s = Tire.search "imdb" do
+    query do
+        string "world w*", 
+        :default_operator =&gt; "AND", 
+        :analyze_wildcard =&gt; true, 
+        :fields =&gt; ["name^5", "year^2", "episode"]
+    end
+    sort do
+        by :rank, "asc"
+        by :_score
+    end
+end</pre>
+<p>Wildcards in ElasticSearch are not exact and are performed in an approximative way (there is a limit in the number of words a prefix query can be expended to).</p>
+<p>In Algolia prefix queries are exact, no approximation is performed. By default last query word is considered as a prefix but you can easily change this behavior to have all words interpreted as a prefix in the index settings:</p>
+<pre class="lang:ruby decode:true">index.set_settings({"queryType" =&gt; "prefixAll"})</pre>
+<h2><a id="typo-tolerance" class="anchor" href="#typo-tolerance" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Typo-tolerance</h2>
+<p>The final step was to enable fuzzy search in order to tolerate user mistakes.</p>
+<p>In both products, typo tolerance (or fuzzy search) is defined by a <a href="http://en.wikipedia.org/wiki/Levenshtein_distance" target="_blank">Levenshtein-distance</a> between query words and hit words. For Asian languages (Chinese, Japanese, Korean), Levenshtein-distance is known to be inefficient and Algolia applies a different strategy that for example considers transformation in simplified Chinese as a typo of Traditional Chinese and vice versa.</p>
+<p>On our data-set, levenshtein-distance is a good measure of typos.</p>
+<p>In Elasticsearch, you can use the Lucene fuzzy operator &#8216;~&#8217; on each query word to apply a Levenshtein-distance with the number of typos you want to tolerate (for example &#8216;george~1 clooney~1&#8217; means that you can tolerate one typo on &#8216;george&#8217; and 1 typo on &#8216;clooney&#8217;).</p>
+<p>Unfortunately, you cannot combine the fuzzy operator with a wildcard operator, so you cannot apply a fuzzy search on a prefix and thus have typo-tolerance on the last query word. In order to keep the Instant-Search feature, we did a wildcard search on last query word and applied fuzzy search on other query words.</p>
+<p>In Algolia, typo tolerance works out-of-the-box and you can define the size of the word needed to allow one or two typos with these two index settings:</p>
+<ul>
+<li>minWordSizefor1Typo: minimum number of letters in a word/prefix to tolerate one typo (defaults is 3)</li>
+<li>minWordSizefor2Typos: minimum number of letters in a word/prefix to tolerate two typos (default is 7)</li>
+</ul>
+<p>Here is for example the first result of the query &#8216;alexandre~1 b*&#8217; in ElasticSearch:</p>
+<pre class="lang:js decode:true">{
+    "_index": "imdb",
+    "_type": "imdb",
+    "_id": "2152873",
+    "_score": 1.8949691,
+    "_source": {
+        "name": "Alexandra Breckenridge",
+        "url": "/name/nm1020036/",
+        "rank": 1015
+    },
+    "highlight": {
+        "name": [
+            "&lt;em&gt;Alexandra&lt;/em&gt; &lt;em&gt;Breckenridge&lt;/em&gt;"
+        ]
+    },
+    "sort": [
+        1015,
+        1.8949691
+    ]
+}</pre>
+<p>And the first result for the query &#8216;alexandre b&#8217; in Algolia:</p>
+<pre class="lang:js decode:true">{
+    "name": "Alexandre Bustillo",
+    "url": "/name/nm2376614/",
+    "rank": 19110,
+    "objectID": "2070968",
+    "_highlightResult": {
+        "name": {
+            "value": "&lt;em&gt;Alexandre&lt;/em&gt; &lt;em&gt;B&lt;/em&gt;ustillo",
+            "matchLevel": "full"
+        }
+    }
+}</pre>
+<p>We can see that Elasticsearch misses results with &#8216;Alexandre&#8217; because it does not sort results by number of typos. This is a huge problem to get a good ranking when accepting user mistakes.</p>
+<p>But Algolia goes even further and allows typos on prefixes. Here are the first 3 results for the query &#8216;gorge clon&#8217; in Algolia. The &#8220;nbTypos&#8221; element indicates the number of typos corrected. As you can see, corrected parts of the words are highlighted, which is essential for the end-user to understand why such hits are retrieved. For the first object, &#8216;gorge&#8217; matched &#8216;george&#8217; (count for one typo since the Levenshtein-Distance between the two words is 1) and &#8216;clon&#8217; matched the prefix &#8216;Cloon&#8217; (also count for one typo since the Levenshtein-Distance between the two words is 1).</p>
+<pre class="lang:js decode:true">{
+    "name": "George Clooney",
+    "url": "/name/nm0000123/",
+    "rank": 109,
+    "objectID": "2051967",
+    "_highlightResult": {
+        "name": {
+           "value": "&lt;em&gt;George&lt;/em&gt; &lt;em&gt;Cloon&lt;/em&gt;ey",
+           "matchLevel": "full"
+        }
+    },
+    "_rankingInfo": {
+        "nbTypos": 2,
+        "firstMatchedWord": 0,
+        "proximityDistance": 1,
+        "userScore": 2436116,
+        "geoDistance": 0,
+        "geoPrecision": 1,
+        "nbExactWords": 0
+    }
+},
+{
+    "name": "George Clinton",
+    "url": "/name/nm1093741/",
+    "rank": 14413,
+    "objectID": "2066271",
+    "_highlightResult": {
+        "name": {
+            "value": "&lt;em&gt;George&lt;/em&gt; &lt;em&gt;Clin&lt;/em&gt;ton",
+            "matchLevel": "full"
+        }
+     },
+     "_rankingInfo": {
+        "nbTypos": 2,
+        "firstMatchedWord": 0,
+        "proximityDistance": 1,
+        "userScore": 2387279,
+        "geoDistance": 0,
+        "geoPrecision": 1,
+        "nbExactWords": 0
+    }
+},
+{
+    "name": "George Clinton: The Mothership Connection",
+    "url": "/title/tt0167955/",
+    "rating": 8.5,
+    "year": "(1998 Documentary)",
+    "nb_voters": 43,
+    "rank": 28215,
+    "objectID": "85918",
+    "_highlightResult": {
+        "name": {
+            "value": "&lt;em&gt;George&lt;/em&gt; &lt;em&gt;Clin&lt;/em&gt;ton: The Mothership Connection",
+            "matchLevel": "full"
+        },
+        "year": {
+            "value": "(1998 Documentary)",
+            "matchLevel": "none"
+        }
+    },
+    "_rankingInfo": {
+        "nbTypos": 2,
+        "firstMatchedWord": 0,
+        "proximityDistance": 1,
+        "userScore": 2294113,
+        "geoDistance": 0,
+        "geoPrecision": 1,
+        "nbExactWords": 0
+    }
+}</pre>
+<p>Algolia provides out-of-the-box typo-tolerance that works on both words and prefixes, and does a smart highlighting of results according to typo tolerance. This allows end-users to understand search results even with typos. Unfortunately Elasticsearch fuzzy matching is more complex to customize and does not provide the ability to highlight prefixes.</p>
+<h2><a id="search-performance" class="anchor" href="#search-performance" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Search Performance</h2>
+<p>We did several search queries to evaluate performance on the IMDB data set. In Algolia we used all features including typo-tolerance on prefix. In Elasticsearch we used Instant-Search queries with typo-tolerance except for the last query word (we cannot apply typo tolerance on the last word since it is a prefix).</p>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th>Algolia 1 Shard</th>
+<th>Algolia 5 Shards</th>
+<th>ES 1 Shard</th>
+<th>ES 5 Shards</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>geo</td>
+<td>&lt; 1ms</td>
+<td>2ms</td>
+<td>101ms</td>
+<td>36ms</td>
+</tr>
+<tr>
+<td>george clo</td>
+<td>2ms</td>
+<td>3ms</td>
+<td>121ms</td>
+<td>51ms</td>
+</tr>
+<tr>
+<td>b</td>
+<td>&lt; 1ms</td>
+<td>2ms</td>
+<td>147ms</td>
+<td>60ms</td>
+</tr>
+<tr>
+<td>batman</td>
+<td>2ms</td>
+<td>2ms</td>
+<td>94ms</td>
+<td>29ms</td>
+</tr>
+<tr>
+<td>world w</td>
+<td>5ms</td>
+<td>2ms</td>
+<td>134ms</td>
+<td>68ms</td>
+</tr>
+<tr>
+<td>e</td>
+<td>&lt; 1ms</td>
+<td>2ms</td>
+<td>202ms</td>
+<td>81ms</td>
+</tr>
+<tr>
+<td>emilia</td>
+<td>&lt; 1ms</td>
+<td>2ms</td>
+<td>102ms</td>
+<td>31ms</td>
+</tr>
+<tr>
+<td>alexandre b</td>
+<td>18ms</td>
+<td>9ms</td>
+<td>243ms</td>
+<td>109ms</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<h1><a id="conclusion" class="anchor" href="#conclusion" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h1>
+<p>Elasticsearch is a wonderful tool for Big Data analytics, but it is very difficult to reach a good relevance with it on database search. You can try to add some logic on top of Elasticsearch or try to reorder manually results for some queries, but it’s tedious work that continuously needs to be tuned. Algolia on the other hand focuses on getting a very good relevance with minimal configuration. While not optimal for all use cases, it makes it particularly appropriate for database search.</p>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Ffull-text-search-in-your-database-algolia-versus-elasticsearch%2F&amp;t=Full+Text+Search+in+your+Database%3A+Algolia+vs+Elasticsearch" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Full+Text+Search+in+your+Database%3A+Algolia+vs+Elasticsearch&amp;url=https%3A%2F%2Fblog.algolia.com%2Ffull-text-search-in-your-database-algolia-versus-elasticsearch%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Ffull-text-search-in-your-database-algolia-versus-elasticsearch%2F&amp;title=Full+Text+Search+in+your+Database%3A+Algolia+vs+Elasticsearch&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                <div class="tags-container"><ul class="tags"><li><a href="https://blog.algolia.com/tag/search/" rel="tag">Search</a></li><li><a href="https://blog.algolia.com/tag/ux/" rel="tag">ux</a></li></ul></div>
+                
+
+  
+  
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/fanfootage-solving-search-problem-algolia/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/12/fanfootage-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/12/fanfootage-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/12/fanfootage-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/fanfootage-solving-search-problem-algolia/'>FanFootage: Solving the Search problem with Algolia</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/algolia-search-is-out/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/algolia-search-is-out/'>Algolia Search is Out!</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Ffull-text-search-in-your-database-algolia-versus-elasticsearch%2F&amp;t=Full+Text+Search+in+your+Database%3A+Algolia+vs+Elasticsearch" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Full+Text+Search+in+your+Database%3A+Algolia+vs+Elasticsearch&amp;url=https%3A%2F%2Fblog.algolia.com%2Ffull-text-search-in-your-database-algolia-versus-elasticsearch%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Ffull-text-search-in-your-database-algolia-versus-elasticsearch%2F&amp;title=Full+Text+Search+in+your+Database%3A+Algolia+vs+Elasticsearch&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'1535',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '1535' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

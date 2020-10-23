@@ -1,0 +1,692 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>How we built the real demo for our fake CSS API client - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; How we built the real demo for our fake CSS API client Comments Feed" href="https://blog.algolia.com/real-demo-fake-css-api-client/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=6102' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Freal-demo-fake-css-api-client%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Freal-demo-fake-css-api-client%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=D20E6E45F2712367E2FB02599BC71EB0');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="How we built the real demo for our fake CSS API client"/>
+  <meta property="og:url" content="https://blog.algolia.com/real-demo-fake-css-api-client/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="On March 31st, we announced our CSS API Client, that replicated a search engine with only CSS. While it was only a joke in the spirit of April Fool&#039;s, it was a lot of fun to make, and also a lot of fun to see it in the wild.
+
+I&#039;ve always been fascinated by how much could be done using only CSS (fr"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2017/04/css_aprilsfools_reveal.png"/>
+  <meta property="article:published_time" content="2017-04-05T01:18:21+00:00"/>
+  <meta property="article:modified_time" content="2017-04-05T06:18:13+00:00" />
+  <meta property="og:updated_time" content="2017-04-05T06:18:13+00:00" />
+  <meta property="article:section" content="Community"/>
+  <meta property="article:section" content="News"/>
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="How we built the real demo for our fake CSS API client"/>
+  <meta itemprop="description" content="On March 31st, we announced our CSS API Client, that replicated a search engine with only CSS. While it was only a joke in the spirit of April Fool&#039;s, it was a lot of fun to make, and also a lot of fun to see it in the wild.
+
+I&#039;ve always been fascinated by how much could be done using only CSS (fr"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2017/04/css_aprilsfools_reveal.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="How we built the real demo for our fake CSS API client"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/real-demo-fake-css-api-client/"/>
+  <meta name="twitter:description" content="On March 31st, we announced our CSS API Client, that replicated a search engine with only CSS. While it was only a joke in the spirit of April Fool&#039;s, it was a lot of fun to make, and also a lot of fun to see it in the wild.
+
+I&#039;ve always been fascinated by how much could be done using only CSS (fr"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2017/04/css_aprilsfools_reveal.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-6102 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-6102" class="cf post-6102 post type-post status-publish format-standard has-post-thumbnail hentry category-community category-news category-technology" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">How we built the real demo for our fake CSS API client</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/23b877d87b8a3d381a63601e8b5b1ec0?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">Tim Carry</span> |
+                    <time class="updated entry-time" datetime="2017-04-05" itemprop="datePublished">April 5, 2017</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/community/" rel="category tag">Community</a>, <a href="https://blog.algolia.com/category/news/" rel="category tag">News</a>, <a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/real-demo-fake-css-api-client/" title="How we built the real demo for our fake CSS API client">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2017/04/css_aprilsfools_reveal-720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2017/04/css_aprilsfools_reveal-720x400.png 720w, https://blog.algolia.com/wp-content/uploads/2017/04/css_aprilsfools_reveal-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2017/04/css_aprilsfools_reveal-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">On March 31st, we <a href="https://blog.algolia.com/js-is-dead-all-hail-css/">announced</a> our <a href="http://www.algolia.com/css">CSS API Client</a>, that replicated a search engine with only CSS. While it was only a joke in the spirit of April Fool&#8217;s, it was a lot of fun to make, and also a lot of fun to see it in the wild.</p>
+<p>I&#8217;ve always been fascinated by how much could be done using only CSS (from <a href="https://pixelastic.github.io/css-flags/">flags</a> to <a href="http://keithclark.co.uk/labs/css-fps/">FPS games</a>). When I started building the demo, I never imagined that I could build such a full-fledge search experience with CSS. The final demo has some huge drawbacks that make it unusable in production (the massive filesize of the generated CSS being the main one), but it still has some nice features that I&#8217;d like to shed some light on in this blogpost.</p>
+<a href="https://www.algolia.com/css"><img class="wp-image-6114 size-full aligncenter" src="https://blog.algolia.com/wp-content/uploads/2017/04/screencast.gif" alt="" width="1145" height="620" /></a>
+<h2><a id="the-power-of-selectors" class="anchor" href="#the-power-of-selectors" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The power of selectors</h2>
+<p>By design, CSS does not have some of the features we expect from programming languages. It has no conditions, no loops, no functions, no regular expressions… Instead, it has selectors that can target elements in an HTML document and apply styling to them.</p>
+<p>Ultimately, targeting elements is one of the greatest strengths of CSS, because it can select elements through a combination of tag names, classes, ids, and attributes. With the sibling selectors (<code>+</code>, <code>&gt;</code> and <code>~</code>), you can even go crazier in what you can target &#8211; this is a big part of how I manipulate CSS for creative CSS projects.</p>
+<h2><a id="the-search-bar" class="anchor" href="#the-search-bar" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The search bar</h2>
+<p>When it comes to searching, the first thing that comes to mind is the search bar. This is the ubiquitous element where you input your text, and results gets displayed. In HTML, a search bar is nothing more than an <code>input</code>. It can thus be targeted by CSS.</p>
+<p>An <code>input</code> element also has a <code>value</code> attribute. It means I can write a selector that will only match the input when it has a specific value:</p>
+<pre class="prettyprint"><code class="language-html">&lt;input type="text" value="Tim" /&gt;
+</code></pre>
+<pre class="prettyprint"><code class="language-css">input[value='Tim'] { background: green; }
+</code></pre>
+<p>When the value of the input is equal to &#8220;Tim&#8221;, I can change the background of the input to green. This might not seem much, but this is the cornerstone on which the whole CSS API Client is built. It lets me change the styling of elements based on the value of the <code>input</code>.</p>
+<p>We&#8217;ll see how this will be used, but first I need to talk a bit about JavaScript.</p>
+<h2><a id="javascript-the-necessary-evil" class="anchor" href="#javascript-the-necessary-evil" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>JavaScript: the necessary evil</h2>
+<p>I know I said this CSS API Client didn&#8217;t need any JavaScript, but that wasn&#8217;t entirely true. I still need a tiny JavaScript statement for this to work.</p>
+<p>When you use an attribute selector in CSS, it uses the value of the attribute that is set in the HTML, at page load. And when you type something in an input, it only updates the &#8220;virtual&#8221; value of the input (the one you can read with JavaScript), not the one in the HTML. It means that by default, CSS does not catch changes in the value of an input.</p>
+<p>As the whole demo is based on that fact, that&#8217;s not very convenient.</p>
+<p>That&#8217;s why I need JavaScript. I want our <code>value</code> attribute to be updated whenever something is typed in the input. This is mandatory to get this as-you-type feeling of results instantly displayed.</p>
+<pre class="prettyprint"><code class="language-html">&lt;input type="text" oninput="this.setAttribute('value', this.value)"&gt;</code></pre>
+<p>This simple JavaScript statement can be read as: &#8220;Whenever the value changes, set the value equal to the value&#8221;. It might seem obvious but is actually needed to pass the correct value from the JavaScript world to the CSS world.</p>
+<p>Now that I&#8217;ve taken care of that, let&#8217;s see how to display the results.</p>
+<h2><a id="displaying-results" class="anchor" href="#displaying-results" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Displaying results</h2>
+<p>At that point, I can apply some styling to the input based on its current value. It&#8217;s a good start, but what I really want is to display results based on what is typed in the input.</p>
+<p>Using the <code>+</code> sibling selector, I can target the <code>div</code> that is just following the <code>input</code> in the markup. And by using the <code>:before</code> pseudo-selector along with the <code>content:</code> declaration, I can add some generated content to it.</p>
+<pre class="prettyprint"><code class="language-html">&lt;input type="text" oninput="this.setAttribute('value', this.value)"&gt;
+&lt;div&gt;&lt;/div&gt;</code></pre>
+<pre class="prettyprint"><code class="language-css">input[value="Tim"] + div:before { content: "Tim Carry" }
+input[value="Josh"] + div:before { content: "Josh Dzielak" }
+input[value="Vincent"] + div:before { content: "Vincent Voyer" }</code></pre>
+<p>Whenever I type Tim, Josh or Vincent, the next div will be populated with the full name.</p>
+<h2><a id="prefix-search" class="anchor" href="#prefix-search" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Prefix search</h2>
+<p>That works well. but a good search engine shouldn&#8217;t have to make you type the full keyword before displaying results. I should see &#8220;Tim Carry&#8221; as a result as soon as I type &#8220;Ti&#8221;, or even just &#8220;T&#8221;.</p>
+<p>That&#8217;s when the major mental shift occurs:</p>
+<ul>
+<li>As a user, when I am searching, I want the answer to the question: <i>What results will I have if I type &#8220;Tim&#8221;?</i>.</li>
+<li>But here, as a builder, the question becomes: <i>What should I type to have &#8220;Tim Carry&#8221; as a result?</i>.</li>
+</ul>
+<p>In this example, the answer would be &#8220;T&#8221;, &#8220;Ti&#8221;, &#8220;Tim&#8221;, but also &#8220;C&#8221;, &#8220;Ca&#8221;, &#8220;Car&#8221;, &#8220;Carr&#8221; and &#8220;Carry&#8221; if I want to search in both first name and last name. Those variations are called n-grams, which means all the strings that would match a specific record.</p>
+<p>Not wanting to do this task by hand, I wrote a <a href="https://github.com/algolia/algoliasearch-client-css/blob/master/demo/lib/query_parser.rb">Ruby script</a> that generates the n-grams for any word, and outputs the CSS selectors to a new file.</p>
+<h2><a id="displaying-several-results" class="anchor" href="#displaying-several-results" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Displaying several results</h2>
+<p>Now that I had it automated, I started feeding my script with the list of all Algolia employees, to see how it performed. That&#8217;s when I realized that displaying only one result was too limiting.</p>
+<p>For example, we have 5 people named &#8220;Alex&#8221; in the company (at some point, 20% of the company was actually named Alex), so I wanted to display all of them when searching for &#8220;Alex&#8221;, not only the first one.</p>
+<p>I changed the HTML markup and instead of having only one <code>div</code> for the result, I created as many divs as the number of employees. I gave each div a unique incremental <code>id</code> (to select them more easily), and pre-filled each of them with the full name using the same <code>:before</code> and <code>content</code> trick.</p>
+<p>Those <code>div</code>s were all hidden by default, and only made visible when the value of the input was matching them.</p>
+<pre class="prettyprint"><code class="language-html">&lt;input type="text" oninput="this.setAttribute('value', this.value)"&gt;
+&lt;section&gt;
+  &lt;div id="h0"&gt;&lt;/div&gt;
+  &lt;div id="h1"&gt;&lt;/div&gt;
+  [...]
+  &lt;div id="h89"&gt;&lt;/div&gt;
+  &lt;div id="h90"&gt;&lt;/div&gt;
+&lt;/section&gt;</code></pre>
+<pre class="prettyprint"><code class="language-css">/* Hide all results */
+section div { display: none; }
+/* Pre-fill them with the full name, but keep them hidden */
+#h4:before { content: "Alexandre Collin" }
+#h8:before { content: "Alexandre Stanislawski" }
+#h15:before { content: "Alex Kudelka " }
+#h16:before { content: "Alexandre Meunier" }
+/* Display them only when the value matches */
+input[value='Alex'] ~ section #h4 { display: block; }
+input[value='Alex'] ~ section #h8 { display: block; }
+input[value='Alex'] ~ section #h15 { display: block; }
+input[value='Alex'] ~ section #h16 { display: block; }
+/* Consider the empty query as matching anything, and display everything*/
+input[value=''] ~ section div { display: block; }</code></pre>
+<h2><a id="styling" class="anchor" href="#styling" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Styling</h2>
+<p>Now that I had the full data-set to play with, I decided to give it a bit more styling, to make it look like the actual &#8220;<a href="https://www.algolia.com/about">About Us</a>&#8221; page we have on the website. Because I&#8217;m only using one <code>div</code> per result, I had to resort to a few more CSS tricks.</p>
+<p>I added a picture for each of us as a background image. I used <a href="https://cloudinary.com">Cloudinary</a> to make all images round, resized and grayscale. I added a fun fact on hover, using the <code>:after</code> pseudo element and generated content.</p>
+<p>To display both the name and job title, I used the special character <code>\A </code> to add a new line in the generated content. I also added <code>white-space: pre</code> so both lines were actually displayed separately. Then, using <code>:first-line</code> I was able to style each line differently.</p>
+<h2><a id="edge-cases" class="anchor" href="#edge-cases" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Edge cases</h2>
+<p>By playing with an actual dataset, I could start to see some edge-cases that I didn&#8217;t expect at first.</p>
+<p>The first one was handling case sensitivity. I wanted both &#8220;Tim&#8221; and &#8220;tim&#8221; to match the same results. Fortunately, CSS handles that directly without needing me to generate more n-grams. <code>input[value='tim' i]</code> will match &#8220;tim&#8221; in a case insensitive way. This works on all major browsers except Edge, unfortunately.</p>
+<p>All the other challenges had to do with my co-worker, Rémy-Christophe Schermesser. Rémy-Christophe has a very interesting name when it comes to edge-cases.</p>
+<p>The first is that his first name is actually composed of two names and I wanted to be able to find him either with &#8220;Rémy&#8221; or &#8220;Christophe&#8221;. In addition to splitting the name on spaces (to identify first name and last name), I also had to split them on dashes.</p>
+<p>The second part was that his name actually uses an accented character (é), and I wanted to be able to find him either by typing &#8220;Remy&#8221; or &#8220;Rémy&#8221;. I had to normalize the names, and generate n-grams for the normalized version as well.</p>
+<p>Finally, his last name, &#8220;Schermesser&#8221;, is difficult to spell correctly on the first try. I wanted people to be able to find him even if they wrote &#8220;Shermesser&#8221; (without a &#8220;c&#8221;), or &#8220;Schermeser&#8221; (with only one &#8220;s&#8221;). Typos are very common in search, especially on mobile (thanks to the fat-finger effect), so a good search engine should auto-fix them as much as it could.</p>
+<p>To handle the typos for this specific word, I had to generate 40 more n-grams, one for each variation of the word with one letter removed (except for the first and last one). &#8220;Ser&#8221;, &#8220;Sherm&#8221;, &#8220;Scermes&#8221;, &#8220;Schrmesser&#8221;, etc were all valid new n-grams to find &#8220;Schermesser&#8221;.</p>
+<p>The funniest thing in this story is that, even in the office, almost no-one ever calls him Rémy-Christophe. Everyone calls him &#8220;RCS&#8221;, and I wanted to replicate this in the engine, through the use of synonyms. Adding a synonym is nothing more than manually adding a new set of n-grams that should match a specific result. In my case, &#8220;r&#8221;, &#8220;rc&#8221; and &#8220;rcs&#8221; were now also valid keywords to find Rémy-Christophe.</p>
+<h2><a id="highlighting" class="anchor" href="#highlighting" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Highlighting</h2>
+<p>At that point, I could search for people either with their first name or last name, including typos, or through synonyms. I decided to also add finding them through their job title. This adds a lot of possibilities, and sometimes it was not obvious why a specific result was displayed.</p>
+<p>A good search engine should never let the user wonder why a result is displayed. It must be clear instantly why a result is relevant, and that&#8217;s where highlighting comes into play.</p>
+<p>The Algolia API handles highlighting by wrapping matching text with the <code>&lt;em&gt;</code> tag. But because I&#8217;m using generated content, I cannot add HTML into it, so I had to find another way.</p>
+<p>The trick I used was to generate a custom font that is a merge of Raleway Regular and Raleway Bold. I kept the regular font as a basis, but added all the bold characters into <a href="https://en.wikipedia.org/wiki/Private_Use_Areas">the private UTF-8 space</a>. To highlight a word, I replace its letters with their bolded version. CSS lets you use specific UTF-8 characters by using the <code>\eXXX </code> syntax.</p>
+<pre class="prettyprint"><code class="language-css">input[value='alex' i] ~ section #h4:before { content: '\e641 \e66c \e665 \e678 andre Collin' }</code></pre>
+<h2><a id="" class="anchor" href="#" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><img class="aligncenter wp-image-6105 size-full" src="https://blog.algolia.com/wp-content/uploads/2017/04/Screenshot-from-2017-04-04-19-08-21.png" alt="" width="279" height="330" srcset="https://blog.algolia.com/wp-content/uploads/2017/04/Screenshot-from-2017-04-04-19-08-21.png 279w, https://blog.algolia.com/wp-content/uploads/2017/04/Screenshot-from-2017-04-04-19-08-21-150x178.png 150w" sizes="(max-width: 279px) 100vw, 279px" /></h2>
+<h2><a id="ordering-results" class="anchor" href="#ordering-results" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Ordering results</h2>
+<p>Another really important part of a search engine is that the most relevant results should be displayed first. My current setup wasn&#8217;t taking relevance into account at all when displaying results.</p>
+<p>This was obvious when searching for &#8220;Co&#8221;. I had Nicolas and Julien, both <strong>Co</strong>-founders, displayed before ry Dobson. This was not what I wanted. Cory should have been the first result because the match was in his first name and that was more important.</p>
+<p>The Algolia engine handles this by sorting results through <a href="https://www.algolia.com/doc/faq/index-configuration/how-does-algolia-s-tie-breaking-ranking-algorithm-work/">a tie-breaking algorithm</a>. We define a list of criterias, and we check each result against those criterias to sort them into buckets. I applied the same logic in my script; my first criterion was that a match in the name was more important than a match in the job title. The sorting should then create two buckets, one for a match in the name, another for a match in the job title.</p>
+<p>If there were several results in a specific bucket, it would apply the second criterion to this bucket to further split the results in more buckets.</p>
+<p>My second criterion was the position of the match. A match in the first word was more important than a match in the last word. If it would still have ties, it would then sort by the last criterion, the custom ranking. Here I decided that results at that point should be displayed by order of arrival in the company.</p>
+<p>You can see it in action with the query &#8220;St&#8221; for example:</p>
+<img class="aligncenter wp-image-6106 size-full" src="https://blog.algolia.com/wp-content/uploads/2017/04/Screenshot-from-2017-04-04-19-09-42.png" alt="" width="900" height="492" srcset="https://blog.algolia.com/wp-content/uploads/2017/04/Screenshot-from-2017-04-04-19-09-42.png 900w, https://blog.algolia.com/wp-content/uploads/2017/04/Screenshot-from-2017-04-04-19-09-42-320x175.png 320w, https://blog.algolia.com/wp-content/uploads/2017/04/Screenshot-from-2017-04-04-19-09-42-768x420.png 768w, https://blog.algolia.com/wp-content/uploads/2017/04/Screenshot-from-2017-04-04-19-09-42-720x394.png 720w" sizes="(max-width: 900px) 100vw, 900px" />
+<ul>
+<li>We have a first bucket with the match on the name, and a second with match in the job title (Full-Stack Software Engineer)</li>
+<li>The first bucket is then split into two more buckets, a match in the first name (Steven Merlino), or a match in the last name (Alexandre Stanislawski, David Strader)</li>
+<li>For each bucket with more than one item, results are ordered by arrival date in the company (Alexandre joined before David, Vincent joined before Maxime, etc)</li>
+</ul>
+<p>Now that I know in which order items should be displayed, how do I do that in CSS? This one was actually much easier than anticipated. As soon as you start using flexbox-based display, you can apply an <code>order:</code> to any element to change its position in the display.</p>
+<pre class="prettyprint"><code class="language-css">input[value='st' i] ~ section #h4 { order: 2 }
+input[value='st' i] ~ section #h8 { order: 3 }
+input[value='st' i] ~ section #h15 { order: 4 }
+input[value='st' i] ~ section #h16 { order: 1 }</code></pre>
+<h2><a id="faceting" class="anchor" href="#faceting" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Faceting</h2>
+<p>The last feature to add was the filtering (or faceting, as we call it in the search industry). Faceting is extremely important when the number of results you get is very large, and thus hard to comprehend. It is important to let your users filter it down.</p>
+<p>I added a way for users to filter results by team. I used most of the same tricks (generated content, flexbox ordering, etc) that I already used on results. The one thing that is important here is that the facets are actually <code>label</code> elements, each linked to an invisible <code>radio</code> button.</p>
+<p>In HTML, you can link a <code>&lt;label for="foo"&gt;</code> with an <code>&lt;input id="foo" type="radio"&gt;</code>. Whenever you click on the label, the radio button will get selected, wherever it is in the page. I used that to my advantage, by linking each <code>&lt;label&gt;</code> to a different radio button that I put in the markup right before the main search bar.</p>
+<p>Using the <code>:checked</code> pseudo-element and the adjacent sibling selector, it let me create a &#8220;global state&#8221; to my page, based on which <code>radio</code> is currently checked.</p>
+<p>Filtering is applied here by hiding all the results that do not match the selected facet. If I select the team &#8220;Engineering&#8221;, then I need to hide all results that are not in the &#8220;Engineering&#8221; team.</p>
+<pre class="prettyprint"><code class="language-html">&lt;!-- Invisible radio buttons --&gt;
+&lt;input type="radio" name="facets" id="f1"&gt;
+&lt;input type="radio" name="facets" id="f2"&gt;
+
+&lt;!-- Main searchbar --&gt;
+&lt;input type="text" onchange="this.setAttribute('value', this.value)"&gt;
+
+&lt;!-- Facets. Content is set through pseudo-elements --&gt;
+&lt;aside&gt;
+  &lt;label for="f1"&gt;&lt;/label&gt;
+  &lt;label for="f2"&gt;&lt;/label&gt;
+&lt;/aside&gt;
+
+&lt;!-- Results --&gt;
+&lt;section&gt;
+  &lt;div id="h0"&gt;&lt;/div&gt;
+  &lt;div id="h1"&gt;&lt;/div&gt;
+  [...]
+  &lt;div id="h89"&gt;&lt;/div&gt;
+  &lt;div id="h90"&gt;&lt;/div&gt;
+&lt;/section&gt;</code></pre>
+<pre class="prettyprint"><code class="language-css">/* When I check the first facet, I hide all results that are not part of this facet */
+#f1:checked ~ section #h2 { display: none !important; }
+#f1:checked ~ section #h3 { display: none !important; }</code></pre>
+<h2><a id="performance" class="anchor" href="#performance" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Performance</h2>
+<p>The generated filesize can get huge quickly, as I need to create new rules for each new n-gram. I used one-letter ids as much as I could as it both reduces the filesize, and makes the browser parsing of the CSS much faster. I then minified the file by grouping selectors sharing the same rules together. Still, the final file is 4Mb.</p>
+<p>I&#8217;ve also removed the <code>!important</code> keyword (taking too many characters) by artificially boosting the specificity of my rules instead (<code>#f1[id]</code> is more specific than <code>#f1</code> for example but will still target exactly the same elements).</p>
+<h2><a id="conclusion" class="anchor" href="#conclusion" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h2>
+<p>By splitting a complex problem into small chunks, and using the strength of the language that was at my disposal, I managed to build the illusion of a search engine in CSS, which made for a great basis of some April Fool&#8217;s fun. While the demo could never be applied in production &#8211; the file size is too big, the results cannot be selected nor clicked and it lacks many features a real search engine should give you &#8211; it was a great opportunity for me to stretch what’s possible with CSS, and for us at Algolia to bring a smile to our community and a few new faces who discovered us from our prank. You can have a look at the <a href="https://github.com/algolia/algoliasearch-client-css">source code on GitHub</a>.</p>
+<p>Search is all about speed, relevance and UX, and we&#8217;ve only scratched the surface of those three pillars here because we were limited by the CSS language; however, we&#8217;re glad the prank &amp; demo sparked some great conversations in the CSS community and we look forward to discussing more with you.</p>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Freal-demo-fake-css-api-client%2F&amp;t=How+we+built+the+real+demo+for+our+fake+CSS+API+client" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=How+we+built+the+real+demo+for+our+fake+CSS+API+client&amp;url=https%3A%2F%2Fblog.algolia.com%2Freal-demo-fake-css-api-client%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Freal-demo-fake-css-api-client%2F&amp;title=How+we+built+the+real+demo+for+our+fake+CSS+API+client&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                
+                
+<div id="disqus_thread">
+    </div>
+
+                                                  
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Freal-demo-fake-css-api-client%2F&amp;t=How+we+built+the+real+demo+for+our+fake+CSS+API+client" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=How+we+built+the+real+demo+for+our+fake+CSS+API+client&amp;url=https%3A%2F%2Fblog.algolia.com%2Freal-demo-fake-css-api-client%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Freal-demo-fake-css-api-client%2F&amp;title=How+we+built+the+real+demo+for+our+fake+CSS+API+client&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"6102 https:\/\/blog.algolia.com\/?p=6102","disqusShortname":"algoliablog","disqusTitle":"How we built the real demo for our fake CSS API client","disqusUrl":"https:\/\/blog.algolia.com\/real-demo-fake-css-api-client\/","options":{"manualSync":false},"postId":"6102"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'6102',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '6102' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

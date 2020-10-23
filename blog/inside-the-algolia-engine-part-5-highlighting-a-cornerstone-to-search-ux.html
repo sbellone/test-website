@@ -1,0 +1,665 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Inside the Algolia Engine Part 5 – Highlighting, a Cornerstone of Search UX - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Inside the Algolia Engine Part 5 – Highlighting, a Cornerstone of Search UX Comments Feed" href="https://blog.algolia.com/inside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=5587' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=71A4067052B6DF767759557935445EE0');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Inside the Algolia Engine Part 5 – Highlighting, a Cornerstone of Search UX"/>
+  <meta property="og:url" content="https://blog.algolia.com/inside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Visually highlighting search results is a must-have component of a great search experience. This is even truer when you start to do advanced processing on the query (synonyms, typo tolerance, concatenation/split of query words, etc.), like we presented in the third installment of this series.
+
+A s"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2016/10/highlight.png"/>
+  <meta property="article:published_time" content="2016-10-03T13:18:29+00:00"/>
+  <meta property="article:modified_time" content="2017-04-21T03:55:34+00:00" />
+  <meta property="og:updated_time" content="2017-04-21T03:55:34+00:00" />
+  <meta property="article:section" content="Guides"/>
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Inside the Algolia Engine Part 5 – Highlighting, a Cornerstone of Search UX"/>
+  <meta itemprop="description" content="Visually highlighting search results is a must-have component of a great search experience. This is even truer when you start to do advanced processing on the query (synonyms, typo tolerance, concatenation/split of query words, etc.), like we presented in the third installment of this series.
+
+A s"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2016/10/highlight.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Inside the Algolia Engine Part 5 – Highlighting, a Cornerstone of Search UX"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/inside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux/"/>
+  <meta name="twitter:description" content="Visually highlighting search results is a must-have component of a great search experience. This is even truer when you start to do advanced processing on the query (synonyms, typo tolerance, concatenation/split of query words, etc.), like we presented in the third installment of this series.
+
+A s"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2016/10/highlight.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-5587 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-5587" class="cf post-5587 post type-post status-publish format-standard has-post-thumbnail hentry category-guides category-technology" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Inside the Algolia Engine Part 5 – Highlighting, a Cornerstone of Search UX</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/25760a5d4e793e491f26da5db64bb738?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">julien</span> |
+                    <time class="updated entry-time" datetime="2016-10-03" itemprop="datePublished">October 3, 2016</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/guides/" rel="category tag">Guides</a>, <a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/inside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux/" title="Inside the Algolia Engine Part 5 – Highlighting, a Cornerstone of Search UX">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2016/10/highlight.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2016/10/highlight.png 720w, https://blog.algolia.com/wp-content/uploads/2016/10/highlight-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2016/10/highlight-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">Visually highlighting search results is a must-have component of a great search experience. This is even truer when you start to do advanced processing on the query (synonyms, typo tolerance, concatenation/split of query words, etc.), like we presented in the <a href="https://blog.algolia.com/inside-the-algolia-engine-part-3-query-processing/">third installment of this series</a>.</p>
+<p>A search result that is considered as weird by a user without highlighting can become smart just by explaining the processing done to retrieve it and by making it easy for the user to check if this is exactly the content they were looking for. In this article, we’ll show you in detail how we have implemented our highlighting to make sure it always provides a great user experience.</p>
+<p style="text-align: center;"><a href="https://blog.algolia.com/inside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux/googlequery2/" rel="attachment wp-att-5588"><img class="aligncenter wp-image-5588" src="https://blog.algolia.com/wp-content/uploads/2016/09/GoogleQuery2.png" alt="Google search query with highlighting removed on second hit" width="594" height="320" srcset="https://blog.algolia.com/wp-content/uploads/2016/09/GoogleQuery2.png 1301w, https://blog.algolia.com/wp-content/uploads/2016/09/GoogleQuery2-320x173.png 320w, https://blog.algolia.com/wp-content/uploads/2016/09/GoogleQuery2-768x414.png 768w, https://blog.algolia.com/wp-content/uploads/2016/09/GoogleQuery2-720x389.png 720w" sizes="(max-width: 594px) 100vw, 594px" /></a><i>On this Google query, the first hit shows the standard highlighting done by Google. We removed the highlighting manually on the second hit &#8211; </i><i>the result is much more difficult to understand.</i></p>
+<h2><a id="different-approaches" class="anchor" href="#different-approaches" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Different approaches</h2>
+<p>Highlighting tends to be a subject that appears easy at first glance; however, the reality is much more complex, namely because it is a different process entirely than that of matching &amp; ranking your objects. There are three main ways to implement highlighting:</p>
+<ol>
+<li>1. Take the query and the text to highlight and imitate the job of the search engine. This approach is partial as you don&#8217;t have access to the processing done by the search engine like the extraction of synonyms. Usually this means that you just highlight the query terms, which will be misleading for users as they will not see why a record was found.</li>
+<li>2. Apply the query interpreter on the query to extract all possible extensions like synonyms and use that information to highlight a text. This approach will give you a good visual result as you will have all the alternatives. But you will have to test a lot of expressions that do not match against your text. There is a lot of waste of performance here.</li>
+<li>3. Apply the query in the search engine as usual but keep the matched terms for each result. This list of matched terms will be used by the highlighter to process a record. This approach offers the best of two worlds: you have exactly the expected highlight whereas the highlighter remains fast and only focuses on the expression that is in the record.</li>
+</ol>
+<p>The big advantage of the last two approaches is that your highlighter will be easier to implement. You don’t have to worry about alternatives like synonyms or typo-tolerance as it will already be resolved by your query interpreter. In other words, if your record matches with a typo, you will have the word with a typo as an input of the highlighter.</p>
+<p>In the Algolia engine, we have used the third approach since day one. It was actually one of the many reasons to redevelop the Algolia engine from scratch. We had already developed several highlighters in the past and we knew from experience the third approach would be the best; however, we had to to keep all matched terms for each record, which needs to be done in a very efficient way in order to not create a bottleneck in term of CPU or RAM.</p>
+<h2><a id="different-expressions-we-highlight" class="anchor" href="#different-expressions-we-highlight" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Different expressions we highlight</h2>
+<p>There are four types of expression that the highlighter can highlight:</p>
+<ol>
+<li>1. <b>A word</b>: in this case, we need to find all tokens in the text to highlight that are identical to this word (with an accent and case-insensitive comparison).</li>
+<li>2. <b>A prefix</b>: in this case, we need to find all tokens in the text to highlight that start with this prefix (again with an accent and case-insensitive comparison). Usually, this word corresponds to the last query term that is matched as a prefix; however, it can also contain a typo (as we support typo tolerance on prefixes).</li>
+<li>3. <b>A phrase</b>: in this case, we need to find a sequence of words in a specific order in the record (also with an accent and case-insensitive comparison).</li>
+<li>4. <b>A prefix phrase</b>: identical as a phrase, except that the last word of the phrase can be matched via a prefix.</li>
+</ol>
+<p>All those expressions come from the search engine and are an input for the highlighter, for example the user query &#8220;searchengine&#8221; contains only one term but will also add the alternative phrase &#8220;search engine&#8221; which is the result of our split of query tokens processing (described in the third article of this series).</p>
+<h2><a id="explaining-the-result-using-query-terms" class="anchor" href="#explaining-the-result-using-query-terms" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Explaining the result using query terms</h2>
+<p>The highlighter is not just the process that adds some tags around matching expressions, it plays a bigger role in the user experience. You have potentially dozens of attributes in your objects used for search, displaying all of them would give too much information to the user. You only have to show the relevant one to explain the result.</p>
+<p>For example, if you are typing the query <i>&#8220;Twilio IPO&#8221;</i> on your favorite news site, you will have several objects that will match. Some with both terms in the title like this one:</p>
+<pre><span style="text-decoration: underline;">Title</span>: <b>Twilio</b> raises more than expected in <b>IPO</b>
+<span style="text-decoration: underline;">Content</span>: <b>Twilio</b> Inc. raised more than it expected in its initial public offering, an optimistic sign for the dozens of other technology companies that have been valued at more than $1 billion in private fundraising. [...]</pre>
+<p>And some with only one term in the title like this one:</p>
+<pre><span style="text-decoration: underline;">Title</span>: <b>Twilio’s</b> shares climb 92% in trading debut
+<span style="text-decoration: underline;">Content</span>: <b>Twilio</b> Inc.’s shares nearly doubled from their initial public offering price in their first day of trading, a positive sign during a dry spell for tech <b>IPOs</b>. [...]</pre>
+<p>On the first one, the highlighter will give you the information that all query terms were found in the title attribute (via the `matchLevel=full`), which allows you to consider a specific display of this article in the UI as only the title is required to explain the result.</p>
+<p>Here is the highlighter information on the title of the first article:</p>
+<pre class="prettyprint"><code class="language-javascript">{
+    "_highlightResult": {
+        "title": {
+            "value": "<em>Twilio</em> raises more than expected in <em>IPO</em>", 
+            "matchLevel": "full", 
+            "matchedWords": [
+                "twilio", 
+                "ipo"
+            ]
+        }
+    }
+}
+</code></pre>
+<p>On the second article, the highlighter will give you the information that the title attribute is partially matching the query (&#8220;matchLevel=partial&#8221;).</p>
+<pre class="prettyprint"><code class="language-javascript">{
+   "_highlightResult": {
+        "title": {
+            "value": "<em>Twilio’s</em> shares climb 92% in trading debut", 
+            "matchLevel": "partial", 
+            "matchedWords": [
+                "twilio"
+            ]
+        }
+    }
+}
+</code></pre>
+<p>The highlighter gives you all information needed to explain the query, you can scan all attributes in the highlighter and only select the ones that &#8220;explain&#8221; one query term that no other one explains. Most of the time, you don’t have enough room to show every title and its content, in this case the highlighter will help you to show the content only when it&#8217;s relevant to explain the result. This approach of explaining search results plays a big role in user engagement and improvement of your ROI on search.</p>
+<p style="text-align: center;"><i><a href="https://blog.algolia.com/inside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux/moviequery/" rel="attachment wp-att-5590"><img class="aligncenter wp-image-5590" src="https://blog.algolia.com/wp-content/uploads/2016/09/MovieQuery.png" alt="Movie and actor search" width="506" height="318" srcset="https://blog.algolia.com/wp-content/uploads/2016/09/MovieQuery.png 832w, https://blog.algolia.com/wp-content/uploads/2016/09/MovieQuery-284x178.png 284w, https://blog.algolia.com/wp-content/uploads/2016/09/MovieQuery-768x482.png 768w, https://blog.algolia.com/wp-content/uploads/2016/09/MovieQuery-638x400.png 638w" sizes="(max-width: 506px) 100vw, 506px" /></a>An example of a search query where several attributes are required to explain the result: the movie title &amp; the actor name</i>.</p>
+<h2><a id="computing-a-snippet" class="anchor" href="#computing-a-snippet" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Computing a snippet</h2>
+<p>When the text of an attribute contains more than a few words like the content of a news article, you want to summarize it by keeping only the important sections. The result of this process is called a snippet and there are a lot of different approaches, so every snippet computation is different.</p>
+<p>In Algolia, the snippet computation relies on the highlighting.</p>
+<p>The first step of the process is to flag each token of the text to snippet with the corresponding query term that matches it. Then the second step is to find the window of N tokens that maximise the number of different query terms matched. You can have several windows of N tokens that contains the same number of highlighted terms, in this case we prefer to leave some text before and after the matching terms to give some context to the user.</p>
+<p>Algolia lets you customize the number of words in a snippet, as this parameter depends on the UI you are building. In the example below, we will use 10 words for the  description of the two articles:</p>
+<pre class="prettyprint"><code class="language-javascript">{
+   "_snippetResult": {
+        "content": "<em>Twilio</em> Inc. raised more than it expected in its initial…", 
+        "matchLevel": "partial"
+    }
+}
+</code></pre>
+<pre class="prettyprint"><code class="language-javascript">{
+   "_snippetResult": {
+        "content": "<em>Twilio</em> Inc.’s shares nearly doubled from their initial public offering…", 
+        "matchLevel": "partial"
+    }
+}
+</code></pre>
+<p>The two snippets actually return the 10 first words of the content as there is no 10 words window that contains both terms.</p>
+<p>You can note that we do not return <i>matchedWords</i> attribute in the snippet as the result is partial. You need to use the highlighter to fully explain a result but you can, of course, request to have both the highlighted version and the snippet version.</p>
+<h2><a id="how-the-engine-identifies-matching-words-efficiently" class="anchor" href="#how-the-engine-identifies-matching-words-efficiently" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>How the engine identifies matching words efficiently</h2>
+<p>Our highlighter is exhaustive while having very good performance, a big part of the hard work is actually done in the search engine itself in the identification and storage of all matched words for an object.</p>
+<p>During the query processing, we compute all expressions to find and create a description object for each of them that contains the expression to highlight and the link to the original query token. At the end of the query processing, we have a vector with all those alternative expressions.</p>
+<p>Then, when we create the boolean query that will be applied to the index, we keep the link to the original expression. For example if you have the query &#8220;<i>Hotel NY</i>&#8221; with a synonym &#8220;NY&#8221; = &#8220;New York&#8221;, the expression vector would be:</p>
+<pre><span style="text-decoration: underline;">0</span>: toHighlight=hotel, queryTerm=hotel
+<span style="text-decoration: underline;">1</span>: toHighlight=NY, queryTerm=ny
+<span style="text-decoration: underline;">2</span>: toHighlight="New York", queryTerm=ny
+</pre>
+<p>We would execute the following query:</p>
+<pre>OR(AND(Word("hotel", vectorPos=0),
+       Phrase("New York", vectorPos=2)),
+   AND(Word("hotel", vectorPos=0),
+       Word("NY", vectorPos=1)))
+</pre>
+<p>When a record matches, we know which part of the expression matched (list of integers). For example:</p>
+<ul>
+<ul>
+<li>A record containing &#8220;hotel&#8221; and &#8220;NY&#8221; will have a vector containing [0, 1]</li>
+<li>A record containing &#8220;hotel&#8221; and &#8220;new york&#8221; will have a vector containing [0, 2]</li>
+<li>A record containing &#8220;hotel&#8221; and &#8220;NY&#8221; and &#8220;new york&#8221; will have a vector containing [0, 1, 2]</li>
+</ul>
+</ul>
+<p>This example is very simple as we have a very small number of expressions to match. In reality, we usually have hundreds of expressions to try because of typo tolerance and it becomes critical to identify only the one found in the record.</p>
+<p>We finally keep this vector of integers for each result to be able to produce the list of terms to highlight and the list of matched words.</p>
+<h2><a id="why-search-without-highlighting-is-bad" class="anchor" href="#why-search-without-highlighting-is-bad" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Why search without highlighting is bad</h2>
+<p>As soon as you have advanced query interpretation,highlighting becomes essential to a good  user experience. Having a great experience is more than highlighting the most important attribute, it is searching and displaying all attributes that are important for the user to understand why the result was displayed. This is key to help the user quickly decide which result they will choose first. Without this aspect, you will leave your user disappointed as they will inevitably choose a bad result.</p>
+<p>I hope this explanation has underscored why highlighting is such a complex and important topic of any search engine!</p>
+<p>We recommend to read the other posts of this series:</p>
+<ul>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-1-indexing-vs-search/">Part 1 – indexing vs. search</a></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/">Part 2 – the indexing challenge of instant search</a></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-3-query-processing/">Part 3 – query processing</a></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-enginepart-4-textual-relevance/">Part 4 – textual relevance</a></li>
+<li><a href="https://blog.algolia.com/inside-the-engine-part-6-handling-synonyms-the-right-way/">Part 6 – Handling Synonyms the Right Way</a></li>
+<li><a href="https://blog.algolia.com/inside-the-engine-part-7-better-relevance-via-dedup-at-query-time/">Part 7 – Better relevance via dedup at query time</a></li>
+</ul>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux%2F&amp;t=Inside+the+Algolia+Engine+Part+5+%E2%80%93+Highlighting%2C+a+Cornerstone+of+Search+UX" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Inside+the+Algolia+Engine+Part+5+%E2%80%93+Highlighting%2C+a+Cornerstone+of+Search+UX&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux%2F&amp;title=Inside+the+Algolia+Engine+Part+5+%E2%80%93+Highlighting%2C+a+Cornerstone+of+Search+UX&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                
+                
+<div id="disqus_thread">
+    </div>
+
+                                                  
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux%2F&amp;t=Inside+the+Algolia+Engine+Part+5+%E2%80%93+Highlighting%2C+a+Cornerstone+of+Search+UX" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Inside+the+Algolia+Engine+Part+5+%E2%80%93+Highlighting%2C+a+Cornerstone+of+Search+UX&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux%2F&amp;title=Inside+the+Algolia+Engine+Part+5+%E2%80%93+Highlighting%2C+a+Cornerstone+of+Search+UX&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"5587 https:\/\/blog.algolia.com\/?p=5587","disqusShortname":"algoliablog","disqusTitle":"Inside the Algolia Engine Part 5 \u2013 Highlighting, a Cornerstone of Search UX","disqusUrl":"https:\/\/blog.algolia.com\/inside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux\/","options":{"manualSync":false},"postId":"5587"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'5587',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '5587' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

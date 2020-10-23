@@ -1,0 +1,627 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>DNS fallback for better resilience - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; DNS fallback for better resilience Comments Feed" href="https://blog.algolia.com/dns-fallback-for-better-resilience/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=3699' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fdns-fallback-for-better-resilience%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fdns-fallback-for-better-resilience%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=260FD60971C4BB3BADE5C5859113C6C1');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="DNS fallback for better resilience"/>
+  <meta property="og:url" content="https://blog.algolia.com/dns-fallback-for-better-resilience/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="At Algolia, we are obsessed with finding a way to have a 99.9999% available architecture. On our way to achieve that, we have to make sure every piece of the architecture can safely fail without affecting the service.
+
+The first point of the architecture where a customer&#039;s request starts to intera"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2015/05/dns-fallback.png"/>
+  <meta property="article:published_time" content="2015-05-11T16:42:29+00:00"/>
+  <meta property="article:modified_time" content="2015-05-11T16:42:29+00:00" />
+  <meta property="og:updated_time" content="2015-05-11T16:42:29+00:00" />
+  <meta property="article:section" content="Infrastructure"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="DNS fallback for better resilience"/>
+  <meta itemprop="description" content="At Algolia, we are obsessed with finding a way to have a 99.9999% available architecture. On our way to achieve that, we have to make sure every piece of the architecture can safely fail without affecting the service.
+
+The first point of the architecture where a customer&#039;s request starts to intera"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2015/05/dns-fallback.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="DNS fallback for better resilience"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/dns-fallback-for-better-resilience/"/>
+  <meta name="twitter:description" content="At Algolia, we are obsessed with finding a way to have a 99.9999% available architecture. On our way to achieve that, we have to make sure every piece of the architecture can safely fail without affecting the service.
+
+The first point of the architecture where a customer&#039;s request starts to intera"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2015/05/dns-fallback.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-3699 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-3699" class="cf post-3699 post type-post status-publish format-standard has-post-thumbnail hentry category-infrastructure tag-availability tag-ddos tag-dns tag-fallback tag-latency tag-sla" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">DNS fallback for better resilience</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/0d23f348c8416b65e5acf54cd52edf57?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person"><a href="https://twitter.com/AdamSurak" title="Visit Adam Surak&#8217;s website" rel="author external">Adam Surak</a></span> |
+                    <time class="updated entry-time" datetime="2015-05-11" itemprop="datePublished">May 11, 2015</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/infrastructure/" rel="category tag">Infrastructure</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/dns-fallback-for-better-resilience/" title="DNS fallback for better resilience">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2015/05/dns-fallback.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2015/05/dns-fallback.png 720w, https://blog.algolia.com/wp-content/uploads/2015/05/dns-fallback-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2015/05/dns-fallback-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">At Algolia, we are obsessed with finding a way to have a 99.9999% available architecture. On our way to achieve that, we have to make sure every piece of the architecture can safely fail without affecting the service.</p>
+<p>The first point of the architecture where a customer&#8217;s request starts to interact with our service is not the router in the datacenter, but a DNS resolving a domain name to the IP address &#8220;long time&#8221; before that. This piece of architecture is very often overlooked and that is no surprise as you mostly get best-effort DNS service automatically with your server.</p>
+<h2><a id="latency" class="anchor" href="#latency" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Latency</h2>
+<p>For couple months we are a happy user of <a href="https://nsone.net" target="_blank">NSONE</a> that provides us with the first level of logic. We use NSONE for its superb performance and data-driven DNS that gives us control in steering the traffic of our <a href="https://www.algolia.com/dsn" target="_blank">Distributed Search Network</a> to the proper server &#8211; whether it means closest or simply available one. But as any other network dependent service, there are factors outside of NSONE&#8217;s control that can influence availability of its DNS resolves and consequently Algolia. BGP routing is still a huge magic and &#8220;optimizations&#8221; of some ISPs are beyond understanding. Well, they do not always make the optimizations in the direction we would like to. For some services the change of DNS resolution time from 10 to 500ms does not mean a lot but for us it is a deal breaker.</p>
+<div id="attachment_3701" style="width: 513px" class="wp-caption aligncenter"><a href="https://blog.algolia.com/wp-content/uploads/2015/05/nsone-dig-latency.png"><img class="wp-image-3701 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/05/nsone-dig-latency.png" alt="nsone-dig-latency" width="503" height="594" srcset="https://blog.algolia.com/wp-content/uploads/2015/05/nsone-dig-latency.png 503w, https://blog.algolia.com/wp-content/uploads/2015/05/nsone-dig-latency-151x178.png 151w, https://blog.algolia.com/wp-content/uploads/2015/05/nsone-dig-latency-339x400.png 339w" sizes="(max-width: 503px) 100vw, 503px" /></a><p class="wp-caption-text">Resolution of latency-1 via NSONE</p></div>
+<h2><a id="ddos" class="anchor" href="#ddos" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>DDoS</h2>
+<p>When we started to think about our DNS dependency, we remembered the <a href="https://threatpost.com/ultradns-dealing-with-ddos-attack/105806" target="_blank">2014 DDoS attack on UltraDNS</a> and the situation when there was not enough <a href="https://twitter.com/hashtag/hugops" target="_blank">#hugops</a> for all the services impacted. During the previous <a href="http://www.zdnet.com/article/ddos-attack-on-ultradns-affects-amazon-com-salesforce-com-petco-com/" target="_blank">attack on UltraDNS in 2009</a> even big names like Amazon and SalesForce got impacted.</p>
+<h2><a id="solution" class="anchor" href="#solution" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Solution</h2>
+<p>In most of the cases it would mean adding another DNS name server from a different provider and replicate the records. But not in ours. NSONE has some unique features that we would have to give up and find a common feature subset with a different provider. In the end we would have to serve a portion of DNS resolutions via slower provider for no good reason.</p>
+<p>Since we provide custom made API clients we have one more place where to put additional logic. Now came a time to choose a resilient provider for our secondary DNS and since we like AWS, Route53 was a clear choice. Route53 has ok performance, many POPs around the world and API we already had integration for.</p>
+<p>In the last moment, one more paranoid idea came to us &#8211; let&#8217;s not rely on a single <a href="http://en.wikipedia.org/wiki/Top-level_domain" target="_blank">TLD</a>. No good reason for that, it was just &#8220;what if&#8230;?&#8221; moment.</p>
+<div id="attachment_3702" style="width: 526px" class="wp-caption aligncenter"><a href="https://blog.algolia.com/wp-content/uploads/2015/05/route53-dig-latency.png"><img class="wp-image-3702 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/05/route53-dig-latency.png" alt="route53-dig-latency" width="516" height="637" srcset="https://blog.algolia.com/wp-content/uploads/2015/05/route53-dig-latency.png 516w, https://blog.algolia.com/wp-content/uploads/2015/05/route53-dig-latency-144x178.png 144w, https://blog.algolia.com/wp-content/uploads/2015/05/route53-dig-latency-324x400.png 324w" sizes="(max-width: 516px) 100vw, 516px" /></a><p class="wp-caption-text">Resolution of latency-1 via Route53</p></div>
+<p>Right now, all the latest versions of our API clients (<a href="#clients">detailed list below</a>) use multiple domain names. &#8220;algolia.net&#8221; is served by NSONE and provides all the speed and intelligence, &#8220;algolianet.com&#8221; is served by Route53 in case that for any reason contacting server via &#8220;algolia.net&#8221; fails. It brings more work to our side, brings more cost on our side but it also brings better sleep for our customers, their customers and us.</p>
+<p>And now we can think what else can fail&#8230;</p>
+<p>Minimal versions of API clients with support of multiple DNS:</p>
+<ul id="clients">
+<li><a href="https://github.com/algolia/algoliasearch-client-js/releases/tag/2.9.6" target="_blank">Javascript v2: 2.9.6</a></li>
+<li><a href="https://github.com/algolia/algoliasearch-client-js" target="_blank">Javascript v3: 3.1.0</a></li>
+<li><a href="https://github.com/algolia/algoliasearch-client-node" target="_blank">Node.js: 1.8.0</a></li>
+<li><a href="https://github.com/algolia/algoliasearch-client-ruby" target="_blank">Ruby: 1.4.1</a></li>
+<li><a href="https://github.com/algolia/algoliasearch-rails" target="_blank">Ruby on rails: Ruby dependency 1.4.1</a></li>
+<li><a href="https://github.com/algolia/algoliasearch-client-python" target="_blank">Python: 1.5.2</a></li>
+<li><a href="https://github.com/algolia/algoliasearch-client-php" target="_blank">PHP: 1.5.5</a></li>
+<li><a href="https://github.com/algolia/algoliasearch-client-java" target="_blank">Java: 1.3.5</a></li>
+<li><a href="https://github.com/algolia/algoliasearch-client-android" target="_blank">Android: 1.6.3</a></li>
+<li><a href="https://github.com/algolia/algoliasearch-client-objc" target="_blank">Objective-C: 3.4.1</a></li>
+<li><a href="https://github.com/algolia/algoliasearch-client-csharp" target="_blank">C-Sharp: 3.1.0</a></li>
+<li><a href="https://github.com/algolia/algoliasearch-client-go">Go: 1.2.0</a></li>
+</ul>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fdns-fallback-for-better-resilience%2F&amp;t=DNS+fallback+for+better+resilience" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=DNS+fallback+for+better+resilience&amp;url=https%3A%2F%2Fblog.algolia.com%2Fdns-fallback-for-better-resilience%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fdns-fallback-for-better-resilience%2F&amp;title=DNS+fallback+for+better+resilience&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                <div class="tags-container"><ul class="tags"><li><a href="https://blog.algolia.com/tag/availability/" rel="tag">availability</a></li><li><a href="https://blog.algolia.com/tag/ddos/" rel="tag">ddos</a></li><li><a href="https://blog.algolia.com/tag/dns/" rel="tag">DNS</a></li><li><a href="https://blog.algolia.com/tag/fallback/" rel="tag">fallback</a></li><li><a href="https://blog.algolia.com/tag/latency/" rel="tag">Latency</a></li><li><a href="https://blog.algolia.com/tag/sla/" rel="tag">sla</a></li></ul></div>
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-414">
+        <div id="dsq-comment-header-414" class="dsq-comment-header">
+            <cite id="dsq-cite-414">
+                <span id="dsq-author-user-414">sgoblin</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-414" class="dsq-comment-body">
+            <div id="dsq-comment-message-414" class="dsq-comment-message"><p>Aren&#8217;t .net and .com both run by Verisign?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-415">
+        <div id="dsq-comment-header-415" class="dsq-comment-header">
+            <cite id="dsq-cite-415">
+                <span id="dsq-author-user-415">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-415" class="dsq-comment-body">
+            <div id="dsq-comment-message-415" class="dsq-comment-message"><p>Yes, that is true</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'>Online Search in the Cloud: Version is in Beta!</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/check-out-the-new-iosos-x-clients-for-our-search-as-a-service-offer/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/check-out-the-new-iosos-x-clients-for-our-search-as-a-service-offer/'>New iOS and OS X API clients for our Search-as-a-Service offer</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fdns-fallback-for-better-resilience%2F&amp;t=DNS+fallback+for+better+resilience" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=DNS+fallback+for+better+resilience&amp;url=https%3A%2F%2Fblog.algolia.com%2Fdns-fallback-for-better-resilience%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fdns-fallback-for-better-resilience%2F&amp;title=DNS+fallback+for+better+resilience&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"3699 https:\/\/blog.algolia.com\/?p=3699","disqusShortname":"algoliablog","disqusTitle":"DNS fallback for better resilience","disqusUrl":"https:\/\/blog.algolia.com\/dns-fallback-for-better-resilience\/","options":{"manualSync":false},"postId":"3699"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'3699',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '3699' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

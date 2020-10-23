@@ -1,0 +1,790 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Realtime Search: Security and our Javascript Client - The Algolia Blog</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="By using a JavaScript client, we are able to optimise our realtime search. Here is how we addressed security challenges to bring you instant results."/>
+<meta name="robots" content="noodp"/>
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Realtime Search: Security and our Javascript Client Comments Feed" href="https://blog.algolia.com/handle-security-realtime-search/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=2120' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fhandle-security-realtime-search%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fhandle-security-realtime-search%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=CBEE84C59EEAAA151120D4994E40C665');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Realtime Search: Security and our Javascript Client"/>
+  <meta property="og:url" content="https://blog.algolia.com/handle-security-realtime-search/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Edit: As suggested on Hacker News, SHA256 is not secure, as it allows a length extension attack. We have replaced it with HMAC-SHA256.
+
+Instant is in our DNA, so our first priority was to build a search backend that would be able to return relevant realtime search results in a few milliseconds. Ho"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2014/03/security.png"/>
+  <meta property="article:published_time" content="2014-03-18T01:58:44+00:00"/>
+  <meta property="article:modified_time" content="2015-12-11T10:13:55+00:00" />
+  <meta property="og:updated_time" content="2015-12-11T10:13:55+00:00" />
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Realtime Search: Security and our Javascript Client"/>
+  <meta itemprop="description" content="Edit: As suggested on Hacker News, SHA256 is not secure, as it allows a length extension attack. We have replaced it with HMAC-SHA256.
+
+Instant is in our DNA, so our first priority was to build a search backend that would be able to return relevant realtime search results in a few milliseconds. Ho"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2014/03/security.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Realtime Search: Security and our Javascript Client"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/handle-security-realtime-search/"/>
+  <meta name="twitter:description" content="Edit: As suggested on Hacker News, SHA256 is not secure, as it allows a length extension attack. We have replaced it with HMAC-SHA256.
+
+Instant is in our DNA, so our first priority was to build a search backend that would be able to return relevant realtime search results in a few milliseconds. Ho"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2014/03/security.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-2120 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-2120" class="cf post-2120 post type-post status-publish format-standard has-post-thumbnail hentry category-technology" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Realtime Search: Security and our Javascript Client</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/25760a5d4e793e491f26da5db64bb738?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">julien</span> |
+                    <time class="updated entry-time" datetime="2014-03-18" itemprop="datePublished">March 18, 2014</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/handle-security-realtime-search/" title="Realtime Search: Security and our Javascript Client">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2014/03/security-720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/security.png 720w, https://blog.algolia.com/wp-content/uploads/2014/03/security-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2014/03/security-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead"><em><strong>Edit: As suggested on <a href="https://news.ycombinator.com/item?id=7419205">Hacker News</a>, SHA256 is not secure, as it allows a length extension attack. We have replaced it with HMAC-SHA256.</strong></em></p>
+<p><span style="line-height: 1.5em;">Instant is in our DNA, so our first priority was to build a search backend that would be able to return relevant realtime search results in a few milliseconds. However, the backend is just one variable in our realtime equation. The response time perceived by the end user is the total lapse of time between their first keystroke and the final display of their results. Thus, with an extremely fast backend, solving this equation comes down to optimising network latency. This is an issue we solve in two steps: </span></p>
+<p>&nbsp;</p>
+<ul>
+<li><span style="line-height: 1.5em;">First, we have </span><a style="line-height: 1.5em;" href="http://blog.algolia.com/added-asian-datacenter-offer/">datacenters in three different locations</a><span style="line-height: 1.5em;">, allowing us to answer queries in North America, Europe and Asia in less than 100ms (including search computation).</span></li>
+</ul>
+<ul>
+<li>Second, to keep reducing this perceived latency, queries must be sent directly from the end users&#8217; browsers or mobile phones to our servers. To avoid intermediaries like your own servers, we offer a JavaScript client for websites and ObjC/Android/C# clients for mobile apps.</li>
+</ul>
+<h2><a id="the-security-challenge-of-javascript" class="anchor" href="#the-security-challenge-of-javascript" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The security challenge of JavaScript</h2>
+<p>Using this client means that you need to include an API key in your JavaScript (or mobile app) code. The first security issue with this approach is that this key can be easily retrieved by anyone who simply looks at the code of the page. This gives that person the potential to modify the content behind the website/mobile application! To fix this problem, we provide search-only API keys which protect your indexes from unauthorized modifications.</p>
+<p><span style="font-size: 14px; line-height: 1.5em;">This was a first step and we&#8217;ve quickly had to solve two other security issues:</span></p>
+<ul>
+<li><strong>Limiting the ability to crawl your data: </strong>you may not want people to get all your data by continuous querying. The simple solution was to limit the number of API calls a user could perform in a given period of time. We implemented this by setting a rate limit per IP address. However, this approach is not acceptable if a lot of users are behind a global firewall, thus sharing one IP address. This is very likely for our corporate users.</li>
+</ul>
+<ul>
+<li><strong>Securing access control</strong>:  you may need to restrict the queries of a user to specific content. For example, you may have power users who should get access to more content than &#8220;regular&#8221; users. The easy way to do it is by using filters. The problem here with simple filters in your JavaScript code is that people can figure out how to modify these filters and get access to content they are not be supposed to see.</li>
+</ul>
+<h2><a id="how-we-solve-it-altogether" class="anchor" href="#how-we-solve-it-altogether" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>How we solve it altogether</h2>
+<p><span style="line-height: 1.5em;">Today, most websites and applications require people to create an account and log in to access a personalized experience (think of CRM applications, Facebook or even Netflix). We decided to use these user IDs to solve these two issues by creating signed API keys. Let&#8217;s say you have an API key with search only permission and want to apply a filter on two groups of content (public OR power_users_only) for a specific user (id=42):</span></p>
+<pre class="lang:sh decode:true">api_key=20ffce3fdbf036db955d67645bb2c993
+query_filters=(public,power_users_only)
+user_token=42</pre>
+<p>You can generate a secured API key in your backend that is defined by a hash (HMAC SHA 256) of three elements:</p>
+<pre class="lang:sh decode:true">secured_api_key=HMAC_SHA_256(api_key, query_filters + user_token)
+secured_api_key=HMAC_SHA_256("20ffce3fdbf036db955d67645bb2c993", "(public,power_users_only)" + "42")
+secured_api_key="3abb95c273455ce9b57c61ee5258ba44093f17022dd4bfb39a37e56bee7d24a5"</pre>
+<p>For example, if you are using rails, the code in your backend would be:</p>
+<pre class="lang:ruby decode:true">secured_key = Algolia.generate_secured_api_key('20ffce3fdbf036db955d67645bb2c993', 
+                                               '(public,power_users_only)', '42')</pre>
+<p>You can then initialize your JavaScript code with the secured API key and associated information:</p>
+<pre class="lang:sh decode:true">
+var algolia = new AlgoliaSearch('YourApplicationID', '3abb95c273455ce9b57c61ee5258ba44093f17022dd4bfb39a37e56bee7d24a5'); algolia.setSecurityTags('(public,power_users_only)'); algolia.setUserToken('42'); algolia.initIndex('YourIndex').search($('#q').val(), function(success, content) { // [...] });
+</pre>
+<p>The user identifier (defined by SetUserToken) is used instead of the IP address for the rate limit and the security filters (defined by SetSecurityTags) are automatically applied to the query.</p>
+<p>In practice, if a user wants to overstep her rights, she will need to modify her security tags and figure out the new hash. Our backend checks if a query is legit by computing all the possible hashes using all your available API keys for the queried index, as well as the security tags defined in the query and the user identifier (if set).  If there is no match between the hash of the query and the ones we computed, we will return a permission denied (403). Don&#8217;t worry, reverse-engineering the original API key using brute-force would require years and <a title="Performance measurements on modern processor architectures" href="http://en.wikipedia.org/wiki/SHA-2#Comparison_of_SHA_functions">thousands of core</a>.</p>
+<p>You may want to apply security filters without limiting the rate of queries, so if you don&#8217;t need both of these features, you can use only one.</p>
+<p>We launched this new feature a few weeks ago and we have received very good feedback so far. Our customers don&#8217;t need to choose anymore between security and realtime search. If you see any way to improve this approach, we would love to hear your feedback!</p>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fhandle-security-realtime-search%2F&amp;t=Realtime+Search%3A+Security+and+our+Javascript+Client" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Realtime+Search%3A+Security+and+our+Javascript+Client&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhandle-security-realtime-search%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhandle-security-realtime-search%2F&amp;title=Realtime+Search%3A+Security+and+our+Javascript+Client&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-109">
+        <div id="dsq-comment-header-109" class="dsq-comment-header">
+            <cite id="dsq-cite-109">
+                <span id="dsq-author-user-109">AreaMan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-109" class="dsq-comment-body">
+            <div id="dsq-comment-message-109" class="dsq-comment-message"><p>If I can get a hack into the web browser of a highly-authorized algolia user, I could grab their credentials and have their browser send the credentials to my server, right?</p>
+<p>Or better yet, have the highly-authorized user perform my query and send me the results.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-111">
+        <div id="dsq-comment-header-111" class="dsq-comment-header">
+            <cite id="dsq-cite-111">
+                <span id="dsq-author-user-111">jackowayed</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-111" class="dsq-comment-body">
+            <div id="dsq-comment-message-111" class="dsq-comment-message"><p>If you can get a hack into the web browser of a user, it&#8217;s game over, you can get their login credentials/cookie and do whatever you want, regardless of what Algolia does. So that issue is outside the &#8220;threat model&#8221; that it&#8217;s reasonable for Algolia to design for.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-113">
+        <div id="dsq-comment-header-113" class="dsq-comment-header">
+            <cite id="dsq-cite-113">
+                <a id="dsq-author-user-113" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-113" class="dsq-comment-body">
+            <div id="dsq-comment-message-113" class="dsq-comment-message"><p>In that case you will be able to query user data (but only perform search). The risk is the same that having access to an authenticated account of that user (mail, facebook, &#8230;).</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-110">
+        <div id="dsq-comment-header-110" class="dsq-comment-header">
+            <cite id="dsq-cite-110">
+                <span id="dsq-author-user-110">Concerned Reader</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-110" class="dsq-comment-body">
+            <div id="dsq-comment-message-110" class="dsq-comment-message"><p>Length extension attack?</p>
+<p><a href="https://news.ycombinator.com/item?id=7419205" rel="nofollow">https://news.ycombinator.com/item?id=7419205</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-112">
+        <div id="dsq-comment-header-112" class="dsq-comment-header">
+            <cite id="dsq-cite-112">
+                <a id="dsq-author-user-112" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-112" class="dsq-comment-body">
+            <div id="dsq-comment-message-112" class="dsq-comment-message"><p>You are right, we have updated the blog post and our code according to that attack.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-114">
+        <div id="dsq-comment-header-114" class="dsq-comment-header">
+            <cite id="dsq-cite-114">
+                <span id="dsq-author-user-114">Terry A Davis</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-114" class="dsq-comment-body">
+            <div id="dsq-comment-message-114" class="dsq-comment-message"><p>Hash function might be adding ASCII letters.<br />
+&#8220;BAA&#8221;=2+1+1=4<br />
+&#8220;DD&#8221;=4+4=8<br />
+&#8220;CA&#8221;=3+1=4<br />
+You can use hash functions to collect only unique words.<br />
+You stupid fucken niggers.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-115">
+        <div id="dsq-comment-header-115" class="dsq-comment-header">
+            <cite id="dsq-cite-115">
+                <span id="dsq-author-user-115">Stephane</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-115" class="dsq-comment-body">
+            <div id="dsq-comment-message-115" class="dsq-comment-message"><p>What prevent an attacker to create many user identifiers?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-116">
+        <div id="dsq-comment-header-116" class="dsq-comment-header">
+            <cite id="dsq-cite-116">
+                <a id="dsq-author-user-116" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-116" class="dsq-comment-body">
+            <div id="dsq-comment-message-116" class="dsq-comment-message"><p>The question is how do you do that? The HMAC_SHA256 introduce the need of brute-force to have different user identifiers</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-117">
+        <div id="dsq-comment-header-117" class="dsq-comment-header">
+            <cite id="dsq-cite-117">
+                <span id="dsq-author-user-117">Stephane</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-117" class="dsq-comment-body">
+            <div id="dsq-comment-message-117" class="dsq-comment-message"><p>Sorry I misread.. The secured API key is generated on the backend so my question is stupid 🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-118">
+        <div id="dsq-comment-header-118" class="dsq-comment-header">
+            <cite id="dsq-cite-118">
+                <a id="dsq-author-user-118" href="http://fulmicoton.com" target="_blank" rel="nofollow">Paul Masurel</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-118" class="dsq-comment-body">
+            <div id="dsq-comment-message-118" class="dsq-comment-message"><p>What about revocability?</p>
+<p>You might want to add a emission date and hash it along the other information, to address it partially&#8230;</p>
+<p>secured_api_key=Hash(api_key, query_filters + user_token, utc_now())</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-119">
+        <div id="dsq-comment-header-119" class="dsq-comment-header">
+            <cite id="dsq-cite-119">
+                <a id="dsq-author-user-119" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-119" class="dsq-comment-body">
+            <div id="dsq-comment-message-119" class="dsq-comment-message"><p>In fact we expose an API to create API keys (secrets in HMAC-SHA256). We support ephemeral API keys (<a href="http://www.algolia.com/doc#Security" rel="nofollow">http://www.algolia.com/doc#Security</a>), so we already address this use case 🙂<br />
+The standard use of secured API keys is to have an ephemeral API key with an expiration date few days in the future and to generate a new API key every day.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-450">
+        <div id="dsq-comment-header-450" class="dsq-comment-header">
+            <cite id="dsq-cite-450">
+                <span id="dsq-author-user-450">PLNech</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-450" class="dsq-comment-body">
+            <div id="dsq-comment-message-450" class="dsq-comment-message"><p>An error prevents the last example from being displayed, as its code is inside a  tag:</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-451">
+        <div id="dsq-comment-header-451" class="dsq-comment-header">
+            <cite id="dsq-cite-451">
+                <a id="dsq-author-user-451" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-451" class="dsq-comment-body">
+            <div id="dsq-comment-message-451" class="dsq-comment-message"><p>Thanks for the bug report, we have fixed the issue.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'>Online Search in the Cloud: Version is in Beta!</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/v2-our-new-offline-search-sdk-with-geo-search-and-other-features/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/v2-our-new-offline-search-sdk-with-geo-search-and-other-features/'>V2: Search by Geolocation in our Offline Search SDK</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fhandle-security-realtime-search%2F&amp;t=Realtime+Search%3A+Security+and+our+Javascript+Client" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Realtime+Search%3A+Security+and+our+Javascript+Client&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhandle-security-realtime-search%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhandle-security-realtime-search%2F&amp;title=Realtime+Search%3A+Security+and+our+Javascript+Client&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"2120 http:\/\/blog.algolia.com\/?p=2120","disqusShortname":"algoliablog","disqusTitle":"Realtime Search: Security and our Javascript Client","disqusUrl":"https:\/\/blog.algolia.com\/handle-security-realtime-search\/","options":{"manualSync":false},"postId":"2120"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'2120',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '2120' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

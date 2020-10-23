@@ -1,0 +1,858 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>iOS: When Automatic Reference Counting is a Bad Idea - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="While developing for iOS, we encountered a problem with automatic reference counting. This gave us some insight into how we want to build our product."/>
+<meta name="robots" content="noodp"/>
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; iOS: When Automatic Reference Counting is a Bad Idea Comments Feed" href="https://blog.algolia.com/ios-when-arc-is-a-bad-idea/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=79' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fios-when-arc-is-a-bad-idea%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fios-when-arc-is-a-bad-idea%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=1F1510476143DB23CB8FD258727581A0');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="iOS: When Automatic Reference Counting is a Bad Idea"/>
+  <meta property="og:url" content="https://blog.algolia.com/ios-when-arc-is-a-bad-idea/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="I started developing for iOS in 2009 by learning about the Objective-C language. At that time ARC (Automatic Reference Counting) was not yet available and developers were responsible for alloc/release/autorelease. I found it pretty straightforward as it was very similar to C++ and the resulting code"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png"/>
+  <meta property="article:published_time" content="2012-07-12T16:26:19+00:00"/>
+  <meta property="article:modified_time" content="2015-04-07T00:05:19+00:00" />
+  <meta property="og:updated_time" content="2015-04-07T00:05:19+00:00" />
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="iOS: When Automatic Reference Counting is a Bad Idea"/>
+  <meta itemprop="description" content="I started developing for iOS in 2009 by learning about the Objective-C language. At that time ARC (Automatic Reference Counting) was not yet available and developers were responsible for alloc/release/autorelease. I found it pretty straightforward as it was very similar to C++ and the resulting code"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="iOS: When Automatic Reference Counting is a Bad Idea"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/ios-when-arc-is-a-bad-idea/"/>
+  <meta name="twitter:description" content="I started developing for iOS in 2009 by learning about the Objective-C language. At that time ARC (Automatic Reference Counting) was not yet available and developers were responsible for alloc/release/autorelease. I found it pretty straightforward as it was very similar to C++ and the resulting code"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-79 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-79" class="cf post-79 post type-post status-publish format-standard has-post-thumbnail hentry category-technology tag-development tag-ios tag-objective-c" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">iOS: When Automatic Reference Counting is a Bad Idea</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/25760a5d4e793e491f26da5db64bb738?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">julien</span> |
+                    <time class="updated entry-time" datetime="2012-07-12" itemprop="datePublished">July 12, 2012</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/ios-when-arc-is-a-bad-idea/" title="iOS: When Automatic Reference Counting is a Bad Idea">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png 720w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">I started developing for iOS in 2009 by learning about the Objective-C language. At that time ARC (Automatic Reference Counting) was not yet available and developers were responsible for alloc/release/autorelease. I found it pretty straightforward as it was very similar to C++ and the resulting code was very self-explanatory.</p>
+<p>When ARC was released at the end of 2011 it made a great impression on me and looked like the perfect feature for any programmer coming from the Java world who was not familiar with memory management. I started using ARC and discovered a major flaw that completely changed my mind. Here is an example :</p>
+<p>[Edit 28-Jan-2013] This post describes a bug in ARC that was fixed in Xcode 4.4.[/Edit]<br />
+<span id="more-79"></span>Let&#8217;s start with an example in C++, the sample contains a constructor that allocates two vectors, a destructor that destroys them and a compute method that just performs a swap between the two vectors. This code is perfectly valid and a swap is the perfect operation when you have two sets of data to maintain because this is very efficient (just two pointers copy, no data copy).</p>
+<pre class="plain:false lang:c++ decode:true" data-url="exampleCPP">class Example {
+public:
+  Example() {
+    nextPositions = new std::vector&lt;int&gt;();
+    currentPositions = new std::vector&lt;int&gt;();
+  }
+  ~Example() {
+    delete nextPositions;
+    delete currentPositions;
+  }
+
+  void compute() {
+    // some code here
+    std::swap(nextPositions, currentPositions);
+    // some other code here
+  }
+
+private:
+  std::vector&lt;int&gt;* nextPositions;
+  std::vector&lt;int&gt;* currentPositions;
+};</pre>
+<p>Before ARC the objective-C code was very similar and perfectly valid:</p>
+<pre class="plain:false lang:objc decode:true">// headers
+@interface Example : NSObject {
+  NSMutableArray* nextPositions;
+  NSMutableArray* currentPositions;
+}
+-(void) compute;
+@end
+
+// implementation
+@implementation Example
+-(id) init {
+  self = [super init];
+  if (!self)
+    return nil;
+  nextPositions = [[NSMutableArray alloc] init];
+  currentPositions = [[NSMutableArray alloc] init];
+  return self;
+}
+
+-(void) dealloc {
+  [super dealloc];
+  [nextPositions release];
+  [currentPositions release];
+}
+
+-(void) compute
+{
+  // some processing stuff here
+  NSMutableArray* tmp = nextPositions;
+  nextPositions = currentPositions;
+  currentPositions = tmp;
+  // some processing stuff here
+}
+@end</pre>
+<p>The semantics are very clear, it is exactly the same as in C++.</p>
+<p>So when you start using ARC you tend to do exactly the same thing with less code, and you just delete the dealloc method:</p>
+<pre class="plain:false lang:default decode:true">// headers
+@interface Example : NSObject {
+  NSMutableArray* nextPositions;
+  NSMutableArray* currentPositions;
+}
+-(void) compute;
+@end
+
+// implementation
+@implementation Example
+-(id) init {
+  self = [super init];
+  if (!self)
+    return nil;
+  nextPositions = [[NSMutableArray alloc] init];
+  currentPositions = [[NSMutableArray alloc] init];
+  return self;
+}
+
+-(void) compute {
+  // some processing stuff here
+  NSMutableArray* tmp = nextPositions;
+  nextPositions = currentPositions;
+  // Wrong, at that step this is too late! nextPositions was deallocated
+  currentPositions = tmp;
+  // some processing stuff here
+}
+@end</pre>
+<p>The error does not come from a missing strong attribute, because instance variables are strong by default. The problem is that ARC does not generate code in the variable assignation. You should explicitely add properties and use &#8220;self.variableName&#8221; notation like in the next example. I would encourage ARC designers to read this excellent article by Joel Spolsky <a href="http://www.joelonsoftware.com/articles/Wrong.html">&#8220;Making Wrong Code Look Wrong&#8221;</a>. This ARC usage is a perfect example of wrong code that looks perfect but leads me to the conclusion that ARC is not trustworthy.</p>
+<p>Here is the correct version:</p>
+<pre class="plain:false lang:default decode:true">// headers
+@interface Example : NSObject {
+  NSMutableArray* nextPositions;
+  NSMutableArray* currentPositions;
+}
+-(void) compute;
+@property (strong, nonatomic) NSMutableArray* nextPositions;
+@property (strong, nonatomic) NSMutableArray* currentPositions;
+@end
+
+// implementation
+@implementation Example
+-(id) init {
+  self = [super init];
+  if (!self)
+    return nil;
+  nextPositions = [[NSMutableArray alloc] init];
+  currentPositions = [[NSMutableArray alloc] init];
+  return self;
+}
+
+-(void) compute {
+  // some processing stuff here
+  NSMutableArray* tmp = self.nextPositions;
+  self.nextPositions = self.currentPositions;
+  self.currentPositions = tmp;
+  // some processing stuff here
+}
+@synthesize nextPositions;
+@synthesize currentPositions;
+@end</pre>
+<p>I am surprised Apple hasn&#8217;t corrected that flaw yet. This is a major issue as ARC does not generate code for variable affectation like it does for properties (if one of you reads this post and has a complete explanation, please tell me!):</p>
+<ul>
+<li>Is it because of a performance issue? I would prefer to have no ARC at all than to see such a behavior.</li>
+<li>Is this case too complex to be handled? The problem is it undermines ARC&#8217;s utility and might get stuck at the prototype stage.</li>
+</ul>
+<p>To me, this is a perfect example of a technology driven product. The engineers know their product so well that they forget to step back and look at it with a fresh eye to analyse the full complexity of their system.</p>
+<p>And that leaves me with two important lessons we&#8217;ll try to apply to our products:</p>
+<ul>
+<li>Always organize user tests, even when your users are developers themselves!</li>
+<li>Always keep a fresh eye when trying to simplify a product (this one may prove particularly difficult!)</li>
+</ul>
+<p>I hope you&#8217;ll tell us when we will (inevitably) break these rules!</p>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fios-when-arc-is-a-bad-idea%2F&amp;t=iOS%3A+When+Automatic+Reference+Counting+is+a+Bad+Idea" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=iOS%3A+When+Automatic+Reference+Counting+is+a+Bad+Idea&amp;url=https%3A%2F%2Fblog.algolia.com%2Fios-when-arc-is-a-bad-idea%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fios-when-arc-is-a-bad-idea%2F&amp;title=iOS%3A+When+Automatic+Reference+Counting+is+a+Bad+Idea&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                <div class="tags-container"><ul class="tags"><li><a href="https://blog.algolia.com/tag/development/" rel="tag">Development</a></li><li><a href="https://blog.algolia.com/tag/ios/" rel="tag">iOS</a></li><li><a href="https://blog.algolia.com/tag/objective-c/" rel="tag">Objective-C</a></li></ul></div>
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-4">
+        <div id="dsq-comment-header-4" class="dsq-comment-header">
+            <cite id="dsq-cite-4">
+                <span id="dsq-author-user-4">Ian Smith</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4" class="dsq-comment-body">
+            <div id="dsq-comment-message-4" class="dsq-comment-message"><p>I can certainly agree that this is deceptive and to some extent wrong.  I also agree that it would be better to either make the feature work everywhere than to have it work &#8220;occasionally.&#8221;</p>
+<p>I would argue that this problem is a derivative of the C++ disease.  I think the apple folks were attempting to allow you to &#8220;pick and choose&#8221; when you wanted to have ARC and allow you the option to not choose it.  If you look at the example provided above, you&#8217;ll notice that most of the differences are just &#8220;flipping the switches&#8221; to turn on the ARC in one way or another.  The exception is the notational difference &#8220;self.BLAH&#8221; which to me is, quite frankly, almost inexcusable and clearly poor design&#8211;the compiler has to know when to insert self.BLAH in your first example wherever there is BLAH _anyway_ yet performs different actions when you do it yourself?!?</p>
+<p>I say this is the C++ disease because C++ is the endgame of &#8220;give developers freedom of choice&#8221; and allow all possible combinations.  I believe that is fundamentally language designers abdicating their responsibility to &#8220;make the simple things simple and the complex things possible.&#8221;  Instead, everything becomes complex and arcane.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-5">
+        <div id="dsq-comment-header-5" class="dsq-comment-header">
+            <cite id="dsq-cite-5">
+                <a id="dsq-author-user-5" href="http://twitter.com/sarfata" target="_blank" rel="nofollow">Thomas Sarlandie</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5" class="dsq-comment-body">
+            <div id="dsq-comment-message-5" class="dsq-comment-message"><p>Apple makes it clear to its developers that you should always use the &#8220;self-dot&#8221; syntax, except when in a dealloc/init method. I would argue that the pre-ARC version of your code looked good but was wrong because it did not use that syntax.</p>
+<p>The main disadvantage of that is that you have to declare property for stuff that are not public. Some of the new stuff announced at WWDC this year and coming soon (but still under NDA) will simplify that: you can put the @property in the .m file and stop declaring ivars.</p>
+<p>Thanks for the little brain challenge 😉</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-6">
+        <div id="dsq-comment-header-6" class="dsq-comment-header">
+            <cite id="dsq-cite-6">
+                <span id="dsq-author-user-6">speedblue</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-6" class="dsq-comment-body">
+            <div id="dsq-comment-message-6" class="dsq-comment-message"><p>Ian: I would say this is a C disease more than C++. Objective-C is built on top of C (like C++) and the problem is to add top feature like ARC that can be easily bypassed with a different syntax.</p>
+<p>Thomas: I agree that it is recommanded to use the &#8220;self-dot&#8221; syntax but I do not understand why with ARC they do not force the &#8220;self.&#8221; on each variable access, this would avoid such problem, btw  there is no mention of this kind of risk on the &#8220;ARC transition&#8221; guide. This is good to see that there is new improvements announced at WWDC ! </p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-7">
+        <div id="dsq-comment-header-7" class="dsq-comment-header">
+            <cite id="dsq-cite-7">
+                <span id="dsq-author-user-7">Peter Parker</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-7" class="dsq-comment-body">
+            <div id="dsq-comment-message-7" class="dsq-comment-message"><p>That is not correct.</p>
+<p><a href="http://pastebin.com/Q8Qgjm4D" rel="nofollow">http://pastebin.com/Q8Qgjm4D</a></p>
+<p>TGTest *test = [[TGTest alloc] init];<br />
+[test compute];test = nil;</p>
+<p>before compute: 123 and 567<br />
+after compute: 567 and 123<br />
+dummy 567 deallocated<br />
+dummy 123 deallocated</p>
+<p>(Zombies are enabled)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-8">
+        <div id="dsq-comment-header-8" class="dsq-comment-header">
+            <cite id="dsq-cite-8">
+                <span id="dsq-author-user-8">Peter Parker</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-8" class="dsq-comment-body">
+            <div id="dsq-comment-message-8" class="dsq-comment-message"><p>Actually, your code runs pretty fine too. How did you manage to get nextPositions dellocated?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-9">
+        <div id="dsq-comment-header-9" class="dsq-comment-header">
+            <cite id="dsq-cite-9">
+                <a id="dsq-author-user-9" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-9" class="dsq-comment-body">
+            <div id="dsq-comment-message-9" class="dsq-comment-message"><p>Hum you are right, this is very strange. I still have the project that produced this error and the zombie mode exactly shows the free on this position. I will try to reproduce it in a very small project like this.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-10">
+        <div id="dsq-comment-header-10" class="dsq-comment-header">
+            <cite id="dsq-cite-10">
+                <a id="dsq-author-user-10" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-10" class="dsq-comment-body">
+            <div id="dsq-comment-message-10" class="dsq-comment-message"><p>Peter: your code works well in debug mode but not in release.<br />
+The wrong object release only occurs in release mode.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-11">
+        <div id="dsq-comment-header-11" class="dsq-comment-header">
+            <cite id="dsq-cite-11">
+                <span id="dsq-author-user-11">Peter Parker</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-11" class="dsq-comment-body">
+            <div id="dsq-comment-message-11" class="dsq-comment-message"><p>You are right. This is definitely a bug in clang. By the way, the following code works too: TGDummy *tmp1 = self.n1; TGDummy *tmp2 = self.n2; _n1 = tmp2; _n2 = tmp1; (using property getter) I think this may be related to some optimizations in clang&#8217;s ARC.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-12">
+        <div id="dsq-comment-header-12" class="dsq-comment-header">
+            <cite id="dsq-cite-12">
+                <span id="dsq-author-user-12">Peter Parker</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-12" class="dsq-comment-body">
+            <div id="dsq-comment-message-12" class="dsq-comment-message"><p>This code runs fine too. Damn you clang developers&#8230; 🙂</p>
+<p>    TGDummy *t = [[TGDummy alloc] init];</p>
+<p>    _n1 = t;</p>
+<p>    __strong TGDummy *tmp1 = _n1;</p>
+<p>    __strong TGDummy *tmp2 = _n2;</p>
+<p>    _n1 = tmp2;</p>
+<p>    _n2 = tmp1;</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-13">
+        <div id="dsq-comment-header-13" class="dsq-comment-header">
+            <cite id="dsq-cite-13">
+                <span id="dsq-author-user-13">Peter Parker</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-13" class="dsq-comment-body">
+            <div id="dsq-comment-message-13" class="dsq-comment-message"><p>And that&#8230;</p>
+<p>__autoreleasing TGDummy *tmp = _n1;</p>
+<p>_n1 = _n2;</p>
+<p>_n2 = tmp;</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-14">
+        <div id="dsq-comment-header-14" class="dsq-comment-header">
+            <cite id="dsq-cite-14">
+                <span id="dsq-author-user-14">Peter Parker</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14" class="dsq-comment-body">
+            <div id="dsq-comment-message-14" class="dsq-comment-message"><p>Seems to be fixed in Xcode 4.4.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'>Online Search in the Cloud: Version is in Beta!</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/simplicity-is-the-most-complex-feature/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/simplicity-is-the-most-complex-feature/'>Simplicity is the most Complex Feature!</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fios-when-arc-is-a-bad-idea%2F&amp;t=iOS%3A+When+Automatic+Reference+Counting+is+a+Bad+Idea" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=iOS%3A+When+Automatic+Reference+Counting+is+a+Bad+Idea&amp;url=https%3A%2F%2Fblog.algolia.com%2Fios-when-arc-is-a-bad-idea%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fios-when-arc-is-a-bad-idea%2F&amp;title=iOS%3A+When+Automatic+Reference+Counting+is+a+Bad+Idea&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"79 http:\/\/blog.algolia.com\/?p=79","disqusShortname":"algoliablog","disqusTitle":"iOS: When Automatic Reference Counting is a Bad Idea","disqusUrl":"https:\/\/blog.algolia.com\/ios-when-arc-is-a-bad-idea\/","options":{"manualSync":false},"postId":"79"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'79',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '79' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

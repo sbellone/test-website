@@ -1,0 +1,747 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Inside the Algolia Engine Part 2 — The Indexing Challenge of Instant Search - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Inside the Algolia Engine Part 2 — The Indexing Challenge of Instant Search Comments Feed" href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=4934' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=2724D2A6393DEF86F4BF4119046EE708');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Inside the Algolia Engine Part 2 — The Indexing Challenge of Instant Search"/>
+  <meta property="og:url" content="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Search engine usage has evolved a lot in the last few years. Today’s users expect instant feedback without having to click on the “enter” button and wait for the page to load to get their results. They also expect the engine to tolerate typing mistakes on the fly without having to validate proposals"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2016/05/indexing-part2.png"/>
+  <meta property="article:published_time" content="2016-05-02T02:17:21+00:00"/>
+  <meta property="article:modified_time" content="2017-04-21T03:57:41+00:00" />
+  <meta property="og:updated_time" content="2017-04-21T03:57:41+00:00" />
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Inside the Algolia Engine Part 2 — The Indexing Challenge of Instant Search"/>
+  <meta itemprop="description" content="Search engine usage has evolved a lot in the last few years. Today’s users expect instant feedback without having to click on the “enter” button and wait for the page to load to get their results. They also expect the engine to tolerate typing mistakes on the fly without having to validate proposals"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2016/05/indexing-part2.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Inside the Algolia Engine Part 2 — The Indexing Challenge of Instant Search"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/"/>
+  <meta name="twitter:description" content="Search engine usage has evolved a lot in the last few years. Today’s users expect instant feedback without having to click on the “enter” button and wait for the page to load to get their results. They also expect the engine to tolerate typing mistakes on the fly without having to validate proposals"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2016/05/indexing-part2.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-4934 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-4934" class="cf post-4934 post type-post status-publish format-standard has-post-thumbnail hentry category-technology" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Inside the Algolia Engine Part 2 — The Indexing Challenge of Instant Search</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/25760a5d4e793e491f26da5db64bb738?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">julien</span> |
+                    <time class="updated entry-time" datetime="2016-05-02" itemprop="datePublished">May 2, 2016</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/" title="Inside the Algolia Engine Part 2 — The Indexing Challenge of Instant Search">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2016/05/indexing-part2.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2016/05/indexing-part2.png 720w, https://blog.algolia.com/wp-content/uploads/2016/05/indexing-part2-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2016/05/indexing-part2-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">Search engine usage has evolved a lot in the last few years. <span style="line-height: 1.5;">Today’s users expect instant feedback without having to click on the “enter” button and wait for the page to load to get their results. They also expect the engine to tolerate typing mistakes on the fly without having to validate proposals of query re-phrasing, like the (in)famous “did you mean?”</span></p>
+<p><span style="line-height: 1.5;">Of course all these changes have pretty big consequences on the engine itself. In this post, we will concentrate on the way we handle indexing at Algolia, why we do it differently in order to maximize indexing speed and search performance and how we natively address these evolutions in search.</span></p>
+<h2><a id="introduction-to-indexing" class="anchor" href="#introduction-to-indexing" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Introduction to indexing</h2>
+<p><span style="font-weight: 400;">The goal of the indexing process is to store your data in a specific data-structure that is optimized for search. Without indexing, we would need to scan all the documents in a database to detect which ones match a query. This would take forever and be highly inefficient, ultimately resulting in a terrible user experience. This is one of the reasons we continue to focus on optimizing indexing speed as part of our overall efforts to make search more efficient.</span></p>
+<p>The main part of the indexing process is to create a data-structure that contains a mapping of each word to the associated list of documents containing this word. One mapping of the word to the list of documents is called an inverted list, with the name coming  from the inversion of the space: instead of having documents that contains words, we have now words with the list of documents containing each word. The concept is similar to the index you have at the end of a book, except all words are in the index.</p>
+<p><span style="font-weight: 400;">There are a lot of algorithms to store those inverted lists in an efficient way while keeping good performance. Most of those techniques are pretty old and well described in the very good </span><a href="https://books.google.fr/books/about/Managing_Gigabytes.html?id=2F74jyPl48EC&amp;redir_esc=y"><span style="font-weight: 400;">Managing Gigabytes</span></a><span style="font-weight: 400;"> book.</span></p>
+<p><span style="font-weight: 400;">The creation of those inverted lists can be decomposed in two big parts:</span></p>
+<ul>
+<li><span style="font-weight: 400;">For each document, we extract the list of words and build a hash-table that associates words to documents</span></li>
+<li><span style="font-weight: 400;">When all documents are processed, we compute an on-disk binary data-structure containing the mapping of words to documents. This data-structure is the index we will use to process queries.</span></li>
+</ul>
+<h2><a id="how-search-as-you-type-is-usually-implemented" class="anchor" href="#how-search-as-you-type-is-usually-implemented" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>How search-as-you-type is usually implemented</h2>
+<p><span style="font-weight: 400;">As-you-type display of search results was introduced by Google in 2010 as &#8220;Google Instant&#8221; and later referred to as &#8220;Instant Search.&#8221; Users love this experience as it creates a seamless interaction with the data they are looking for! It removes the intermediate steps such as query validation, “did-you-mean” re-phrasing and decreases the time spent waiting for the results to show up! It also means indexing and search have to be redesigned because you don&#8217;t simply search for words anymore, but also for partially written words (prefixes) and it needs to be very fast!</span><br />
+<span style="font-weight: 400;">There are four main different approaches engineers use today to build this type of instant search:</span></p>
+<h3><a id="1-autocomplete-also-called-suggest" class="anchor" href="#1-autocomplete-also-called-suggest" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>1) Autocomplete (also called Suggest)</strong></h3>
+<p><span style="font-weight: 400;">This approach is the most commonly used and is based on a static data-structure on the side of the search engine. You can see it as a big dictionary in the form of a </span><a href="https://en.wikipedia.org/wiki/Trie"><span style="font-weight: 400;">Trie</span></a><span style="font-weight: 400;"> (special type of Tree that associates string to an output, all the descendants of a node have a common prefix of the string).</span></p>
+<p><b>Advantages:</b></p>
+<ul>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Very fast response time (usually few milliseconds)</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Scales well, can easily handle thousands of queries per second on one machine</span></li>
+</ul>
+<p><b>Drawbacks:</b></p>
+<ul>
+<li style="font-weight: 400;"><span style="font-weight: 400;">This is not a search engine, you have to search for a sub-string on the pre-defined list of expressions in the dictionary. In terms of user-experience, it often leads to very frustrating &#8220;no results&#8221; or &#8220;bad results&#8221; because of this limitation</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">The relevance is not the same as the search engine itself, it is just a static dictionary. It works well if you propose &#8220;frequent queries,&#8221; but starts to have weird effects if you use it to search on the same records as the fully-featured search engine itself. The relevance will be different, of lesser quality and will lead to a lot of confusion.</span></li>
+</ul>
+<h3><a id="2-index-prefixes" class="anchor" href="#2-index-prefixes" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>2) Index prefixes</strong></h3>
+<p><span style="font-weight: 400;">This approach is simply to build an inverted list for all prefixes of a word instead of just the word itself. For example instead of just having an inverted list for the word &#8220;engine&#8221;, you will also have one for &#8220;e&#8221;, &#8220;en&#8221;, &#8220;eng&#8221;, &#8220;engi&#8221; and &#8220;engin&#8221;. Those lists will usually contain a specific indicator that allows at query time to make the difference between a prefix and an exact word (both exact and prefix inverted lists will be queried with a preference for exact).</span></p>
+<p><b>Advantages:</b></p>
+<ul>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Fast resolution of prefixes as they are pre-computed</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Ability to keep the relevance of the search-engine for all interaction with the engine, including as-you-type experience (user is never lost between two different ways to rank results)</span></li>
+</ul>
+<p><b>Drawbacks:</b></p>
+<ul>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Increase the time to publish results because the indexing process is far more expensive than without inverted list and consumes far more memory (inverted list are kept in memory)</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Increase a lot the size of the index, which reduces a lot the likelihood of fitting in memory and so can hurt performance (even on a SSD)</span></li>
+</ul>
+<h3><a id="3-ngrams-computation" class="anchor" href="#3-ngrams-computation" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>3) ngrams computation</strong></h3>
+<p><span style="font-weight: 400;">This approach is very similar to the indexing of all prefixes but it limits the computation of prefixes by allowing a minimum and a maximum number of letters in the prefix. The main advantage is to reduce the cost compared to the indexing of all prefixes, if you query a prefix that is bigger than the maximum number of letters, the query will be automatically be transformed into a query on several ngrams (queries with fewer letters than the minimum will not trigger the prefix search).</span></p>
+<p><span style="font-weight: 400;">Advantages and drawbacks are the same as the indexing of all prefixes; it is just a small improvement to reduce a bit the cost of indexing by adding more computation in the search.</span></p>
+<h3><a id="4-search-prefixes-at-search-time" class="anchor" href="#4-search-prefixes-at-search-time" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>4) Search prefixes at search time</strong></h3>
+<p><span style="font-weight: 400;">This approach keeps the indexing process pretty light by keeping only one inverted list per word but it requires to do all the processing at query-time. For example if you perform the query &#8216;a&#8217;, it will mean looking for all words that start by &#8216;a&#8217; in a big dictionary and then perform a query with all those words in a big OR operand. This approach is very expensive and usually people that select this approach start the prefix search after a certain number of letters in the prefix to avoid having queries that are too expensive.</span></p>
+<p><b>Advantages:</b></p>
+<ul>
+<li style="font-weight: 400;"><span style="font-weight: 400;">No indexing overhead for prefix searches</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">No compromises on the relevance of the search-engine</span></li>
+</ul>
+<p><b>Drawbacks:</b></p>
+<ul>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Produces very complex and slow queries</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Only works if the number of documents and words is very small, it does not scale</span></li>
+</ul>
+<p><span style="font-weight: 400;">Engineers working on search have no other choice than spending time to test those different approaches and select the one that seems the best for their use cases, unfortunately all of them have serious drawbacks.</span></p>
+<h2><a id="a-different-approach" class="anchor" href="#a-different-approach" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>A different approach</h2>
+<p><span style="font-weight: 400;">At the beginning of Algolia, we worked on a different product: an offline search engine SDK for mobile app developers. And we wanted this engine to provide a fast instant search experience on old devices like an iPhone 3G.</span></p>
+<p><span style="font-weight: 400;">None of the standard approaches described above would have worked on such a low-end hardware, so we had to design a new way to do the indexing with very little RAM and CPU. All that while maintaining an instant search experience (one of the purpose of indexing being to speed up the search operations).</span></p>
+<p><span style="font-weight: 400;">Having already worked on multiple data-structures for search engines prior to Algolia helped me a lot in designing a different way to solve the problem. The first inspiration came from a generational string B-tree I built several years ago. It was pretty similar to what the </span><a href="https://github.com/google/leveldb"><span style="font-weight: 400;">LevelDB</span></a><span style="font-weight: 400;"> fast key-value store developed by Google is doing (associate an arbitrary size value to an arbitrary size string).</span></p>
+<p><span style="font-weight: 400;">First, I knew that for Algolia I wanted to have a generational data-structure.</span></p>
+<h3><a id="generational-data-structure" class="anchor" href="#generational-data-structure" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>Generational data-structure</strong></h3>
+<p><span style="font-weight: 400;">Having a generational data-structure makes updating the data a lot faster. Typically, you’ll create two (or more) “generations” of your data-structure. A big one containing the “old” data, and a small one containing the “new” data.</span></p>
+<p><span style="font-weight: 400;">Then, if you need to add/update/delete an object, you’ll update a smaller structure containing only the “new” information, which is much faster.</span></p>
+<h3><a id="merge-of-generational-data-structure" class="anchor" href="#merge-of-generational-data-structure" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>Merge of Generational data-structure</strong></h3>
+<p><span style="font-weight: 400;">At some point (generally when your smallest generation reaches a certain size), you’ll need to merge several generations into one for a better efficiency. This operation is called a merge.</span></p>
+<p><span style="font-weight: 400;">In order to have an efficient merge, each generation needs to be sorted, so that you can scan them in parallel while generating the result (merge of the parallel scan is done via a standard heap-merge algorithm).</span></p>
+<h3><a id="radix-tree" class="anchor" href="#radix-tree" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>Radix tree</strong></h3>
+<p><span style="font-weight: 400;">For Algolia, I decided to represent the words that will be searchable as a </span><a href="https://en.wikipedia.org/wiki/Radix_tree"><span style="font-weight: 400;">radix tree</span></a><span style="font-weight: 400;"> (</span><span style="font-weight: 400;">space-optimized representation of a Trie, below we look at what a radix tree is in practice)</span><span style="font-weight: 400;">.</span></p>
+<p><span style="font-weight: 400;">First because a radix tree is sorted, which allowed us to have an efficient merge and to use multiple generations of the tree.</span></p>
+<p><span style="font-weight: 400;">Second because it works very well to process the typo-tolerance in a very efficient way (more details on the typo-tolerance will come in another post).</span></p>
+<p><span style="font-weight: 400;">It is easy to build a radix tree in memory before writing it on disk, but it consumes a lot of RAM. And I wanted to use the least amount of RAM possible, because:</span></p>
+<ol>
+<li style="font-weight: 400;"><span style="font-weight: 400;">For the initial offline search SDK, we simply didn’t have enough RAM on an iPhone 3G.</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">For our current SaaS engine, we want the RAM to be focused on making search fast (the indices are all stored on RAM for search), which means indexing should consume the minimum amount of RAM.</span></li>
+</ol>
+<p><span style="font-weight: 400;">What’s great is that you can actually write a radix tree on the fly without having to build the tree in memory if you’re indexing a list of sorted words.</span></p>
+<p><span style="font-weight: 400;">For example, let’s consider that the dataset we want to search on contains 5 objects, each having a single word. Each object will be represented by a value from 1 to 5.</span></p>
+<p><span style="font-weight: 400;">Normally, multiple objects could have the same word, so the leaf would have a list of values. But for simplicity’s sake, we’ll take records containing different words.</span></p>
+<div id="attachment_4957" style="width: 234px" class="wp-caption aligncenter"><a href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/dictionary1/" rel="attachment wp-att-4957"><img class="wp-image-4957 " src="https://blog.algolia.com/wp-content/uploads/2016/05/dictionary1-e1462180935434.png" width="224" height="251" srcset="https://blog.algolia.com/wp-content/uploads/2016/05/dictionary1-e1462180935434.png 449w, https://blog.algolia.com/wp-content/uploads/2016/05/dictionary1-e1462180935434-159x178.png 159w, https://blog.algolia.com/wp-content/uploads/2016/05/dictionary1-e1462180935434-357x400.png 357w" sizes="(max-width: 224px) 100vw, 224px" /></a><p class="wp-caption-text">Dictionary example mapping a word to an integer</p></div>
+<p><span style="font-weight: 400;">Each node of our radix tree will contain a string.</span></p>
+<p><span style="font-weight: 400;">If the node is a leaf, it has a value associated to the corresponding object having this word.</span></p>
+<p><span style="font-weight: 400;">If the node is not a leaf, it can have an associated value, but it can also just be an internal node representing a shared prefix.</span></p>
+<p><span style="font-weight: 400;">The radix-tree we’re going to build will look like this:</span></p>
+<div id="attachment_4956" style="width: 463px" class="wp-caption aligncenter"><a href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/dictionary-2/" rel="attachment wp-att-4956"><img class="wp-image-4956 " src="https://blog.algolia.com/wp-content/uploads/2016/05/dictionary-2-e1462181068823.png" width="453" height="260" srcset="https://blog.algolia.com/wp-content/uploads/2016/05/dictionary-2-e1462181068823.png 990w, https://blog.algolia.com/wp-content/uploads/2016/05/dictionary-2-e1462181068823-310x178.png 310w, https://blog.algolia.com/wp-content/uploads/2016/05/dictionary-2-e1462181068823-768x441.png 768w, https://blog.algolia.com/wp-content/uploads/2016/05/dictionary-2-e1462181068823-696x400.png 696w" sizes="(max-width: 453px) 100vw, 453px" /></a><p class="wp-caption-text">Radix-tree of the previous dictionary</p></div>
+<p><span style="font-weight: 400;">Now, let’s build our radix-tree. Seems simple now enough, right? The naive approach is to build the complete data-structure in memory and then to dump it on disk. We do not want to use this approach because we want to keep as much memory as possible on our servers to hosts the indices of our users and provide a fast search! This is why we designed all the indexing to use as little memory as possible while optimizing speed of indexing.</span></p>
+<p><span style="font-weight: 400;">Here’s the trick: we can build this data-structure on-disk directly from the list of words and with only a few kilobytes of memory. To do that, we’ll flush from the RAM the nodes as soon as possible, by building the tree on the fly. </span></p>
+<p><span style="font-weight: 400;">The first step is to order alphanumerically the words of the documents we want to index (which is already done in our example).</span></p>
+<p><span style="font-weight: 400;">Then, we’re going to build our tree using a </span><a href="https://en.wikipedia.org/wiki/Depth-first_search"><span style="font-weight: 400;">depth-first search</span></a><span style="font-weight: 400;">: since a radix tree is sorted in the alphanumeric order, it’ll be easy to flush nodes to the disk as soon as we don’t need them.</span></p>
+<ol>
+<li><span style="font-weight: 400;">1. Add the word Fast</span></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/dictionary-3/" rel="attachment wp-att-4955"><img class="aligncenter wp-image-4955 " src="https://blog.algolia.com/wp-content/uploads/2016/05/dictionary-3-e1462181232517.png" width="182" height="38" srcset="https://blog.algolia.com/wp-content/uploads/2016/05/dictionary-3-e1462181232517.png 444w, https://blog.algolia.com/wp-content/uploads/2016/05/dictionary-3-e1462181232517-320x67.png 320w" sizes="(max-width: 182px) 100vw, 182px" /></a></li>
+<li><span style="font-weight: 400;">2. Add the word Faster</span></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/dictionary-4/" rel="attachment wp-att-4954"><img class="aligncenter wp-image-4954 " src="https://blog.algolia.com/wp-content/uploads/2016/05/dictionary-4-e1462181279567.png" width="289" height="41" srcset="https://blog.algolia.com/wp-content/uploads/2016/05/dictionary-4-e1462181279567.png 713w, https://blog.algolia.com/wp-content/uploads/2016/05/dictionary-4-e1462181279567-320x45.png 320w" sizes="(max-width: 289px) 100vw, 289px" /></a></li>
+<li><span style="font-weight: 400;">3. Add the word Test</span></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/dictionary4fixed/" rel="attachment wp-att-4999"><img class="aligncenter wp-image-4999" src="https://blog.algolia.com/wp-content/uploads/2016/05/dictionary4Fixed.png" alt="Step 3" width="300" height="109" srcset="https://blog.algolia.com/wp-content/uploads/2016/05/dictionary4Fixed.png 692w, https://blog.algolia.com/wp-content/uploads/2016/05/dictionary4Fixed-320x116.png 320w" sizes="(max-width: 300px) 100vw, 300px" /></a></li>
+<li><span style="font-weight: 400;">4. Flush the branch “fast” to disk</span></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/dictionary5fixed/" rel="attachment wp-att-4998"><img class="aligncenter wp-image-4998" src="https://blog.algolia.com/wp-content/uploads/2016/05/dictionary5Fixed.png" alt="Step 4" width="209" height="44" srcset="https://blog.algolia.com/wp-content/uploads/2016/05/dictionary5Fixed.png 470w, https://blog.algolia.com/wp-content/uploads/2016/05/dictionary5Fixed-320x67.png 320w" sizes="(max-width: 209px) 100vw, 209px" /></a></li>
+<li><span style="font-weight: 400;">5. Add the word toaster</span></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/dicationary-7/" rel="attachment wp-att-4951"><img class="aligncenter wp-image-4951 " src="https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-7-e1462181493671.png" width="313" height="116" srcset="https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-7-e1462181493671.png 688w, https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-7-e1462181493671-320x119.png 320w" sizes="(max-width: 313px) 100vw, 313px" /></a></li>
+<li><span style="font-weight: 400;">6. Flush the branch “est”</span></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/dicationary-8/" rel="attachment wp-att-4950"><img class="aligncenter wp-image-4950 " src="https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-8-e1462181678105.png" width="327" height="47" srcset="https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-8-e1462181678105.png 703w, https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-8-e1462181678105-320x46.png 320w" sizes="(max-width: 327px) 100vw, 327px" /></a></li>
+<li></li>
+<li><span style="font-weight: 400;">7. Add the word toasting</span></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/dicationary-9/" rel="attachment wp-att-4949"><img class="aligncenter wp-image-4949 " src="https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-9-e1462181731807.png" width="412" height="108" srcset="https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-9-e1462181731807.png 992w, https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-9-e1462181731807-320x84.png 320w, https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-9-e1462181731807-768x202.png 768w, https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-9-e1462181731807-720x189.png 720w" sizes="(max-width: 412px) 100vw, 412px" /></a></li>
+<li><span style="font-weight: 400;">8. Flush the branch &#8220;er&#8221;, then &#8220;ing&#8221;, &#8220;oast&#8221; and finally &#8220;t&#8221;</span></li>
+<li></li>
+<li><span style="font-weight: 400;">This way to build a tree is very efficient because it only keeps in memory a very small number of nodes (in the worst case scenario you will have a number of nodes in memory that is equal to the longest key in the tree, in our case we always have fewer than 100 nodes in memory).</span><span style="font-weight: 400;">Now that this is done, let’s focus on the next part: prefix search!</span></li>
+</ol>
+<h3><a id="prefix-search" class="anchor" href="#prefix-search" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>Prefix search</strong></h3>
+<p><span style="font-weight: 400;">Remember that we wanted an instant search experience. This means that the engine must be able to retrieve results as-you-type, at each character.</span></p>
+<p><span style="font-weight: 400;">If you type “f”, you want to retrieve the results “fast” and “faster”, so the engine must know that both these words contain the prefix “f”.</span></p>
+<p><span style="font-weight: 400;">And we don’t want to calculate the association prefix-object for all the prefixes, which would take a lot of time and memory, but only when it’s really necessary.</span></p>
+<p><span style="font-weight: 400;">The good news is that our radix tree can tell us precisely where we need to store prefixes: all the nodes in the tree which have children.</span></p>
+<p><span style="font-weight: 400;">In our example, it is only necessary for the nodes “fast”, “t” and “toast”.</span></p>
+<div id="attachment_4948" style="width: 504px" class="wp-caption aligncenter"><a href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/dicationary-10/" rel="attachment wp-att-4948"><img class="wp-image-4948 " src="https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-10-e1462181862124.png" width="494" height="284" srcset="https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-10-e1462181862124.png 984w, https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-10-e1462181862124-309x178.png 309w, https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-10-e1462181862124-768x442.png 768w, https://blog.algolia.com/wp-content/uploads/2016/05/dicationary-10-e1462181862124-695x400.png 695w" sizes="(max-width: 494px) 100vw, 494px" /></a><p class="wp-caption-text">Radix-tree with prefix inverted list computed</p></div>
+<p><span style="font-weight: 400;">You see what I just did right there? Yes! the prefixes can be computed on the fly too! We just need to remember what was in the last few branches that we flushed.</span></p>
+<p><span style="font-weight: 400;">For example, if I just flushed the branch “est”, I’ll remember that the prefix “t” is associated to the object 3 (test). I’ll do the same with “toaster” (object 4) and “toasting” (object 5). And when we’re done processing all the words beginning with “t”, I’ll know that this node should contain the objects 3, 4 and 5.</span></p>
+<h2><a id="a-few-numbers" class="anchor" href="#a-few-numbers" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>A few numbers</h2>
+<p><span style="font-weight: 400;">This way to build prefixes has been built into our engine since 2012 and we index billions of jobs every day with this algorithm. We have measured the impact on a lot of different indices, the impact on search is pretty obvious as we always have the prefix inverted list when we do a query (and we’ll have a lot of RAM handy), but the impact on indexing time and on the size are less obvious. Here is a small summary of the impacts that are very small compared to the advantages it gives at query time:</span></p>
+<table>
+<tbody>
+<tr>
+<td></td>
+<td><span style="font-weight: 400;">Minimum</span></td>
+<td><span style="font-weight: 400;">Average</span></td>
+<td><span style="font-weight: 400;">Maximum</span></td>
+</tr>
+<tr>
+<td><span style="font-weight: 400;">Impact of prefixes on index size</span></td>
+<td><span style="font-weight: 400;">+9%</span></td>
+<td><span style="font-weight: 400;">+21%</span></td>
+<td><span style="font-weight: 400;">+43%</span></td>
+</tr>
+<tr>
+<td><span style="font-weight: 400;">Impact of prefixes on indexing speed</span></td>
+<td><span style="font-weight: 400;">+3%</span></td>
+<td><span style="font-weight: 400;">+12%</span></td>
+<td><span style="font-weight: 400;">+17%</span></td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-weight: 400;">This approach is significantly better than any of the other approaches presented before, it is actually optimal at query time and has a very reasonable impact on indexing performance!</span></p>
+<p><span style="font-weight: 400;">This optimization of the prefixed indexing is just one of the numerous optimizations we have built in the Algolia engine. The reason we built it is because of our focus on performance and the fact that our engine was developed specifically to allow for the strong constraints of mobiles devices. We also had to think a bit out of the box, mainly by considering the word dictionary and inverted lists as one unique data-structure instead of two independent one.</span></p>
+<p><span style="font-weight: 400;">I look forward to reading your thoughts and comments on this post and continuing to explain how our engine is implemented internally, transparency is part of our DNA! 🙂</span></p>
+<p>We recommend to read the other posts of this series:</p>
+<ul>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-1-indexing-vs-search/">Part 1 – indexing vs. search</a></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-3-query-processing/">Part 3 – query processing</a></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-enginepart-4-textual-relevance/">Part 4 – Textual Relevance</a></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux/">Part 5 – Highlighting, a Cornerstone of Search UX</a></li>
+<li><a href="https://blog.algolia.com/inside-the-engine-part-6-handling-synonyms-the-right-way/">Part 6 – Handling Synonyms the Right Way</a></li>
+<li><a href="https://blog.algolia.com/inside-the-engine-part-7-better-relevance-via-dedup-at-query-time/">Part 7 – Better relevance via dedup at query time</a></li>
+</ul>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search%2F&amp;t=Inside+the+Algolia+Engine+Part+2+%E2%80%94+The+Indexing+Challenge+of+Instant+Search" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Inside+the+Algolia+Engine+Part+2+%E2%80%94+The+Indexing+Challenge+of+Instant+Search&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search%2F&amp;title=Inside+the+Algolia+Engine+Part+2+%E2%80%94+The+Indexing+Challenge+of+Instant+Search&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-475">
+        <div id="dsq-comment-header-475" class="dsq-comment-header">
+            <cite id="dsq-cite-475">
+                <span id="dsq-author-user-475">Hal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-475" class="dsq-comment-body">
+            <div id="dsq-comment-message-475" class="dsq-comment-message"><p>Great post! For the &#8220;hash-table that associates words to documents&#8221;, what data structure do you use to store the documents? Bitmaps or roaring bitmaps? Something custom?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-476">
+        <div id="dsq-comment-header-476" class="dsq-comment-header">
+            <cite id="dsq-cite-476">
+                <a id="dsq-author-user-476" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-476" class="dsq-comment-body">
+            <div id="dsq-comment-message-476" class="dsq-comment-message"><p>Nice to hear that you like the post! For the hash-table itself we are using <a href="https://github.com/sparsehash/sparsehash" rel="nofollow">Sparsehash</a>, for the documents in the hashtable we are using a custom implementation (very compact linked list as we want to optimize the memory usage and the number of call to memory allocation for speed). The number of records for each word follows a <a href="https://en.wikipedia.org/wiki/Zipf%27s_law" rel="nofollow">Zipf&#8217;s law</a>, using one memory allocated data-structure for each word would cost a lot in term of memory allocation and the over-head of the memory-allocation and the data-structure make a binary encoding useless. This is why we have this custom implementation of a linked list optimized for size in the hash-map entry (we allocate linked-list entries by big blocs in order to reduce memory allocations). In practice on a machine with 128GB of RAM, we use around 10GB for indexing, considering we build 6 different indices in parallel, the remaining 118GB are used to store indices in memory (we optimize everything to have 100% of the index in memory)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-480">
+        <div id="dsq-comment-header-480" class="dsq-comment-header">
+            <cite id="dsq-cite-480">
+                <span id="dsq-author-user-480">Shai Alon</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-480" class="dsq-comment-body">
+            <div id="dsq-comment-message-480" class="dsq-comment-message"><p>Fantastic Post Jullien.<br />
+This brings me back to how amazed I was the first time I saw the Aglolia search in action, and how it changed my perception for the possibilities of &#8220;search as you type&#8221;&#8230; While I appreciate elasticsearch for it&#8217;s architecture and flexibility, I always wondered what was Algolia&#8217;s secret sauce that makes it outperform elastic in speed, relevance and simplicity (not having to deal with configuring prefixes and n-grams is a joy when using Algolia).<br />
+Of all the architecture pieces you&#8217;ve posted over the years (including stackshare), this is the best as it really reveals the core of what makes the solution so elegantly amazing. </p>
+<p>Looking forward to more posts like this,<br />
+Shai</p>
+<p>P.S.<br />
+You&#8217;ve probably head this before, but it would be amazing if you release an open source &#8220;mini-algolia&#8221;&#8230;</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                                  
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search%2F&amp;t=Inside+the+Algolia+Engine+Part+2+%E2%80%94+The+Indexing+Challenge+of+Instant+Search" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Inside+the+Algolia+Engine+Part+2+%E2%80%94+The+Indexing+Challenge+of+Instant+Search&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search%2F&amp;title=Inside+the+Algolia+Engine+Part+2+%E2%80%94+The+Indexing+Challenge+of+Instant+Search&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"4934 https:\/\/blog.algolia.com\/?p=4934","disqusShortname":"algoliablog","disqusTitle":"Inside the Algolia Engine Part 2 \u2014 The Indexing Challenge of Instant Search","disqusUrl":"https:\/\/blog.algolia.com\/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search\/","options":{"manualSync":false},"postId":"4934"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'4934',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '4934' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

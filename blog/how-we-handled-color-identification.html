@@ -1,0 +1,634 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>How We Tackled Color Identification - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; How We Tackled Color Identification Comments Feed" href="https://blog.algolia.com/how-we-handled-color-identification/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=5299' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fhow-we-handled-color-identification%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fhow-we-handled-color-identification%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=1BB7E46A80698A9E0FB83D9D0B509F2C');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="How We Tackled Color Identification"/>
+  <meta property="og:url" content="https://blog.algolia.com/how-we-handled-color-identification/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="No matter how well crafted a search engine may be, if the query it is given is incomplete or inaccurate, the search results will always seem a little off.
+E-commerce often falls prey to this because large catalogs and innumerable filters complicate curation. Since relevancy is at the very top of ou"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy-5.png"/>
+  <meta property="article:published_time" content="2016-07-25T02:30:26+00:00"/>
+  <meta property="article:modified_time" content="2016-07-25T05:13:05+00:00" />
+  <meta property="og:updated_time" content="2016-07-25T05:13:05+00:00" />
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="How We Tackled Color Identification"/>
+  <meta itemprop="description" content="No matter how well crafted a search engine may be, if the query it is given is incomplete or inaccurate, the search results will always seem a little off.
+E-commerce often falls prey to this because large catalogs and innumerable filters complicate curation. Since relevancy is at the very top of ou"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy-5.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="How We Tackled Color Identification"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/how-we-handled-color-identification/"/>
+  <meta name="twitter:description" content="No matter how well crafted a search engine may be, if the query it is given is incomplete or inaccurate, the search results will always seem a little off.
+E-commerce often falls prey to this because large catalogs and innumerable filters complicate curation. Since relevancy is at the very top of ou"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy-5.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-5299 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-5299" class="cf post-5299 post type-post status-publish format-standard has-post-thumbnail hentry category-technology tag-color tag-colors tag-e-commerce tag-facets tag-fashion tag-filter tag-image tag-relevance tag-tagging" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">How We Tackled Color Identification</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/7953f90c086b96d7b0bb85f14592ce11?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">Léo Ercolanelli</span> |
+                    <time class="updated entry-time" datetime="2016-07-25" itemprop="datePublished">July 25, 2016</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/how-we-handled-color-identification/" title="How We Tackled Color Identification">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy-5-720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy-5-720x400.png 720w, https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy-5-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy-5-768x427.png 768w, https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy-5-340x189.png 340w, https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy-5.png 1440w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead"><span style="font-weight: 400;">No matter how well crafted a search engine may be, if the query it is given is incomplete or inaccurate, the search results will always seem a little off.</span><span style="font-weight: 400;"><br />
+</span><span style="font-weight: 400;">E-commerce often falls prey to this because large catalogs and innumerable filters complicate curation. <span style="font-weight: 400;">Since relevancy is at the very top of our priority list, let us introduce a little experiment of ours, designed especially to enhance the search experience when it comes to image-driven content.</span></span></p>
+<h2><a id="the-problem" class="anchor" href="#the-problem" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>The Problem?</strong></h2>
+<p><span style="font-weight: 400;">The goal we set for our computer vision experiment was to detect the color of the dominant object of a picture. Searching by color is a common occurence when it comes to e-commerce websites, and while the nature of the object is usually clear in the description, its color is often more of a problem. As an example, let us consider an article containing several colors in its description (for the sake of the example: white and blue), but having a picture clearly showcasing a </span><i><span style="font-weight: 400;">blue </span></i><span style="font-weight: 400;">shirt. While searching for a </span><i><span style="font-weight: 400;">white</span></i><span style="font-weight: 400;"> shirt this article may show up and may even rank very high, because the relevant color &#8211; white, </span><b>is</b><span style="font-weight: 400;"> present in the description. However correct this may be, having a number of images showing a </span><i><span style="font-weight: 400;">blue </span></i><span style="font-weight: 400;">object while searching for a </span><i><span style="font-weight: 400;">white </span></i><span style="font-weight: 400;">one does not give the best impression of relevance to the end user. The idea is certainly not to remove these results (because they are still correct), but to </span><i><span style="font-weight: 400;">boost</span></i><span style="font-weight: 400;"> the ranking of the ones which more closely represent objects of the searched color.</span></p>
+<h2><a id="some-colorful%c2%a0context" class="anchor" href="#some-colorful%c2%a0context" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>Some c<em>olorful</em> context&#8230;</strong></h2>
+<p><span style="font-weight: 400;">We are obviously not the first to attempt to address this problem, but we’ve taken a slightly different approach from the current solutions in the market. We can divide the applications trying to solve this problem into two different groups that provide different experiences:</span></p>
+<ul>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Commercial applications like </span><a href="http://vue.ai/"><span style="font-weight: 400;">vue.ai</span></a></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Open source scripts like </span><a href="https://github.com/josip/node-colour-extractor"><span style="font-weight: 400;">josip/node-colour-extractor</span></a><span style="font-weight: 400;"> or </span><span style="font-weight: 400;"><a href="https://github.com/lokesh/color-thief/">lokesh/color-thief</a></span></li>
+</ul>
+<p><span style="font-weight: 400;">The open-source scripts listed are going for a different and simpler problem. They extract the palette composed of the principal colors of an image. While they do the job well, they can’t be applied out of the box to fashion images because we are not interested in the colors in the entire image. Using them directly would result in the color of the background being detected as the main color of the given image. Moreover they do not provide a </span><i><span style="font-weight: 400;">word</span></i><span style="font-weight: 400;"> for the extracted colors, and indexing RGB values would not improve the search experience.</span></p>
+<p><span style="font-weight: 400;">Vue.ai showcases some impressive results and provides many more features than our experiment. We wanted to provide a quick, easy way for users to enrich their records a bit and improve their ranking, especially if they have to deal with poor descriptions in their records. This script doesn’t need you to register or anything: all you have to do is download, install dependencies, enjoy.</span></p>
+<h2><a id="our-approach" class="anchor" href="#our-approach" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;"><strong>Our approach</strong> </span></h2>
+<h3><a id="chosen-method" class="anchor" href="#chosen-method" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>Chosen method</strong></h3>
+<p><span style="font-weight: 400;">The problem we try to address is a relatively complex one and can be solved by a number of different ways. Most state-of-the-art computer vision frameworks these days adopt the Deep Learning path by using techniques such as Convolutional Neural Network to classify images. This is a path we decided not to take. Neural networks offer astounding results, but to do so they also need large datasets in addition to dedicated hardware which shortens the computation time. We started this project as an experiment and we began with simpler methods to see where those would take us. We always knew that we would eventually open-source this project allowing anyone to run it and add information to their records: deep learning frameworks can be somewhat hard to setup and run; they also require a great deal of computing time. The sequence of algorithms we chose was able to process images reasonably fast on a machine with a classic CPU and can be installed as simply as any other python package.</span></p>
+<h3><a id="pre-processing" class="anchor" href="#pre-processing" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>Pre-Processing</strong></h3>
+<p><span style="font-weight: 400;">Because we only cared about the color of the dominant object in the picture, a high level of detail was likely to confuse the algorithms. Moreover, smaller images meant less computing. After performing tests on several images we observed that a size of 100&#215;100 was a good compromise.</span></p>
+<p><span style="font-weight: 400;">We really had the use-case of a fashion e-commerce website in mind while designing this tool, and it led to the idea of an additional step to improve our color detection tool: cropping.</span></p>
+<p><span style="font-weight: 400;">The object we are interested in is highly likely to be centered within the image, cropping allows us to reduce the size of the background image. Although cropping does yield better results overall, keeping less than 90% of the original image doesn&#8217;t work well with background removal when considering a heterogeneous data set. This is due to the main object, sometimes touching the corners of the picture as a result of which it gets considered as  the “background” for subsequent algorithms.</span></p>
+<div id="attachment_5306" style="width: 650px" class="wp-caption aligncenter"><img class="wp-image-5306 size-large" src="https://blog.algolia.com/wp-content/uploads/2016/07/crop-642x400.png" alt="color-crop" width="640" height="399" srcset="https://blog.algolia.com/wp-content/uploads/2016/07/crop-642x400.png 642w, https://blog.algolia.com/wp-content/uploads/2016/07/crop-286x178.png 286w, https://blog.algolia.com/wp-content/uploads/2016/07/crop-768x478.png 768w, https://blog.algolia.com/wp-content/uploads/2016/07/crop.png 811w" sizes="(max-width: 640px) 100vw, 640px" /><p class="wp-caption-text">Resizing and cropping (original on the left)</p></div>
+<h3><a id="excluding-background" class="anchor" href="#excluding-background" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>Excluding background</strong></h3>
+<p><span style="font-weight: 400;">Be it plain white or complex, the background isn’t something we want to interfere with, while detecting the color of the main object of a picture. Separating the “foreground” and the “background” is not an easy task unless you know that it follows a simple convention (i.e. plain white), or exactly where the targeted object is placed in the picture. We make none of these assumptions to allow for broader use cases, and combine several simple computer vision algorithms to handle reasonably complex backgrounds.</span></p>
+<p><span style="font-weight: 400;">The first step can be viewed as a <em>thresholding</em> over the image. We take the pixel values at the four corners, identify all pixels that are close in terms of color-shade and consider them to be a part of the background. We use the </span><a href="https://en.wikipedia.org/wiki/Color_difference#Delta_E"><span style="font-weight: 400;"><img src="https://blog.algolia.com/wp-content/ql-cache/quicklatex.com-4d434c706d718662ba08fff6b47e0b57_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#68;&#101;&#108;&#116;&#97;&#32;&#69;" title="Rendered by QuickLaTeX.com" height="12" width="29" style="vertical-align: 0px;"/></span><span style="font-weight: 400;"> metric</span></a><span style="font-weight: 400;"> to determine the distance between two colors. This step is particularly useful on more complex backgrounds because it doesn’t use information such as edges, but can’t discard gradient or shadows efficiently.</span></p>
+<div id="attachment_5353" style="width: 650px" class="wp-caption aligncenter"><img class="size-large wp-image-5353" src="https://blog.algolia.com/wp-content/uploads/2016/07/global-threshold-720x347.png" alt="Global thresholding struggling with shadows" width="640" height="308" srcset="https://blog.algolia.com/wp-content/uploads/2016/07/global-threshold-720x347.png 720w, https://blog.algolia.com/wp-content/uploads/2016/07/global-threshold-320x154.png 320w, https://blog.algolia.com/wp-content/uploads/2016/07/global-threshold-768x371.png 768w, https://blog.algolia.com/wp-content/uploads/2016/07/global-threshold.png 769w" sizes="(max-width: 640px) 100vw, 640px" /><p class="wp-caption-text">Global thresholding struggling with shadows</p></div>
+<p><span style="font-weight: 400;">The second step uses flood filling and edge detection to remove shadows and gradients. The technique is largely inspired by </span><a href="http://developers.lyst.com/2014/02/13/background-removal/"><span style="font-weight: 400;">this article</span></a><span style="font-weight: 400;"> on the Lyst engineering blog. The main goal is to remove the background- generally indicated by the absence of sharp edges. To achieve this, several steps of smoothing are used to maximize the efficiency of the <a href="https://en.wikipedia.org/wiki/Sobel_operator#Alternative_operators">Scharr filter</a></span><span style="font-weight: 400;"> used. Contrary to the first step, this step doesn’t behave well on complex backgrounds that contain edges themselves, or in cases where the object and the background don’t have sharp edges separating them.</span></p>
+<div id="attachment_5350" style="width: 650px" class="wp-caption aligncenter"><img class="size-large wp-image-5350" src="https://blog.algolia.com/wp-content/uploads/2016/07/flooding-full-720x350.png" alt="Shadows are handled by edge detection and flooding" width="640" height="311" srcset="https://blog.algolia.com/wp-content/uploads/2016/07/flooding-full-720x350.png 720w, https://blog.algolia.com/wp-content/uploads/2016/07/flooding-full-320x155.png 320w, https://blog.algolia.com/wp-content/uploads/2016/07/flooding-full.png 764w" sizes="(max-width: 640px) 100vw, 640px" /><p class="wp-caption-text">Shadows are handled by edge detection and flooding</p></div>
+<p><span style="font-weight: 400;">By using both of these filters we try to get the best of both worlds. However, this is not always achievable, sometimes one of the two steps does not accurately separate the background and the foreground and ends up removing way too many pixels. When this happens, the result of the step is simply ignored.</span></p>
+<h3><a id="excluding-skin" class="anchor" href="#excluding-skin" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>Excluding skin</strong></h3>
+<p><span style="font-weight: 400;">A lot of pictures include models and if the targeted object is a swimsuit, the number of pixels representing skin can be greater than the number of pixels we are actually interested in. For cases like this, we implemented a really simple method to discard additional pixels.</span></p>
+<p><span style="font-weight: 400;">Detecting skin is an open problem and the possible solutions range from testing if each pixel color can be considered as skin to training a complex artificial intelligence model. We went for the lower end of the spectrum of complexity: a simple filter using only the color of the pixels to classify them.</span></p>
+<p><span style="font-weight: 400;">There are a lot of skin filters out there, and each has their pros and cons. We chose one based on its false-positive rate. Indeed most of the filters only consider the color of the pixel &#8211; in fact it is very common (unfortunately) to see orange-tinted clothes entirely labeled as skin. Choosing a low false-positive rate reduces this risk but doesn’t remove it, and because all data sets don’t contain skin, we made this step completely optional in the final script.</span></p>
+<p><span style="font-weight: 400;">For now, a single filter has been implemented which tries to be as versatile as possible, however we definitely plan to implement several narrower ones to be able to target certain skin types more efficiently.</span></p>
+<div id="attachment_5360" style="width: 650px" class="wp-caption aligncenter"><img class="size-large wp-image-5360" src="https://blog.algolia.com/wp-content/uploads/2016/07/skin-720x348.png" alt="Detecting skin pixels" width="640" height="309" srcset="https://blog.algolia.com/wp-content/uploads/2016/07/skin-720x348.png 720w, https://blog.algolia.com/wp-content/uploads/2016/07/skin-320x155.png 320w, https://blog.algolia.com/wp-content/uploads/2016/07/skin-768x371.png 768w, https://blog.algolia.com/wp-content/uploads/2016/07/skin.png 774w" sizes="(max-width: 640px) 100vw, 640px" /><p class="wp-caption-text">Detecting skin pixels</p></div>
+<h3><a id="clustering-pixels" class="anchor" href="#clustering-pixels" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>Clustering pixels</strong></h3>
+<p><span style="font-weight: 400;">We have no interest in the multiple shades of colors that images may contain, but only for the canonical, definitive names. To achieve this we use a clustering algorithm to group similar pixels together.</span></p>
+<div id="attachment_5371" style="width: 750px" class="wp-caption aligncenter"><img class="wp-image-5371" src="https://blog.algolia.com/wp-content/uploads/2016/07/cluster-720x180.png" alt="Clustering a gray T-shirt" width="740" height="185" srcset="https://blog.algolia.com/wp-content/uploads/2016/07/cluster-720x180.png 720w, https://blog.algolia.com/wp-content/uploads/2016/07/cluster-320x80.png 320w, https://blog.algolia.com/wp-content/uploads/2016/07/cluster-768x192.png 768w, https://blog.algolia.com/wp-content/uploads/2016/07/cluster.png 930w" sizes="(max-width: 740px) 100vw, 740px" /><p class="wp-caption-text">Clustering a gray T-shirt (from left to right: original, background, skin, clusters)</p></div>
+<p><span style="font-weight: 400;">All pictures are not equal in terms of number of colors, and even if we want to group together different shades of the same color, we don’t want to say mix blue and green pixels. Because of this property, we can’t build the same number of clusters regardless of the image. We try to detect the best number of clusters, using the “jump” method for which a simple description can be found </span><a href="https://en.wikipedia.org/wiki/Determining_the_number_of_clusters_in_a_data_set#An_Information_Theoretic_Approach"><span style="font-weight: 400;">here on Wikipedia</span></a><span style="font-weight: 400;">. This technique is relatively easy to understand. The error in a particular case of clustering can be measured using the following formula where </span><img src="https://blog.algolia.com/wp-content/ql-cache/quicklatex.com-b6de2be3d446062abf3b9b838960ea9b_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#32;&#67;&#95;&#112;" title="Rendered by QuickLaTeX.com" height="18" width="20" style="vertical-align: -6px;"/><span style="font-weight: 400;"> </span><span style="font-weight: 400;">is the center of the cluster that </span><img src="https://blog.algolia.com/wp-content/ql-cache/quicklatex.com-c6ac2197da92745787d0598aead6b7bd_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#32;&#112;" title="Rendered by QuickLaTeX.com" height="12" width="10" style="vertical-align: -4px;"/><span style="font-weight: 400;"> belongs to:</span></p>
+<p class="ql-center-displayed-equation" style="line-height: 41px;"><span class="ql-right-eqno"> &nbsp; </span><span class="ql-left-eqno"> &nbsp; </span><img src="https://blog.algolia.com/wp-content/ql-cache/quicklatex.com-b77ca5292b40e6937476061f73e84edc_l3.png" height="41" width="190" class="ql-img-displayed-equation quicklatex-auto-format" alt="&#92;&#091;&#101;&#114;&#114;&#111;&#114;&#61;&#92;&#115;&#117;&#109;&#95;&#123;&#112;&#32;&#92;&#105;&#110;&#32;&#112;&#105;&#120;&#101;&#108;&#115;&#125;&#124;&#124;&#67;&#95;&#112;&#32;&#45;&#32;&#112;&#124;&#124;&#92;&#093;" title="Rendered by QuickLaTeX.com"/></p>
+<p><span style="font-weight: 400;">This formula says that the greater the distance from a particular point to its attributed cluster’s center, the higher the error. This value will always decrease when clusters are added, until it reaches the point where </span><img src="https://blog.algolia.com/wp-content/ql-cache/quicklatex.com-f40d6d5d8afe83cec99bf619f1cb0035_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#32;&#110;&#95;&#123;&#99;&#108;&#117;&#115;&#116;&#101;&#114;&#115;&#125;&#32;&#61;&#32;&#110;&#95;&#123;&#112;&#105;&#120;&#101;&#108;&#115;&#125;" title="Rendered by QuickLaTeX.com" height="14" width="131" style="vertical-align: -6px;"/><span style="font-weight: 400;"> </span><span style="font-weight: 400;">which gives an error of </span><span style="font-weight: 400;">0</span><span style="font-weight: 400;">. </span><span style="font-weight: 400;">However, this error won’t decrease at the same rate every time a cluster is added. At first, each added cluster will decrease the error by a huge amount, and at one point, the gain will become much smaller. The goal is to find the moment when adding a cluster is way less significant.</span></p>
+<p><span style="font-weight: 400;">The algorithm uses a slightly more complex computation of error, but the idea behind it is the same. This way we adapt the number of clusters to have colors close to one another grouped together but still enough clusters not to group distinctly different colors on multi-colored items.</span></p>
+<div id="attachment_5368" style="width: 650px" class="wp-caption aligncenter"><img class="wp-image-5368 size-large" src="https://blog.algolia.com/wp-content/uploads/2016/07/rainbow-720x238.png" alt="Rainbow clusters" width="640" height="212" srcset="https://blog.algolia.com/wp-content/uploads/2016/07/rainbow-720x238.png 720w, https://blog.algolia.com/wp-content/uploads/2016/07/rainbow-320x106.png 320w, https://blog.algolia.com/wp-content/uploads/2016/07/rainbow-768x254.png 768w, https://blog.algolia.com/wp-content/uploads/2016/07/rainbow.png 906w" sizes="(max-width: 640px) 100vw, 640px" /><p class="wp-caption-text">Rainbow clusters (from left to right: original, background, clusters)</p></div>
+<h3><a id="attributing-color-names" class="anchor" href="#attributing-color-names" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>Attributing color names</strong></h3>
+<p><span style="font-weight: 400;">Last but not the least we have to return readable names in a given language, say English, in the results and not just RGB values. This problem is harder to solve than it looks: the color space is huge (~16 million</span><span style="font-weight: 400;"> possible values), and different colors have very heterogeneous sizes. Defining each possible color range by hand is very tedious and yields poor results in a lot of cases. We turned to a K-Nearest-Neighbors algorithm to give color names to RGB values, thanks to the </span><a href="https://blog.xkcd.com/2010/05/03/color-survey-results/"><span style="font-weight: 400;">XKCD Color Survey</span></a><span style="font-weight: 400;">. The XKCD survey consists of 200,000 RGB values labeled with 27 different color names (e.g. black, green, teal, etc.) that we use to train a </span><a href="http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html"><span style="font-weight: 400;">scikit-learn KNeighborsClassifier</span></a><span style="font-weight: 400;">.</span></p>
+<p><span style="font-weight: 400;">This method is still far from perfect; for example, it is not able to handle shades of grey. We are working with the RGB system, and the grey colors form a plan in this colorspace. Because of this topology, there are never enough neighbors (using a euclidean distance) to categorize a color as grey. To solve this we added an additional step dedicated to these colors. By computing the  distance between RGB values and their projection on the grey plan, it is possible to tell how “close” the color actually is to grey. We then apply an arbitrary threshold to classify the color as grey, or continue with the classifier.</span></p>
+<p><span style="font-weight: 400;">The overall process still has drawbacks. For example it doesn’t provide enough insights to be able to put a color in multiple categories (sometimes it is hard to tell if a color is green or blue for instance, and we may like to label it </span><i><span style="font-weight: 400;">both </span></i><span style="font-weight: 400;">green </span><i><span style="font-weight: 400;">and </span></i><span style="font-weight: 400;">blue).</span></p>
+<h2><a id="the-final-result" class="anchor" href="#the-final-result" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><strong>The final result</strong></h2>
+<p><span style="font-weight: 400;">Today this computer vision experiment is available </span><a href="https://github.com/algolia/color-extractor"><span style="font-weight: 400;">here on github</span></a><span style="font-weight: 400;"> as a stand-alone python script that anyone can run to enrich their records containing an image URL with the extracted color tags. Both a library for more advanced usage and a CLI are available for use as well.</span></p>
+<p>This is as simple as it gets using the CLI:</p>
+<pre>./color-extractor color_names.npz image.jpg
+&gt; red,black</pre>
+<p><span style="font-weight: 400;">We ditched the idea of a dedicated search engine optimized for images for to a simple reason: Algolia already has a state of the art search engine, and not taking advantage of it would be a pity!</span></p>
+<p><span style="font-weight: 400;">A self-serve script fulfills another criterion close to our hearts: configurability. Our script uses sane defaults, but all steps described above can be tweaked to yield better results on a specific catalog. These tweaks range from making certain steps more or less aggressive to deactivating them entirely. We also provide a way to support any language: the dataset used by the script to give color names to images can be changed by the user, thus making room for non-english color names.</span><br />
+<span style="font-weight: 400;">Our script doesn’t use any kind of machine learning yet and we’re aware that results could be greatly improved by going down this road. For this first release our tool features ~84% accuracy. While this is still low, our tool isn’t designed to be used on its own, but in conjunction with your textual searches by boosting images whose colors match what is searched for.</span></p>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fhow-we-handled-color-identification%2F&amp;t=How+We+Tackled+Color+Identification" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=How+We+Tackled+Color+Identification&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhow-we-handled-color-identification%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhow-we-handled-color-identification%2F&amp;title=How+We+Tackled+Color+Identification&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                <div class="tags-container"><ul class="tags"><li><a href="https://blog.algolia.com/tag/color/" rel="tag">color</a></li><li><a href="https://blog.algolia.com/tag/colors/" rel="tag">colors</a></li><li><a href="https://blog.algolia.com/tag/e-commerce/" rel="tag">e-commerce</a></li><li><a href="https://blog.algolia.com/tag/facets/" rel="tag">Facets</a></li><li><a href="https://blog.algolia.com/tag/fashion/" rel="tag">fashion</a></li><li><a href="https://blog.algolia.com/tag/filter/" rel="tag">filter</a></li><li><a href="https://blog.algolia.com/tag/image/" rel="tag">image</a></li><li><a href="https://blog.algolia.com/tag/relevance/" rel="tag">relevance</a></li><li><a href="https://blog.algolia.com/tag/tagging/" rel="tag">tagging</a></li></ul></div>
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-564">
+        <div id="dsq-comment-header-564" class="dsq-comment-header">
+            <cite id="dsq-cite-564">
+                <a id="dsq-author-user-564" href="https://studenton.com" target="_blank" rel="nofollow">Amit Chaudhary</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-564" class="dsq-comment-body">
+            <div id="dsq-comment-message-564" class="dsq-comment-message"><p>Giving it a try. Thanks for building this.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/robots-vs-humans-who-will-emerge-supreme-in-the-battle-of-the-image-tags/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2015/12/slack-imgs.com_-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2015/12/slack-imgs.com_-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2015/12/slack-imgs.com_-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/robots-vs-humans-who-will-emerge-supreme-in-the-battle-of-the-image-tags/'>Robots vs. humans: Who will emerge supreme in the battle of the image tags?</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/how-algolia-tackled-the-relevance-problem-of-search-engines/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2016/03/algorythm-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2016/03/algorythm-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2016/03/algorythm-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/how-algolia-tackled-the-relevance-problem-of-search-engines/'>How Algolia tackled the relevance problem of search engines</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fhow-we-handled-color-identification%2F&amp;t=How+We+Tackled+Color+Identification" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=How+We+Tackled+Color+Identification&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhow-we-handled-color-identification%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhow-we-handled-color-identification%2F&amp;title=How+We+Tackled+Color+Identification&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"5299 https:\/\/blog.algolia.com\/?p=5299","disqusShortname":"algoliablog","disqusTitle":"How We Tackled Color Identification","disqusUrl":"https:\/\/blog.algolia.com\/how-we-handled-color-identification\/","options":{"manualSync":false},"postId":"5299"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'5299',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '5299' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

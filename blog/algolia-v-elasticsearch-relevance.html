@@ -1,0 +1,648 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Comparing Algolia and Elasticsearch For Consumer-Grade Search Part 2: Relevance Isn’t Luck - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comparing Algolia and Elasticsearch For Consumer-Grade Search Part 2: Relevance Isn’t Luck Comments Feed" href="https://blog.algolia.com/algolia-v-elasticsearch-relevance/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=6163' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Falgolia-v-elasticsearch-relevance%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Falgolia-v-elasticsearch-relevance%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=B46D2622336182842BDAE813DE3263C0');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Comparing Algolia and Elasticsearch For Consumer-Grade Search Part 2: Relevance Isn’t Luck"/>
+  <meta property="og:url" content="https://blog.algolia.com/algolia-v-elasticsearch-relevance/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="A relevant search returns the best results first. Google’s famous “I’m feeling lucky” button is a standing invitation for users to test their relevance by jumping through directly to the top hit. It’s a bold gesture when you consider that Google’s index contains trillions of documents, yet it works."/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2017/04/feel-lucky-1.png"/>
+  <meta property="article:published_time" content="2017-04-20T08:32:54+00:00"/>
+  <meta property="article:modified_time" content="2017-04-21T03:03:33+00:00" />
+  <meta property="og:updated_time" content="2017-04-21T03:03:33+00:00" />
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Comparing Algolia and Elasticsearch For Consumer-Grade Search Part 2: Relevance Isn’t Luck"/>
+  <meta itemprop="description" content="A relevant search returns the best results first. Google’s famous “I’m feeling lucky” button is a standing invitation for users to test their relevance by jumping through directly to the top hit. It’s a bold gesture when you consider that Google’s index contains trillions of documents, yet it works."/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2017/04/feel-lucky-1.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Comparing Algolia and Elasticsearch For Consumer-Grade Search Part 2: Relevance Isn’t Luck"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/algolia-v-elasticsearch-relevance/"/>
+  <meta name="twitter:description" content="A relevant search returns the best results first. Google’s famous “I’m feeling lucky” button is a standing invitation for users to test their relevance by jumping through directly to the top hit. It’s a bold gesture when you consider that Google’s index contains trillions of documents, yet it works."/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2017/04/feel-lucky-1.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-6163 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-6163" class="cf post-6163 post type-post status-publish format-standard has-post-thumbnail hentry category-technology" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Comparing Algolia and Elasticsearch For Consumer-Grade Search Part 2: Relevance Isn’t Luck</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/52fce504cc701577cb6ca94528b977e6?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">Josh Dzielak</span> |
+                    <time class="updated entry-time" datetime="2017-04-20" itemprop="datePublished">April 20, 2017</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/algolia-v-elasticsearch-relevance/" title="Comparing Algolia and Elasticsearch For Consumer-Grade Search Part 2: Relevance Isn’t Luck">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2017/04/feel-lucky-1-720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2017/04/feel-lucky-1-720x400.png 720w, https://blog.algolia.com/wp-content/uploads/2017/04/feel-lucky-1-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2017/04/feel-lucky-1-768x426.png 768w, https://blog.algolia.com/wp-content/uploads/2017/04/feel-lucky-1-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead"><span style="font-weight: 400;">A relevant search returns the best results first. Google’s famous “I’m feeling lucky” button is a standing invitation for users to test their relevance by jumping through directly to the top hit. It’s a bold gesture when you consider that Google’s index contains trillions of documents, yet it works. The top result is often highly relevant and the user ends up right where they wanted.</span></p>
+<blockquote><p>“I’m feeling lucky.” &#8211; Average internet search user</p></blockquote>
+<p>If we want to understand what a consumer expects from their search, luck is a good place to start. If we want to understand what it takes to build that search, luck is a very bad place to start.</p>
+<p><span style="font-weight: 400;">Great relevance is within reach for any search project, but it requires a careful understanding and application of complex techniques, several of which we&#8217;ll look at in this article. Whether you&#8217;re using Elasticsearch or Algolia, the goal should be to give your users a search they&#8217;ll love, a search so good you&#8217;d even consider putting an &#8220;I&#8217;m feeling lucky&#8221; button next to it!</span></p>
+<blockquote><p>Would I put an ‘I’m feeling lucky’ button next to my search box?</p></blockquote>
+<img class="alignnone size-large" src="https://cl.ly/0T3O0E0k0R23/image00.gif" width="1280" height="332" />
+<p>In Part 1 of this series, <a href="https://blog.algolia.com/algolia-v-elasticsearch-latency/">End-to-End Latency</a>, we discussed the perfectly unreasonable search expectations of the average internet user, starting with speed. Global end-to-end response times must be lower than 100 milliseconds for search-as-you-type experiences to feel natural, with less than 50ms being ideal.</p>
+<p><span style="font-weight: 400;">In this part of the series, </span><b>Relevance Isn’t Luck</b><span style="font-weight: 400;">, we’ll look first at consumer search behavior and why it challenges traditional approaches to relevance. Then we’ll look at how developers are adapting to these changes using the available tools, looking first at Elasticsearch and then Algolia.</span></p>
+<h2><a id="intuitive%c2%a0user-experiences-require%c2%a0smarter-relevance" class="anchor" href="#intuitive%c2%a0user-experiences-require%c2%a0smarter-relevance" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Intuitive user experiences require smarter relevance</span></h2>
+<p><span style="font-weight: 400;">Consumer-quality search experiences are so streamlined that it&#8217;s hard to imagine what&#8217;s going on underneath, even for engineers. Yet many things that we take for granted as users have serious consequences for engineers trying to achieve good relevance.</span></p>
+<h3><a id="single-input" class="anchor" href="#single-input" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Single input</span></h3>
+<p><span style="font-weight: 400;">In the early days of the web, most searches required you to separate your query into different boxes, one for each field you wanted to search in. Today, this is only the case for advanced searches, with the irony being that it’s actually simpler for the search engine to find and rank records when the query is split up into different fields.</span></p>
+<img class="alignnone size-large" src="https://cl.ly/35330Z3z3L39/image02.gif" width="726" height="190" />
+<h3><a id="instant-search" class="anchor" href="#instant-search" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Instant search</span></h3>
+<p><span style="font-weight: 400;">Search-as-you-type experiences have become the standard since </span><a href="http://searchengineland.com/google-instant-complete-users-guide-50136"><span style="font-weight: 400;">Google Instant was introduced</span></a><span style="font-weight: 400;"> in 2010. Users love the immediate feedback and responsiveness of instant experiences. Product designers love instant search because it’s an efficient way for users to discover the content on their site.</span></p>
+<img class="alignnone size-large" src="https://cl.ly/143p2a1Y0C2Y/iphone2.gif" width="1074" height="724" />
+<p>Instant search introduces a brand new set of relevance challenges. The search engine can’t wait for a full word to be typed, it has to find and rank matches using only the first few letters.</p>
+<h3><a id="instant-search-vs-instant-suggest" class="anchor" href="#instant-search-vs-instant-suggest" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Instant search vs. instant suggest</span></h3>
+<p><span style="font-weight: 400;">Not all instant searches are created the same. A variation called </span><i><span style="font-weight: 400;">instant suggest </span></i><span style="font-weight: 400;">is a multi-step process. Each new keystroke produces suggestions for keywords but not actual search results. Search results can only be reached by clicking on a suggestion or hitting the enter key.</span></p>
+<p><i><span style="font-weight: 400;">Instant search</span></i><span style="font-weight: 400;"> produces real search results with every keystroke, no clicks or enter keys required. The user benefits from a streamlined experience and the development team has less moving parts to tune and maintain. But as we’ll see later, achieving the necessary speed and relevance is much harder for instant search than instant suggest.</span></p>
+<h3><a id="forgiving-mistakes" class="anchor" href="#forgiving-mistakes" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Forgiving mistakes</span></h3>
+<p><span style="font-weight: 400;">On-the-go users misspell, omit and juxtapose words, and frequently get distracted and stop typing mid-sentence. Yet, when they gaze back down at their screen, they still expect to see the contact, movie or product they were searching for. This requires search engines to be much more forgiving than they were originally designed to be.</span></p>
+<img class="alignnone size-large" src="https://cl.ly/1U0n360k2Y3P/image05.gif" width="1080" height="728" />
+<p><span style="font-weight: 400;">Mobile keyboards make forgiveness a must-have for two reasons: </span><a href="https://blog.algolia.com/mobile-search-ux-tips/"><span style="font-weight: 400;">it’s easier to make mistakes</span></a><span style="font-weight: 400;"> and it takes longer to correct them. To make the search engine more forgiving, we’ll need to apply a variety of text and language processing techniques, designed to handle everything from typos to languages like Dutch and German that dontalwayshavespacesbetweenwords.</span></p>
+<h3><a id="promoting-results" class="anchor" href="#promoting-results" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Promoting Results</span></h3>
+<p><span style="font-weight: 400;">Thousands of pages on the internet can tell you how to treat the common cold. How do you know which one to trust? Text-based signals aren’t enough—whether the page mentions the word </span><i><span style="font-weight: 400;">cold</span></i><span style="font-weight: 400;"> 5 times or 50 times makes it no more or less trustworthy. To solve this problem for web search, Google created the </span><a href="https://en.wikipedia.org/wiki/PageRank"><span style="font-weight: 400;">PageRank</span></a><span style="font-weight: 400;"> algorithm which determines a page’s importance based on how many other pages link to it (and what those pages’ rankings are).</span></p>
+<p><span style="font-weight: 400;">Most search engines, including Elasticsearch and Algolia, provide a way to promote results based on signals that aren’t related to the text itself. High-level attributes like trustworthiness, popularity, and affordability are commonly distilled down to a set of numbers, which are then used to sort records.</span></p>
+<p><span style="font-weight: 400;">A particularly challenging part of relevance design is combining text-based relevance with strategies for promotion. The text represents the user’s intent while the promotion represents yours. These have to be considered in the right order.</span></p>
+<p><i><span style="font-weight: 400;">For a great search UX, </span></i><b><i>what the user is looking for</i></b><i><span style="font-weight: 400;"> must come before </span></i><b><i>what you want them to find</i></b><i><span style="font-weight: 400;">.</span></i></p>
+<h2><a id="relevance-is-a-journey-not-a-destination" class="anchor" href="#relevance-is-a-journey-not-a-destination" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Relevance is a journey, not a destination</span></h2>
+<p><span style="font-weight: 400;">Relevance can be broken down into requirements, design, implementation, testing and maintenance phases. Now that we know what some of the requirements are, let’s jump into design and implementation, first with Elasticsearch and then with Algolia.</span></p>
+<h3><a id="about-elasticsearch" class="anchor" href="#about-elasticsearch" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">About Elasticsearch</span></h3>
+<p><span style="font-weight: 400;">If you’re not familiar with Elasticsearch, you can think of it as a set of tools for building a broad range of search and analytics applications. At the core of Elasticsearch is </span><a href="https://lucene.apache.org/core/"><span style="font-weight: 400;">Lucene</span></a><span style="font-weight: 400;">, a widely-used open source search engine first released in 1999. Part of Lucene’s wide applicability lives in its ability to apply very </span><a href="https://lucene.apache.org/core/4_7_0/core/org/apache/lucene/search/similarities/package-summary.html"><span style="font-weight: 400;">different similarity models</span></a><span style="font-weight: 400;"> to calculate relevance, including </span><a href="https://en.wikipedia.org/wiki/Okapi_BM25"><span style="font-weight: 400;">Okapi BM25</span></a><span style="font-weight: 400;"> and </span><a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf"><span style="font-weight: 400;">TF-IDF</span></a><span style="font-weight: 400;">, the new and former defaults used by Elasticsearch. In this sense, Lucene is a swiss-army knife, not a machete.</span></p>
+<blockquote><p><span style="font-weight: 400;">“Regardless of how easy Elasticsearch has made it, Lucene-based search is a framework, not a solution.” —Doug Turnbull, author of </span><a href="https://www.manning.com/books/relevant-search"><span style="font-weight: 400;">Relevant Search</span></a><span style="font-weight: 400;">, </span><a href="http://opensourceconnections.com/blog/2016/06/01/thoughts-on-algolia/"><span style="font-weight: 400;">June 2016</span></a></p></blockquote>
+<p><span style="font-weight: 400;">The job of a relevance engineer is to choose tools from the framework for the application in question. For consumer-grade search, tools are needed to handle:</span></p>
+<ul>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Multi-field matching &#8211; Testing each query word against each searchable field</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Prefix matching &#8211; Matching word parts for as-you-type search</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Forgiveness &#8211; handling typos, concatenations, plurals, omissions</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Promotion of records based on non-textual signals like price or popularity</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">A predictable, debuggable way to combine and rank all of these signals</span></li>
+</ul>
+<p><span style="font-weight: 400;">As we proceed, we must keep an eye on how each new layer impacts the relevance and the performance of the search as a whole. Like with most things in software, getting each component to work is easy. The hard part is making them all work together.</span></p>
+<h3><a id="poor-applicability" class="anchor" href="#poor-applicability" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Poor applicability</span></h3>
+<p><span style="font-weight: 400;">There are a few features of Elasticsearch that should be ruled out early on, even if they look promising at first glance. This isn’t because they’re bad features, but because they’re not going to be powerful or fast enough for what we want to achieve.</span></p>
+<p><strong><a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/fuzzy-match-query.html">Fuzzy queries</a></strong></p>
+<p><span style="font-weight: 400;">Fuzzy queries allow forgiveness for typos and omissions, but for search-as-you-type they are simply too slow. Strategies to speed them up, like increasing prefix_length or reducing max_expansions, will cause other problems. In the case of setting prefix_length to 3 or more, we lose the ability to correct typos in the first 3 characters of the word.</span></p>
+<p><span style="font-weight: 400;">There are also relevance concerns. There is no straightforward way to rank exact matches above fuzzy matches &#8211; the match query gives all fuzzy matches a constant score of 1, regardless of how inexact the query was. This has the consequence of making some records unreachable, even by exact queries, when typo-free variants are scored higher for other reasons. Fuzzy matching doesn’t work with phrase matching, and it also can’t be used with </span><a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/_cross_fields_queries.html"><span style="font-weight: 400;">cross_fields</span></a><span style="font-weight: 400;"> in multi_match queries, which prevents us from specifying field-specific boosts.</span></p>
+<p><a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/prefix-query.html"><b>Prefix</b></a><b>, </b><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query-phrase.html"><b>match_phrase</b></a><b>, </b><span style="font-weight: 400;">and</span> <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query-phrase-prefix.html"><b>match_phrase_prefix</b></a><span style="font-weight: 400;"> queries</span></p>
+<p><span style="font-weight: 400;">Prefix queries allow you to match the first letters of a word but don’t handle phrases, where at least one full word has already been typed. match_phrase only works with whole words. match_phrase_prefix does work with prefixes but on the last world only, and it fails to find matches when the prefix is short (1-2 letters) and the index is large. For this reason, Elasticsearch advises to avoid it.</span></p>
+<p><a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/ignoring-tfidf.html"><b>TF-IDF</b></a></p>
+<p><span style="font-weight: 400;">If the fields you’re searching tend to be short—names, titles, descriptions, sentences or short paragraphs—you probably want to turn off TF-IDF/BM25 altogether. Term frequency (TF) won’t be very helpful, as several occurrences of the same word in a short span isn’t usually a meaningful relevance signal. Inverse-document frequency (IDF) can unfairly penalize high-signal terms simply because they’re popular, like “Plato” will be in a search for philosophy book titles. You can read a very detailed explanation of this phenomenon from Doug Turnbull and the really sharp team at OpenSource Connections called </span><a href="http://opensourceconnections.com/blog/2014/12/08/title-search-when-relevancy-is-only-skin-deep/"><span style="font-weight: 400;">Title Search: when relevancy is only skin deep</span></a><span style="font-weight: 400;">.</span></p>
+<p><span style="font-weight: 400;">There’s one other general advantage with not using IDF, which is that the relevance of a single document is self-contained. A new influx of documents with previously unencountered proportions of keywords can’t cause a relevance regression in the documents that were already present.</span></p>
+<h3><a id="higher-applicability" class="anchor" href="#higher-applicability" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Higher applicability</span></h3>
+<p><span style="font-weight: 400;">While the previous Elasticsearch concepts might not prove that useful in the end for consumer-grade relevance, the next few can add more value, provided that we understand their limitations.</span></p>
+<p><a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/match-multi-word.html"><b>minimum_should_match</b></a></p>
+<p><span style="font-weight: 400;">This important configuration knob lets a query return results even if some query words aren’t in the record. For example, if the user searches for “my quick brown fox”, the query can return a record that only contains “fox” but neither of the other 2 terms, if the </span><b>minimum_should_match</b><span style="font-weight: 400;"> is 25% or lower. This scenario is especially important in instant search where not all query words are present until the end (or perhaps never at all).</span></p>
+<p><span style="font-weight: 400;">A </span><b>minimum_should_match</b><span style="font-weight: 400;"> value that is too high will exclude too many potentially good results, leading to zero-result scenarios more often. If the value was 50% in the example above, the “fox” result would not have been returned. A value that is too low will cause irrelevant results to appear. At 25%, the above query would also return results where “my” was the only word that matched. Finding the right value for this parameter is important, and requires you to understand both your data and the way that your users are searching.</span></p>
+<p><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters-completion.html"><b>Completion Suggester</b></a></p>
+<p><span style="font-weight: 400;">The Completion Suggester can be used to create an </span><b>instant suggest</b><span style="font-weight: 400;"> experience, as described above. It cannot be used to create a full-record instant search experience, as suggesters are limited to searching in only one field. Still, instant suggest has advantages that make it a popular choice, namely that it’s fast. Suggesters have a completely different in-memory execution path which helps make them fast enough for as-you-type search.</span></p>
+<p><span style="font-weight: 400;">On the relevance side, suggesters have weighting and can do fuzzy matching. On the other hand, clients have to de-duplicate data and advanced features like filtering and faceting can’t be used. Read more about the pros and cons here: </span><a href="https://qbox.io/blog/quick-and-dirty-autocomplete-with-elasticsearch-completion-suggest"><span style="font-weight: 400;">Quick and Dirty Autocomplete with Elasticsearch Completion Suggest</span></a><span style="font-weight: 400;">.</span></p>
+<h3><a id="n-grams" class="anchor" href="#n-grams" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">n-grams</span></h3>
+<p><span style="font-weight: 400;">One of the most versatile tools in the Elasticsearch toolbox is </span><a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/_ngrams_for_partial_matching.html"><span style="font-weight: 400;">n-grams</span></a><span style="font-weight: 400;">, where words are broken down and indexed as smaller groups of letters. The “brown” would be indexed with the tokens [“b”, “br”, “bro”, “brow”, “brown”, “r”, “ro”, “row”, “rown”, “o”, “ow”, “own”, “w”, “wn” and “n”]. </span></p>
+<p><span style="font-weight: 400;">A subset of n-grams called </span><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-edgengram-tokenizer.html"><span style="font-weight: 400;">edge n-grams</span></a><span style="font-weight: 400;"> are a better choice for instant search, because all tokens start from the beginning of the word and because there will less tokens overall, improving the speed of the search. The edge n-grams for “brown” are just [“b”, “br”, “bro”, “brow”, “brown”]. With n-grams a query for “row” would match “brown”. This is called infix matching and it usually does more harm than good for relevance—another good bad example is a search for “nathan” matching “jo</span><b>nathan</b><span style="font-weight: 400;">”. Edge n-grams only afford prefix matching, so “</span><b>row</b><span style="font-weight: 400;">” will only match “</span><b>row</b><span style="font-weight: 400;">er” or “</span><b>row</b><span style="font-weight: 400;">boat”, not “ar</span><b>row</b><span style="font-weight: 400;">”.</span></p>
+<p><span style="font-weight: 400;">Similar to the limitation that fuzzy matching has with ranking exact above inexact matches, n-grams don’t come with a way to rank full word matches higher than partial ones. N-grams don’t store information about whether the token represents a full word. Without that, we can’t guarantee that “motor” will be ranked above “</span><b>motor</b><span style="font-weight: 400;">bike” for the query “motor”.</span></p>
+<h3><a id="shingles" class="anchor" href="#shingles" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Shingles</span></h3>
+<p><span style="font-weight: 400;">Another limitation of n-grams is not being able to use them for phrase matching, where we want to giving ranking preference to records where the terms match in the right order. A name search for “anne marie” should rank results for “marie anne” after “anne marie”. This is very important when there are many people named “marie anne”, because the user may never be able to reach the “anne marie” record they were looking for otherwise. N-grams don’t store the position or order of tokens, so it’s impossible to satisfy this ranking requirement with n-grams alone.</span></p>
+<p><a href="https://www.elastic.co/blog/searching-with-shingles"><span style="font-weight: 400;">Shingles</span></a><span style="font-weight: 400;"> are often used instead of (or in concert with) n-grams because they do retain information about word proximities. Shingles are similar to n-grams in that they represent tokens, but instead of breaking up words into letters, they break up phrases into words. The shingled tokens of “quick brown fox” are [“quick brown”, “brown fox”].</span></p>
+<p><span style="font-weight: 400;">For search-as-you-type relevance, shingles will have to be used alongside n-grams because shingles won’t help us do prefix matching. An Elasticsearch implementation using both techniques is </span><a href="http://dogdogfish.com/guide/building-a-search-engine-for-e-commerce-with-elasticsearch/"><span style="font-weight: 400;">referred to here by DogDogFish</span></a><span style="font-weight: 400;">. However, the increase in index size and amount of scanning at query time make the combination of shingles and ngrams almost certainly too slow for full instant search. Presumably for that reason, and also to handle typos, the DogDogFish team ended up with a mix of instant suggest for keywords, instant suggest for spelling correction, followed by keyword search to find results.</span></p>
+<blockquote><p><span style="font-weight: 400;">“If there is a particular search found to yield bad results, it can be easy to optimise towards improving and fixing that search, but then other searches end up suffering as a result.”—DogDogFish</span></p></blockquote>
+<h2><a id="delivering-relevance-with-algolia" class="anchor" href="#delivering-relevance-with-algolia" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Delivering relevance with Algolia</span></h2>
+<p><span style="font-weight: 400;">Unlike Elasticsearch, Algolia is not a swiss-army knife for implementing a myriad of front-end and back-end search use cases. But nor is it a single blade capable of only one kind of search—the API is highly customizable and individual search implementations vary widely by data, user interface and audience.</span></p>
+<p><span style="font-weight: 400;">A good way to think about Algolia is a set of wrenches, each a different shape or size, purpose-built to tighten a specific nut or bolt of a fully instant consumer-grade search.</span></p>
+<img class="alignnone size-large wp-image-6236" src="https://blog.algolia.com/wp-content/uploads/2017/04/image01-720x400.png" alt="" width="640" height="356" srcset="https://blog.algolia.com/wp-content/uploads/2017/04/image01-720x400.png 720w, https://blog.algolia.com/wp-content/uploads/2017/04/image01-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2017/04/image01-768x427.png 768w, https://blog.algolia.com/wp-content/uploads/2017/04/image01-340x189.png 340w, https://blog.algolia.com/wp-content/uploads/2017/04/image01.png 1440w" sizes="(max-width: 640px) 100vw, 640px" />
+<h3><a id="multi-field" class="anchor" href="#multi-field" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Multi-field</span></h3>
+<p><span style="font-weight: 400;">Algolia is designed to index structured data, not large blocks of text, so searching in multiple fields of a record is the default behavior. The list of fields to be searched is specified in the </span><a href="https://www.algolia.com/doc/guides/relevance/ranking/#searchable-attributes"><span style="font-weight: 400;">searchableAttributes</span></a><span style="font-weight: 400;"> property of the index. It can be changed at any time in the Algolia Dashboard or API.</span></p>
+<p><span style="font-weight: 400;">The list of searchable attributes is ordered, with the most important attributes being first. The ordering is considered at query time by the </span><a href="https://www.algolia.com/doc/guides/relevance/ranking/#ranking-formula-a-tie-breaking-algorithm"><span style="font-weight: 400;">ranking formula</span></a><span style="font-weight: 400;">, which is the foundation of how Algolia computes relevance. Algolia’s ranking formula contains a handful of different criteria, each meant to handle a specific relevance need. For multi-field-aware ranking, matches in some fields need to count more than others. This is done by the formula’s </span><a href="https://www.algolia.com/doc/guides/relevance/ranking/#attribute"><span style="font-weight: 400;">attribute</span></a><span style="font-weight: 400;"> criteria.</span></p>
+<p><span style="font-weight: 400;">Unlike Elasticsearch, there are no </span><i><span style="font-weight: 400;">term</span></i><span style="font-weight: 400;"> or </span><i><span style="font-weight: 400;">match </span></i><span style="font-weight: 400;">queries that operate only against single fields; conceptually everything is </span><i><span style="font-weight: 400;">multi_match. </span></i><span style="font-weight: 400;">Likewise, there are no operators like</span><i><span style="font-weight: 400;"> bool</span></i><span style="font-weight: 400;"> or </span><i><span style="font-weight: 400;">dis_max </span></i><span style="font-weight: 400;">to combine relevance signals from multiple fields— this is handled by the ranking formula itself.</span></p>
+<p><span style="font-weight: 400;">The ranking formula, including the attribute criteria, doesn’t require developers to specify </span><i><span style="font-weight: 400;">how much</span></i><span style="font-weight: 400;"> more important one criteria (or one attribute) is than another, only that it is simply more important. In contrast to Lucene-style boosting, no coefficients need to be provided.</span></p>
+<p><span style="font-weight: 400;">Algolia uses a tie-breaking algorithm, not the computation of a score, to rank documents. The algorithm considers each criteria, one after the other, to successively sort the result set into parts. Read more here about the </span><a href="https://blog.algolia.com/how-algolia-tackled-the-relevance-problem-of-search-engines/"><span style="font-weight: 400;">tie-breaking algorithm and ranking criteria</span></a><span style="font-weight: 400;">.</span></p>
+<h3><a id="prefix-matching" class="anchor" href="#prefix-matching" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Prefix matching</span></h3>
+<p><span style="font-weight: 400;">For the query “sun”, exact matches like “sun” need to be ranked above partial matches like “</span><b>sun</b><span style="font-weight: 400;">flower”. Otherwise, records about the sun will be impossible to reach if there are many records about sunflowers—there is no way for the user to be more precise than “sun” when they are looking for records about the sun.</span></p>
+<p><span style="font-weight: 400;">Showing a sunflower to a consumer when they wanted the sun will cause a ton of frustration, so much that we want to </span><b>guarantee</b><span style="font-weight: 400;"> it won’t happen. The </span><a href="https://www.algolia.com/doc/guides/relevance/ranking/#exact"><span style="font-weight: 400;">exact</span></a><span style="font-weight: 400;"> criteria in the Algolia ranking formula makes sure that full-word matches count more than partial-word matches. The criteria not only can rank one prefix against one word, but it also combinations of multiple full words and multiple prefixes.</span></p>
+<h3><a id="forgiveness" class="anchor" href="#forgiveness" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Forgiveness</span></h3>
+<p><span style="font-weight: 400;">The </span><a href="https://www.algolia.com/doc/api-client/javascript/parameters/typoTolerance/"><span style="font-weight: 400;">typo</span></a><span style="font-weight: 400;"> criteria in the ranking formula guarantees that exact matches for query words count more than matches where this a mistake. The reasoning is because sometimes a typo is not actually a typo, it just depends on what the underlying data is.</span></p>
+<p><span style="font-weight: 400;">Take a query for “jon”. This is either an exact match for “Jon” or a 1-letter omission typo for “John” or “Joan”. The search engine needs to guarantee that people named “Jon” appear before “John”, while still showing “John” and “Joan” afterwards. The “jon” query is simultaneously a typo for some records and not a typo for others. The records for which it is not a typo need to come first.</span></p>
+<p><span style="font-weight: 400;">Both Algolia and Elasticsearch use the </span><a href="https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance"><span style="font-weight: 400;">Damerau–Levenshtein distance</span></a><span style="font-weight: 400;"> algorithm for computing typos based on word distance. Spelling mistakes, however, are just a small fraction of dealing with the reality that it is a human in front of the search box, and that humans speak different languages and phrase things in different ways.</span></p>
+<p><span style="font-weight: 400;">In Elasticsearch, search teams add analyzers to the indexing path or the query path to handle the quirks of language, and there are quite a few to </span><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-analyzers.html"><span style="font-weight: 400;">choose from</span></a><span style="font-weight: 400;">. With Algolia, queries are put through a two-step tokenization and alternative-word matching process that handles many common cases for a variety of different languages. For a deep dive, check out the </span><a href="https://blog.algolia.com/inside-the-algolia-engine-part-3-query-processing/"><span style="font-weight: 400;">Query Processing</span></a><span style="font-weight: 400;"> edition of the </span><i><span style="font-weight: 400;">Inside the Engine</span></i><span style="font-weight: 400;"> series, but here are a few examples:</span></p>
+<ul>
+<li style="font-weight: 400;"><b>Abbreviations and apostrophes</b><span style="font-weight: 400;">: In French, “l’aigle” (the eagle) needs to be indexed as </span><i><span style="font-weight: 400;">aigle </span></i><span style="font-weight: 400;">not </span><i><span style="font-weight: 400;">laigle</span></i><span style="font-weight: 400;"> &#8211; simply removing the apostrophe will produce very bad relevance. But if indexing English, “don’t” should be just one token “dont”.</span></li>
+<li style="font-weight: 400;"><b>Agglutinative languages</b><span style="font-weight: 400;">: Some languages like Japanese, Chinese and Korean don’t have word separators. A statistical approach is required to break words into tokens. Here, typo tolerance is not based on word distance but on synonyms between ideograms, so that you can search for simplified Chinese using traditional Chinese and vice versa.</span></li>
+<li style="font-weight: 400;"><b>Prefix correction</b><span style="font-weight: 400;">: Beyond Damerau–Levenshtein, Algolia keeps a dictionary of words that can be used to correct prefixes. If the user inputs “jhon” the prefix will be corrected to “john” automatically, since “john” will have been in the dictionary. This situation is often overlooked but is essential to a good instant search experience. Mistakes are very common in the first few characters of a search, as we all know from using our mobile devices.</span></li>
+</ul>
+<h4><span style="font-weight: 400;">Typosquatting</span></h4>
+<p><span style="font-weight: 400;">When you mistype a domain name and end up on an ugly “Domain For Sale” page, you’ve been a victim of typosquatting. Domains aren’t the only place typosquatting happens. It’s also common on social networks, where it takes advantage of the search’s preference for exact matches. @BarakObama on Twitter, who is not @BarackObama, has 16.3k followers. To prevent typosquatters from getting to the top of the search results, we need to do something that is the opposite of what we usually recommend &#8211; we need to consider another signal to be more important than the text. Because the elements of Algolia’s ranking formula can be reordered, this is easy. The recommended solution is to add an isPopular attribute to the data, set it to true for the top ~1% of accounts, and put it above the typo criteria in the ranking formula.</span></p>
+<h3><a id="promotion" class="anchor" href="#promotion" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Promotion</span></h3>
+<p><span style="font-weight: 400;">Multi-field matching, prefix matching, forgiving mistakes and understanding the intricacies of language all fall under an umbrella that Algolia calls </span><a href="https://blog.algolia.com/inside-the-algolia-enginepart-4-textual-relevance/"><span style="font-weight: 400;">textual relevance</span></a><span style="font-weight: 400;">. Textual relevance is all about what the user wants to find.</span></p>
+<p><i><span style="font-weight: 400;">Business relevance</span></i><span style="font-weight: 400;"> is about what you want the user to find. When your index contains textually identical people, products or items, Algolia gives you the </span><i><span style="font-weight: 400;">custom ranking</span></i><span style="font-weight: 400;"> to push the most important records to the top. A custom ranking might be driven by business metrics, popularity metrics, or attributes intrinsic to the record, like price. As with textual relevance, your Algolia custom ranking can take into account many signals, while still giving you a guarantee about the order in which they matter.</span></p>
+<p><span style="font-weight: 400;">By default, the ranking formula applies textual criteria first and only then the custom ranking. This provides a guarantee that promotional signals will not override the textual quality of the match, which is one of the most common situations that lead to bad relevance and a bad user experience.</span></p>
+<h2><a id="conclusion" class="anchor" href="#conclusion" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Conclusion</span></h2>
+<p><span style="font-weight: 400;">In Part 1 of this series, we looked at how instant search forces us to think about latency in a new way. The same is true for relevance. We can no longer search by full words only nor assume the query has made it accurately from the user&#8217;s head into the search box.</span></p>
+<p><span style="font-weight: 400;">The path to great relevance looks different whether you are using Elasticsearch or Algolia. Because relevance and user experience are inextricably linked, the type of user experience you will end up providing may also be different. Recent Elasticsearch additions like the Completion Suggester are designed to help developers build an instant suggest experience that is fast enough for as-you-type search, with a tradeoff of some functionality. For full instant search, Elasticsearch users should expect to make trade-offs between speed, relevance and how predictive or forgiving the user experience is.</span></p>
+<p><span style="font-weight: 400;">Algolia is built from the ground-up for full instant search. Tradeoffs center around different ways to model data and finding the most cost-effective ways to integrate, but not around speed, relevance or user experience. Every Algolia developer has unfettered access to the features we believe are essential to building a great search.</span></p>
+<p><span style="font-weight: 400;">The third and final part of this series will be about developer experience. We&#8217;ll look at popular libraries, integrations and community projects that exist in both the Elasticsearch and Algolia ecosystems, and see how these resources help developers build fast with confidence.</span></p>
+<style>
+.entry-content { font-family: sans-serif !important; line-height: 1.5em; }</style>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Falgolia-v-elasticsearch-relevance%2F&amp;t=Comparing+Algolia+and+Elasticsearch+For+Consumer-Grade+Search+Part+2%3A+Relevance+Isn%E2%80%99t+Luck" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Comparing+Algolia+and+Elasticsearch+For+Consumer-Grade+Search+Part+2%3A+Relevance+Isn%E2%80%99t+Luck&amp;url=https%3A%2F%2Fblog.algolia.com%2Falgolia-v-elasticsearch-relevance%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Falgolia-v-elasticsearch-relevance%2F&amp;title=Comparing+Algolia+and+Elasticsearch+For+Consumer-Grade+Search+Part+2%3A+Relevance+Isn%E2%80%99t+Luck&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                
+                
+<div id="disqus_thread">
+    </div>
+
+                                                  
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Falgolia-v-elasticsearch-relevance%2F&amp;t=Comparing+Algolia+and+Elasticsearch+For+Consumer-Grade+Search+Part+2%3A+Relevance+Isn%E2%80%99t+Luck" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Comparing+Algolia+and+Elasticsearch+For+Consumer-Grade+Search+Part+2%3A+Relevance+Isn%E2%80%99t+Luck&amp;url=https%3A%2F%2Fblog.algolia.com%2Falgolia-v-elasticsearch-relevance%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Falgolia-v-elasticsearch-relevance%2F&amp;title=Comparing+Algolia+and+Elasticsearch+For+Consumer-Grade+Search+Part+2%3A+Relevance+Isn%E2%80%99t+Luck&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"6163 https:\/\/blog.algolia.com\/?p=6163","disqusShortname":"algoliablog","disqusTitle":"Comparing Algolia and Elasticsearch For Consumer-Grade Search Part 2: Relevance Isn\u2019t Luck","disqusUrl":"https:\/\/blog.algolia.com\/algolia-v-elasticsearch-relevance\/","options":{"manualSync":false},"postId":"6163"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'6163',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '6163' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

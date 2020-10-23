@@ -1,0 +1,2756 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>When Solid State Drives are not that solid - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; When Solid State Drives are not that solid Comments Feed" href="https://blog.algolia.com/when-solid-state-drives-are-not-that-solid/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=3735' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fwhen-solid-state-drives-are-not-that-solid%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fwhen-solid-state-drives-are-not-that-solid%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=6CF8F371237ADD0E26E70CEA83768865');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="When Solid State Drives are not that solid"/>
+  <meta property="og:url" content="https://blog.algolia.com/when-solid-state-drives-are-not-that-solid/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="It looked just like another page in the middle of the night. One of the servers of our search API stopped processing the indexing jobs for an unknown reason. Since we build systems in Algolia for high availability and resiliency, nothing bad was happening. The new API calls were correctly redirected"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2015/06/ssd-cheese.png"/>
+  <meta property="article:published_time" content="2015-06-15T22:20:11+00:00"/>
+  <meta property="article:modified_time" content="2015-07-30T14:55:12+00:00" />
+  <meta property="og:updated_time" content="2015-07-30T14:55:12+00:00" />
+  <meta property="article:section" content="Infrastructure"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="When Solid State Drives are not that solid"/>
+  <meta itemprop="description" content="It looked just like another page in the middle of the night. One of the servers of our search API stopped processing the indexing jobs for an unknown reason. Since we build systems in Algolia for high availability and resiliency, nothing bad was happening. The new API calls were correctly redirected"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2015/06/ssd-cheese.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="When Solid State Drives are not that solid"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/when-solid-state-drives-are-not-that-solid/"/>
+  <meta name="twitter:description" content="It looked just like another page in the middle of the night. One of the servers of our search API stopped processing the indexing jobs for an unknown reason. Since we build systems in Algolia for high availability and resiliency, nothing bad was happening. The new API calls were correctly redirected"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2015/06/ssd-cheese.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-3735 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-3735" class="cf post-3735 post type-post status-publish format-standard has-post-thumbnail hentry category-infrastructure" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">When Solid State Drives are not that solid</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/0d23f348c8416b65e5acf54cd52edf57?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person"><a href="https://twitter.com/AdamSurak" title="Visit Adam Surak&#8217;s website" rel="author external">Adam Surak</a></span> |
+                    <time class="updated entry-time" datetime="2015-06-15" itemprop="datePublished">June 15, 2015</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/infrastructure/" rel="category tag">Infrastructure</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/when-solid-state-drives-are-not-that-solid/" title="When Solid State Drives are not that solid">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2015/06/ssd-cheese.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2015/06/ssd-cheese.png 720w, https://blog.algolia.com/wp-content/uploads/2015/06/ssd-cheese-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2015/06/ssd-cheese-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">It looked just like another page in the middle of the night. One of the servers of our search API stopped processing the indexing jobs for an unknown reason. Since we build systems in Algolia for high availability and resiliency, nothing bad was happening. The new API calls were correctly redirected to the rest of the <a href="http://highscalability.com/blog/2015/3/9/the-architecture-of-algolias-distributed-search-network.html">healthy machines in the cluster</a> and the only impact on the service was one woken-up engineer. It was time to find out what was going on.</p>
+<p><strong>SUMMARY:<br />
+</strong>1) the issue raised by Algolia is due to a Linux kernel error<br />
+2) Linux kernel error can affect any SSD under the same operating conditions<br />
+3) Samsung has also posted a <a href="http://www.spinics.net/lists/raid/msg49440.html">Linux kernel patch that should fix the issue</a></p>
+<p><strong>UPDATE June 16:<br />
+</strong><a href="https://hn.algolia.com/story/9723066/when-solid-state-drives-are-not-that-solid">A lot of discussions</a> started pointing out that the issue is related to the newly introduced queued TRIM. This is not correct. The TRIM on our drives is un-queued and the issue we have found is not related to the latest changes in the Linux Kernel to disable this feature.</p>
+<blockquote><p># smartctl -l gplog,0x13 /dev/sda<br />
+smartctl 6.2 2013-07-26 r3841 [x86_64-linux-3.16.0-31-generic] (local build)<br />
+Copyright (C) 2002-13, Bruce Allen, Christian Franke, www.smartmontools.org</p>
+<p>General Purpose Log 0x13 does not exist (override with &#8216;-T permissive&#8217; option)</p></blockquote>
+<p><strong>UPDATE June 17:<br />
+</strong>We got contacted by Samsung and we provided them all the system specifications and all the information about the issue we had. We will continue to provide Samsung all the necessary information in order to resolve the issue.</p>
+<p><strong>UPDATE June 18:</strong><br />
+We just had a conference call with the European branch and the Korean HQ of Samsung. Their engineers are going to visit one of the datacenters we have servers in and in cooperation with our server provider they will inspect the mentioned SSDs in our SW and HW setup.</p>
+<p><strong>UPDATE June 19:<br />
+</strong>On Monday June 22, the engineering team from Samsung is going analyze one of our servers in Singapore and if nothing is found on-site, the server will travel to Samsung HQ in Korea for further analysis.</p>
+<p id="magicdomid4" class="ace-line gutter-author-p-233551 emptyGutter" data-author-link="/ep/profile/nJ0dZaC6EX1" data-author-name="Adam S" data-author-initials="AS"><strong><a name="july13"></a>UPDATE July 13:<br />
+</strong><span class="author-p-233551">Since the last update of this blog-post, we have been in a cooperation with Samsung trying to help them find the issue</span><span class="author-p-233185">, during this investigation we agree</span><span class="author-p-233551">d</span><span class="author-p-233185"> with Samsung not to communicate until their approval.</span></p>
+<p id="magicdomid6" class="ace-line gutter-author-p-233551 emptyGutter" data-author-link="/ep/profile/nJ0dZaC6EX1" data-author-name="Adam S" data-author-initials="AS"><span class="author-p-233551">As the issue was not reproduced on our server in Singapore, the reproduction is now running under Samsung supervision in Korea, out of our environment. Although Samsung requested multiple times an access to our software and corrupted data, we </span><span class="author-p-233185">could</span><span class="author-p-233551"> not provide it to them </span><span class="author-p-233551">in order to protect the privacy and data of our customers.</span></p>
+<p id="magicdomid8" class="ace-line gutter-author-p-233551 emptyGutter" data-author-link="/ep/profile/nJ0dZaC6EX1" data-author-name="Adam S" data-author-initials="AS"><span class="author-p-233551">Samsung asked us to inform you about this:</span></p>
+<ul class="listtype-bullet listindent1 list-bullet1">
+<li><span class="author-p-233551">Samsung tried to duplicate the failure with the latest script provided to them, but no single failure has been reproduced so far.</span></li>
+</ul>
+<ul class="listtype-bullet listindent1 list-bullet1">
+<li><span class="author-p-233551">Samsung will do further tests, most likely from week 29 onwards, with a much more intensive script provided by Algolia.</span></li>
+</ul>
+<p id="magicdomid14" class="ace-line gutter-author-p-233551 emptyGutter" data-author-link="/ep/profile/nJ0dZaC6EX1" data-author-name="Adam S" data-author-initials="AS"><span class="author-p-233551">After unsuccessful tries to reproduce the issue with Bash scripts we have </span><span class="author-p-233185">decided to help them by </span><span class="author-p-233551">creat</span><span class="author-p-233185">ing</span><span class="author-p-233551"> a small C++ program that simulates the writing style and pattern of our application (no</span><span class="author-p-233185"> files are open with</span><span class="author-p-233551"> O_DIRECT). We believe that if the issue is coming from a specific way we are using the standard kernel calls, it might take a couple of days and terabytes of data to be written to the drive. We have been informed by Samsung that no issue of this kind have been reported to them. Our server provider has modified their Ubuntu 14.04 images to disable the fstrim cron in order to avoid this issue. For the last couple of months after not using trim anymore we have not seen the issue again.</span></p>
+<p class="ace-line gutter-author-p-233551 emptyGutter" data-author-link="/ep/profile/nJ0dZaC6EX1" data-author-name="Adam S" data-author-initials="AS"><a name="july17"></a><strong>UPDATE July 17:<br />
+</strong>We have just finished a conference call with Samsung considering the failure analysis of this issue. Samsung engineering team has been able to successfully reproduce the issue with our latest provided binary.</p>
+<p class="ace-line gutter-author-p-233551 emptyGutter" data-author-link="/ep/profile/nJ0dZaC6EX1" data-author-name="Adam S" data-author-initials="AS"><strong>Samsung had a concrete conclusion that the issue is not related to Samsung SSD or Algolia software but is related to the Linux kernel.</strong></p>
+<p class="ace-line gutter-author-p-233551 emptyGutter" data-author-link="/ep/profile/nJ0dZaC6EX1" data-author-name="Adam S" data-author-initials="AS">Samsung has developed <a href="http://www.spinics.net/lists/raid/msg49440.html">a kernel patch</a> to resolve this issue and the official statement with details will be released tomorrow, July 18 on Linux community with the Linux patch guide. Our testing code <a href="https://github.com/algolia/trimtester">is available on GitHub</a>.</p>
+<p class="ace-line gutter-author-p-233551 emptyGutter" data-author-link="/ep/profile/nJ0dZaC6EX1" data-author-name="Adam S" data-author-initials="AS">This has been an amazing ride, thank you everyone for joining, we have arrived at the destination.</p>
+<h2 class="ace-line gutter-author-p-233551 emptyGutter" data-author-link="/ep/profile/nJ0dZaC6EX1" data-author-name="Adam S" data-author-initials="AS"><strong>For all followers of this blogpost and all the new readers:</strong></h2>
+<p class="ace-line gutter-author-p-233551 emptyGutter" data-author-link="/ep/profile/nJ0dZaC6EX1" data-author-name="Adam S" data-author-initials="AS">The discovered issue has much bigger impact than we originally expected and is not caused by Samsung SSDs, as we originally assumed.<br />
+<strong>My personal apologies to Samsung!</strong></p>
+<hr />
+<p>&nbsp;</p>
+<p>The <a href="http://nginx.org/">NGINX</a> daemon serving all the HTTP(S) communication of our API was up and ready to serve the search queries but the indexing process crashed. Since the indexing process is guarded by <a href="http://cr.yp.to/daemontools/supervise.html">supervise</a>, crashing in a loop would have been understandable but a complete crash was not. As it turned out the filesystem was in a read-only mode. All right, let&#8217;s assume it was a cosmic ray 🙂 the filesystem got fixed, files were restored from another healthy server and everything looked fine again.</p>
+<p>The next day another server ended with filesystem in read-only, two hours after another one and then next hour another one. Something was going on. After restoring the filesystem and the files, it was time for serious analysis since this was not a one time thing. At this point, we did a breakdown of the software involved in our storage stack and went through the recent changes.</p>
+<h2><a id="investigation-debugging-time" class="anchor" href="#investigation-debugging-time" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Investigation &amp; debugging time!</h2>
+<p>We first asked ourselves if it could be related to our software. Are we using non-safe system calls or processing the data in an unsafe way? Did we incorrectly read and write the files in the memory before flushing it to disk?</p>
+<ul>
+<li>Filesystem &#8211; Is there a bug in <a href="https://en.wikipedia.org/wiki/Ext4">ext4</a>? Can we access the memory space of allocation tables by accident?</li>
+<li><a href="https://raid.wiki.kernel.org/index.php/Linux_Raid">Mdraid</a> &#8211; Is there a bug in mdadm? Did we use an improper configuration?</li>
+<li>Driver &#8211; Does the driver have a bug?</li>
+<li><a href="https://en.wikipedia.org/wiki/Solid-state_drive">SSD</a> &#8211; Is the SSD dying? Or even worse, is there a problem with the firmware of the drive?</li>
+</ul>
+<p>We even started to bet where the problem was and exactly proposed, in this order, the possible solutions going from easy to super-hard.</p>
+<p>Going through storage procedures of our software stack allowed us to set up traps and in case the problem happens again, we would be able to better isolate the corrupted parts. Looking at every single storage call of our engine gave us enough confidence that the problem was not coming from the way in which we manipulate the data. Unfortunately.</p>
+<p>One hour later, another server was corrupted. This time we took it out of the cluster and started to inspect it bit by bit. Before we fixed the filesystem, we noticed that some pieces of our files were missing (zeroed) &#8211; file modification date was unchanged, size was unchanged, just some parts were filled with zeros. Small files were completely erased. This was weird, so we started to think if it was possible that our application could access certain portions of the memory where the OS/filesystem had something mapped because otherwise our application cannot modify a file without the filesystem noticing. Having our software written in C++ brought a lot of crazy ideas of what happened. This turned out to be a dead-end as all of these memory blocks were out of our reach.</p>
+<p>So is there an issue in the ext4? Going through the kernel changelog looking for ext4 related issues was a terrifying experience. In almost every version we found a fixed bug that could theoretically impact us. I have to admit, I slept better before reading the changelog.</p>
+<p>We had kernels 3.2, 3.10, 3.13 and 3.16 distributed between the most often corrupted machines and waited to see which of the mines blows up. All of them did. Another dead-end. Maybe there was an issue in ext4 that no one else has seen before? The chance that we were this “lucky” was quite low and we did not want to end up in a situation like that. The possibility of a bug in ext4 was still open but highly improbable.</p>
+<p>What if there was an issue in mdadm? Looking at the changelog gave us confidence that we should not go down this path.</p>
+<p>The level of despair was reaching a critical level and the pages in the middle of the night were unstoppable. We spent a big portion of two weeks just isolating machines as quickly as possible and restoring them as quickly as possible. The one thing we did was to implement a check in our software that looked for empty blocks in the index files, even when they were not used, and alerted us in advance.</p>
+<h2><a id="not-a-single-day-without-corruptions" class="anchor" href="#not-a-single-day-without-corruptions" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Not a single day without corruptions</h2>
+<p>While more and more machines were dying, we had managed to automate the restore procedure to a level we were comfortable with. At every failure, we tried to look at different patterns of the corruption in hopes that we would find the smallest common denominator. They all had the same characteristics. But one thing started to be more and more clear &#8211; we saw the issue only on a portion of our servers. The software stack was identical but the hardware was slightly different. Mainly the SSDs were different but they were all from the same manufacturer. This was very alarming and led us to contact our server provider to ask if they have ever seen something like this before. It’s hard to convince a technical support person about a problem that you see only once in a while, with the latest firmware and that you cannot reproduce on demand. We were not very successful but at least we had one small victory on our side.</p>
+<p>Knowing that the issue existed somewhere in the combination of the software and drive itself, we reproduced the identical software stack from our servers with different drives. And? Nothing, the corruption appeared again. So it was quite safe to assume the problem was not in the software stack and was more drive related. But what causes a block to change the content without the rest of the system noticing? That would be a lot of rotten bits in a sequence&#8230;</p>
+<p>The days started to become a routine &#8211; long shower, breakfast, restoring corrupted servers, lunch, restoring corrupted servers, dinner, restoring corrupted servers. Until one long morning shower full of thinking, “how big was the sequence?” As it turned out, the lost data was always 512 bytes, which is one block on the drive. One step further, a block ends up to be full of zeroes. A hardware bug? Or is the block zeroed? What can zero the block? <a href="https://en.wikipedia.org/wiki/Trim_(computing)">TRIM</a>! Trim instructs the SSD drive to zero the empty blocks. But these block were not empty and other types of SSDs were not impacted. We gave it a try and disabled TRIM across all of our servers. It would explain everything!</p>
+<p>The next day not a single server was corrupted, two days silence, then a week. The nightmare was over! At least we thought so… a month after we isolated the problem, a server restarted and came up with corrupted data but only from the small files &#8211; including certificates. Even improper shutdown cannot cause this.</p>
+<p>Poking around in the source code of the kernel looking for the trim related code, we came to the <a href="https://github.com/torvalds/linux/blob/e64f638483a21105c7ce330d543fa1f1c35b5bc7/drivers/ata/libata-core.c#L4109-L4286">trim blacklist</a>. This blacklist configures a specific behavior for certain SSD drives and identifies the drives based on the regexp of the model name. Our working SSDs were explicitly allowed full operation of the TRIM but some of the SSDs of our affected manufacturer were limited. Our affected drives did not match any pattern so they were implicitly allowed full operation.</p>
+<h2><a id="the-complete-picture" class="anchor" href="#the-complete-picture" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The complete picture</h2>
+<p>At this moment we finally got a complete picture of what was going on. The system was issuing a TRIM to erase empty blocks, the command got misinterpreted by the drive and the controller erased blocks it was not supposed to. Therefore our files ended-up with 512 bytes of zeroes, files smaller than 512 bytes were completely zeroed. When we were lucky enough, the misbehaving TRIM hit the super-block of the filesystem and caused a corruption. After disabling the TRIM, the live big files were no longer corrupted but the small files that were once mapped to the memory and never changed since then had two states &#8211; correct content in the memory and corrupted one on the drive. Running a check on the files found nothing because they were never fetched again from the drive and just silently read from the memory. Massive reboot of servers came into play to restore the data consistency but after many weeks of hunting a ghost we came to the end.</p>
+<p>As a result, we informed our server provider about the affected SSDs and they informed the manufacturer. Our new deployments were switched to different SSD drives and we don&#8217;t recommend anyone to use any SSD that is anyhow mentioned in a bad way by the Linux kernel. Also be careful, even when you don&#8217;t enable the TRIM explicitly, at least since Ubuntu 14.04 the explicit <a href="http://man7.org/linux/man-pages/man8/fstrim.8.html">FSTRIM</a> runs in a cron once per week on all partitions &#8211; the freeze of your storage for a couple of seconds will be your smallest problem.</p>
+<h2><a id="tldr" class="anchor" href="#tldr" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>TL;DR</h2>
+<h3><a id="broken-ssds-drives-on-which-we-have-detected-the-issue" class="anchor" href="#broken-ssds-drives-on-which-we-have-detected-the-issue" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><del>Broken SSDs</del>: (Drives on which we have detected the issue)</h3>
+<ul>
+<li>SAMSUNG MZ7WD480HCGM-00003</li>
+<li>SAMSUNG MZ7GE480HMHP-00003</li>
+<li>SAMSUNG MZ7GE240HMGR-00003</li>
+<li>Samsung SSD 840 PRO Series<br />
+recently blacklisted for 8-series blacklist</li>
+<li>Samsung SSD 850 PRO 512GB<br />
+recently blacklisted as 850 Pro and later in 8-series blacklist</li>
+</ul>
+<h3><a id="working-ssds-drives-on-which-we-have-not-detected-the-issue" class="anchor" href="#working-ssds-drives-on-which-we-have-not-detected-the-issue" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><del>Working SSDs</del>: (Drives on which we have NOT detected the issue)</h3>
+<ul>
+<li>Intel S3500</li>
+<li>Intel S3700</li>
+<li>Intel S3710</li>
+</ul>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fwhen-solid-state-drives-are-not-that-solid%2F&amp;t=When+Solid+State+Drives+are+not+that+solid" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=When+Solid+State+Drives+are+not+that+solid&amp;url=https%3A%2F%2Fblog.algolia.com%2Fwhen-solid-state-drives-are-not-that-solid%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fwhen-solid-state-drives-are-not-that-solid%2F&amp;title=When+Solid+State+Drives+are+not+that+solid&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-211">
+        <div id="dsq-comment-header-211" class="dsq-comment-header">
+            <cite id="dsq-cite-211">
+                <span id="dsq-author-user-211">Tyler Durden</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-211" class="dsq-comment-body">
+            <div id="dsq-comment-message-211" class="dsq-comment-message"><p>Fake!</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-212">
+        <div id="dsq-comment-header-212" class="dsq-comment-header">
+            <cite id="dsq-cite-212">
+                <a id="dsq-author-user-212" href="http://www.bluebyte.co.nz" target="_blank" rel="nofollow">leeh007</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-212" class="dsq-comment-body">
+            <div id="dsq-comment-message-212" class="dsq-comment-message"><p>Why Fake?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-241">
+        <div id="dsq-comment-header-241" class="dsq-comment-header">
+            <cite id="dsq-cite-241">
+                <span id="dsq-author-user-241">leeh0007</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-241" class="dsq-comment-body">
+            <div id="dsq-comment-message-241" class="dsq-comment-message"><p>They are going by the name &#8216;Tyler Durden&#8217;, I don&#8217;t think you are going to get a logical response.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-215">
+        <div id="dsq-comment-header-215" class="dsq-comment-header">
+            <cite id="dsq-cite-215">
+                <span id="dsq-author-user-215">LWWZ</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-215" class="dsq-comment-body">
+            <div id="dsq-comment-message-215" class="dsq-comment-message"><p>What&#8217;s your source for this opinion?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-214">
+        <div id="dsq-comment-header-214" class="dsq-comment-header">
+            <cite id="dsq-cite-214">
+                <span id="dsq-author-user-214">Nick Price</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-214" class="dsq-comment-body">
+            <div id="dsq-comment-message-214" class="dsq-comment-message"><p>Using an experimental filesystem and experimental TRIM support on Ubuntu doesn&#8217;t seem like the best idea for a variety of reasons.</p>
+<p>There are a number of platforms with more mature TRIM support than Linux (not to mention filesystems that would&#8217;ve handled these corruption issues in stride if they did manage to occur).  Solaris, SmartOS, and even FreeBSD are good examples.</p>
+<p>Sometimes &#8220;Put the latest version of Ubuntu on it&#8221; isn&#8217;t the correct answer.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-218">
+        <div id="dsq-comment-header-218" class="dsq-comment-header">
+            <cite id="dsq-cite-218">
+                <a id="dsq-author-user-218" href="http://project3825.blogspot.com/" target="_blank" rel="nofollow">3825</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-218" class="dsq-comment-body">
+            <div id="dsq-comment-message-218" class="dsq-comment-message"><p>Well, no matter the OS kernel, it is Samsung&#8217;s fault&#8230; </p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-221">
+        <div id="dsq-comment-header-221" class="dsq-comment-header">
+            <cite id="dsq-cite-221">
+                <span id="dsq-author-user-221">Erik Johansson</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-221" class="dsq-comment-body">
+            <div id="dsq-comment-message-221" class="dsq-comment-message"><p>So what is it in the TRIM support that makes Solaris, SmartOS and FreeBSD so much better? From experience you get data corruption with SSD on Solaris and FreeBSD as well, since it&#8217;s fixed by swapping to the right SSDs I&#8217;ve always blamed the controller either for UNMAP -&gt; TRIM conversion or just shoddy firmware. </p>
+<p>SSDs firmware are like filesystems on their own.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-251">
+        <div id="dsq-comment-header-251" class="dsq-comment-header">
+            <cite id="dsq-cite-251">
+                <span id="dsq-author-user-251">Nebshar</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-251" class="dsq-comment-body">
+            <div id="dsq-comment-message-251" class="dsq-comment-message"><p>He&#8217;s alluding to the filesystem. ZFS has full checksum coverage. There are no silent corruptions (i.e. you will be able to pinpoint the problem quickly), and you can repair from parity / redundancy with full faith in the restored blocks.</p>
+<p>Solaris, SmartOS, and FreeBSD are not better at TRIM. They are just a lot better at error handling.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-276">
+        <div id="dsq-comment-header-276" class="dsq-comment-header">
+            <cite id="dsq-cite-276">
+                <span id="dsq-author-user-276">Benjamin Smith</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-276" class="dsq-comment-body">
+            <div id="dsq-comment-message-276" class="dsq-comment-message"><p>PS: ZFS on Linux works rather well for us! However, ZFS would be vulnerable to this trim issue if you don&#8217;t have some type of redundancy, EG RAIDZ.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-317">
+        <div id="dsq-comment-header-317" class="dsq-comment-header">
+            <cite id="dsq-cite-317">
+                <span id="dsq-author-user-317">Frank Drebin</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-317" class="dsq-comment-body">
+            <div id="dsq-comment-message-317" class="dsq-comment-message"><p>ZFS on Linux doesn&#8217;t support TRIM/discard, so you won&#8217;t run into this problem.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-3" id="dsq-comment-302">
+        <div id="dsq-comment-header-302" class="dsq-comment-header">
+            <cite id="dsq-cite-302">
+                <span id="dsq-author-user-302">J</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-302" class="dsq-comment-body">
+            <div id="dsq-comment-message-302" class="dsq-comment-message"><p>If your buggy linux kernel queues the commands that lead the the unmapping of a block but send the TRIM immediately to the SSD controller and do not expect it to be executed immediately, than it would not be the controller&#8217;s fault. Don&#8217;t jump to conclusions without analysing the exact sequence of commands here.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-223">
+        <div id="dsq-comment-header-223" class="dsq-comment-header">
+            <cite id="dsq-cite-223">
+                <span id="dsq-author-user-223">Bob</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-223" class="dsq-comment-body">
+            <div id="dsq-comment-message-223" class="dsq-comment-message"><p>EXT4 is experimental? Not for a long time.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-233">
+        <div id="dsq-comment-header-233" class="dsq-comment-header">
+            <cite id="dsq-cite-233">
+                <span id="dsq-author-user-233">THE AXEMAN</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-233" class="dsq-comment-body">
+            <div id="dsq-comment-message-233" class="dsq-comment-message"><p>Yep, I have no idea what he&#8217;s talking about.</p>
+<p>Also, with regards to filesystems (or hell, anything) and the Linux kernel, there&#8217;s no reason *not* to have the latest kernel version &#8212; especially if you&#8217;re using an &#8220;experimental&#8221; filesystem like btrfs. (which has, by the way, given me no problems whatsoever) Kernel development moves quickly.</p>
+<p>And as @project3825:disqus said: within reason, OP&#8217;s kernel version or filesystem doesn&#8217; t matter. Samsung&#8217;s drives shit the bed. The kernel didn&#8217;t.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-235">
+        <div id="dsq-comment-header-235" class="dsq-comment-header">
+            <cite id="dsq-cite-235">
+                <span id="dsq-author-user-235">PAUL Miller</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-235" class="dsq-comment-body">
+            <div id="dsq-comment-message-235" class="dsq-comment-message"><p>ext4 experimental?  What are you using?  btrfs? ha!</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-245">
+        <div id="dsq-comment-header-245" class="dsq-comment-header">
+            <cite id="dsq-cite-245">
+                <span id="dsq-author-user-245">Sascha</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-245" class="dsq-comment-body">
+            <div id="dsq-comment-message-245" class="dsq-comment-message"><p>minix fs 😉</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-3" id="dsq-comment-259">
+        <div id="dsq-comment-header-259" class="dsq-comment-header">
+            <cite id="dsq-cite-259">
+                <span id="dsq-author-user-259">Supremebob</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-259" class="dsq-comment-body">
+            <div id="dsq-comment-message-259" class="dsq-comment-message"><p>I only use reiserfs, because it&#8217;s a killer filesystem!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-243">
+        <div id="dsq-comment-header-243" class="dsq-comment-header">
+            <cite id="dsq-cite-243">
+                <span id="dsq-author-user-243">Carina Wilberg</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-243" class="dsq-comment-body">
+            <div id="dsq-comment-message-243" class="dsq-comment-message"><p>You are truly absurdly clueless, buddy. Did you miss the part where the SSD trimmed out regions which the TRIM command did not specify? Don&#8217;t go blaming other components when this is clearly a firmware issue.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-255">
+        <div id="dsq-comment-header-255" class="dsq-comment-header">
+            <cite id="dsq-cite-255">
+                <span id="dsq-author-user-255">boogaloo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-255" class="dsq-comment-body">
+            <div id="dsq-comment-message-255" class="dsq-comment-message"><p>Nothing in the write up of the problem is conclusive that there isn&#8217;t some form of problem in the kernel/fs that is interacting with the firmware which causes this. Maybe they both have problems. &#8220;There is no problem with different ssd so it must be ok&#8221; isn&#8217;t a valid argument. It&#8217;s obvious that the manufacturer doesn&#8217;t test Ubuntu though, so I would blame whoever built the server.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-3" id="dsq-comment-413">
+        <div id="dsq-comment-header-413" class="dsq-comment-header">
+            <cite id="dsq-cite-413">
+                <span id="dsq-author-user-413">Duckeenie</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-413" class="dsq-comment-body">
+            <div id="dsq-comment-message-413" class="dsq-comment-message"><p>You wanna share some of that egg?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-216">
+        <div id="dsq-comment-header-216" class="dsq-comment-header">
+            <cite id="dsq-cite-216">
+                <span id="dsq-author-user-216">NotTwentyAnymore</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-216" class="dsq-comment-body">
+            <div id="dsq-comment-message-216" class="dsq-comment-message"><p>Could you use a font designed for reading when writing more than ten words, please?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-217">
+        <div id="dsq-comment-header-217" class="dsq-comment-header">
+            <cite id="dsq-cite-217">
+                <a id="dsq-author-user-217" href="http://project3825.blogspot.com/" target="_blank" rel="nofollow">3825</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-217" class="dsq-comment-body">
+            <div id="dsq-comment-message-217" class="dsq-comment-message"><p>Which font do you recommend d?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-249">
+        <div id="dsq-comment-header-249" class="dsq-comment-header">
+            <cite id="dsq-cite-249">
+                <span id="dsq-author-user-249">7eggert</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-249" class="dsq-comment-body">
+            <div id="dsq-comment-message-249" class="dsq-comment-message"><p><a href="https://en.wikipedia.org/wiki/DejaVu_fonts" rel="nofollow">https://en.wikipedia.org/wiki/DejaVu_fonts</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-224">
+        <div id="dsq-comment-header-224" class="dsq-comment-header">
+            <cite id="dsq-cite-224">
+                <span id="dsq-author-user-224">michalstanko</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-224" class="dsq-comment-body">
+            <div id="dsq-comment-message-224" class="dsq-comment-message"><p>The font is nice and legible, the problem is probably on your side. 😉</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-248">
+        <div id="dsq-comment-header-248" class="dsq-comment-header">
+            <cite id="dsq-cite-248">
+                <span id="dsq-author-user-248">7eggert</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-248" class="dsq-comment-body">
+            <div id="dsq-comment-message-248" class="dsq-comment-message"><p>It&#8217;s &#8220;legible&#8221; for headlines, but even there it&#8217;s a bad font. For longer texts, it&#8217;s just bad.</p>
+<p>Fortunately my user-css overrides it to DejaVu Serif.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-234">
+        <div id="dsq-comment-header-234" class="dsq-comment-header">
+            <cite id="dsq-cite-234">
+                <a id="dsq-author-user-234" href="http://kgranger.fr/" target="_blank" rel="nofollow">Kevin Granger</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-234" class="dsq-comment-body">
+            <div id="dsq-comment-message-234" class="dsq-comment-message"><p>Hello,<br />
+we choosed the font for his readability but sometimes shit happens with some untested configuration, can you share screenshots and config (os, browser)? Will be happy to fix that. Thanks!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-219">
+        <div id="dsq-comment-header-219" class="dsq-comment-header">
+            <cite id="dsq-cite-219">
+                <span id="dsq-author-user-219">PAUL Miller</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-219" class="dsq-comment-body">
+            <div id="dsq-comment-message-219" class="dsq-comment-message"><p>Then of course you have the issue of bit corruption later down the road just because of bit rot on the SSD itself.   SSD&#8217;s are good for write-once read many.   Writing to the same location more than 100k times usually results in bit rot.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-220">
+        <div id="dsq-comment-header-220" class="dsq-comment-header">
+            <cite id="dsq-cite-220">
+                <a id="dsq-author-user-220" href="http://aerospike.com/" target="_blank" rel="nofollow">Brian Bulkowski</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-220" class="dsq-comment-body">
+            <div id="dsq-comment-message-220" class="dsq-comment-message"><p>At Aerospike, we have a NoSQL database that&#8217;s been run on a lot of flash drives, for years, and we&#8217;ve found a few things:<br />
+* Don&#8217;t use TRIM. There are too many bad controllers that (at best) do bizarre performance actions. TRIM should be a good thing&#8230;. but it&#8217;s (apparently) too complex for most controller writers.<br />
+* Don&#8217;t use a file system. Aerospike has its own native data layout, and you can use files, but lousy things happen.<br />
+* Some manufacturers go through bad times, so keep testing. We built a tool <a href="http://github.com/aerospike/act" rel="nofollow">http://github.com/aerospike/act</a> so we can prove to manufactures when they have bugs. If I tried to list all the devices that we tested and had firmware issues (either performance or &#8220;functionality&#8221;) it would be a long and embarrassing list. We have over 4 years of data covering a lot of manufacturers.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-227">
+        <div id="dsq-comment-header-227" class="dsq-comment-header">
+            <cite id="dsq-cite-227">
+                <span id="dsq-author-user-227">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-227" class="dsq-comment-body">
+            <div id="dsq-comment-message-227" class="dsq-comment-message"><p>I totally agree, you should not use TRIM on enterprise SSDs. The idea to run without filesystem is interesting as we are not that far from it. Thank you for the testing tool, that&#8217;s very impressive! I&#8217;ll give it a try on our HW. Do you share the results somewhere?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-229">
+        <div id="dsq-comment-header-229" class="dsq-comment-header">
+            <cite id="dsq-cite-229">
+                <span id="dsq-author-user-229">Michael Böckling</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-229" class="dsq-comment-body">
+            <div id="dsq-comment-message-229" class="dsq-comment-message"><p>Its a bit hidden, but they do: <a href="http://www.aerospike.com/docs/operations/plan/ssd/ssd_certification.html" rel="nofollow">http://www.aerospike.com/docs/operations/plan/ssd/ssd_certification.html</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-326">
+        <div id="dsq-comment-header-326" class="dsq-comment-header">
+            <cite id="dsq-cite-326">
+                <a id="dsq-author-user-326" href="http://gathman.org/vitae" target="_blank" rel="nofollow">CustomDesigned</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-326" class="dsq-comment-body">
+            <div id="dsq-comment-message-326" class="dsq-comment-message"><p>That list only shows bad performance &#8211; which is not a show stopper for a home user.  We are frightened by the prospect of TRIM trimming the wrong blocks, however.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-222">
+        <div id="dsq-comment-header-222" class="dsq-comment-header">
+            <cite id="dsq-cite-222">
+                <span id="dsq-author-user-222">Stu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-222" class="dsq-comment-body">
+            <div id="dsq-comment-message-222" class="dsq-comment-message"><p>I&#8217;ve had weird read errors from time to time on my crucial m4 SSD as well. &#8230; When doing lots of reads (like trying to backup), and even randomly returning wrong data from files (also when i had done a lot of reads and writes building Python virtualenvs).</p>
+<p>Unfortunately I&#8217;m traveling so can&#8217;t order a replacement of a different make right now, and it seems to work about 99% of the time, those other times are worrying though.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-349">
+        <div id="dsq-comment-header-349" class="dsq-comment-header">
+            <cite id="dsq-cite-349">
+                <a id="dsq-author-user-349" href="http://gathman.org/vitae" target="_blank" rel="nofollow">CustomDesigned</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-349" class="dsq-comment-body">
+            <div id="dsq-comment-message-349" class="dsq-comment-message"><p>Rotating disks store the sector number with each sector.  Planning the motion of the R/W head to grab a sector is a complex realtime operation &#8211; and sometimes it get the wrong one.  But it knows that immediately, and can try again, doing a seek recalibrate if needed.  A momentary freeze is FAR better than silent data corruption.</p>
+<p>You would think SSD manufacturers would do the same.  If you ask the drive for sector 123456, and the FTL (Flash Translation Layer) points to sector 7654321, the controller can do a sequential search for the correct sector and fix the corrupted FTL.  A freeze during that process if FAR better than silent data corruption.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-225">
+        <div id="dsq-comment-header-225" class="dsq-comment-header">
+            <cite id="dsq-cite-225">
+                <span id="dsq-author-user-225">hector</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-225" class="dsq-comment-body">
+            <div id="dsq-comment-message-225" class="dsq-comment-message"><p>Have you considering using a SAN instead of raw SSDs? Nimble can provide you with the performance of an SSD and the reliability of hard drives since it uses SSDs only for caching</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-226">
+        <div id="dsq-comment-header-226" class="dsq-comment-header">
+            <cite id="dsq-cite-226">
+                <span id="dsq-author-user-226">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-226" class="dsq-comment-body">
+            <div id="dsq-comment-message-226" class="dsq-comment-message"><p>Since we rent most of our servers, it would be complicated to force the providers this direction, but for our setups it would be much easier. Thank you for the tip!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-237">
+        <div id="dsq-comment-header-237" class="dsq-comment-header">
+            <cite id="dsq-cite-237">
+                <span id="dsq-author-user-237">Stefan Seidel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-237" class="dsq-comment-body">
+            <div id="dsq-comment-message-237" class="dsq-comment-message"><p>So, I don&#8217;t know, but for me, shifting the probability of an error to the *most frequently accessed* blocks doesn&#8217;t exactly sound like a win to me.</p>
+<p>Don&#8217;t misunderstand me, I like the concept of SSD caching, but for the problem described in *this* blog post, it would have probably made things much worse.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-240">
+        <div id="dsq-comment-header-240" class="dsq-comment-header">
+            <cite id="dsq-cite-240">
+                <span id="dsq-author-user-240">Frank Drebin</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-240" class="dsq-comment-body">
+            <div id="dsq-comment-message-240" class="dsq-comment-message"><p>Price is always a factor, but you&#8217;ll also be working with a black box that you can&#8217;t even debug properly.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-348">
+        <div id="dsq-comment-header-348" class="dsq-comment-header">
+            <cite id="dsq-cite-348">
+                <a id="dsq-author-user-348" href="http://gathman.org/vitae" target="_blank" rel="nofollow">CustomDesigned</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-348" class="dsq-comment-body">
+            <div id="dsq-comment-message-348" class="dsq-comment-message"><p>My home server running CentOS with Gigabit Ethernet is a SAN.  iSCSI is simple to set up.  The server has RAID (I prefer RAID-1 or RAID-10), and backups.</p>
+<p>That is great for desktops.  But you can&#8217;t bring a SAN with you on the road.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-359">
+        <div id="dsq-comment-header-359" class="dsq-comment-header">
+            <cite id="dsq-cite-359">
+                <span id="dsq-author-user-359">Frank Drebin</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-359" class="dsq-comment-body">
+            <div id="dsq-comment-message-359" class="dsq-comment-message"><p>You can actually cobble together a pretty decent SAN with currently available open source technologies if you so choose. Just combine two storage servers with RAID, DRBD over Infiniband as well as connecting the servers over infiniband (or iSCSI if you must). With iSER you&#8217;ll have great performance for exported volumes, but you can also run any other protocol you choose, you&#8217;re able to debug and fine tune as you like, deploy using puppet/chef/saltstack/ansible/whatever and you don&#8217;t have vendor lock-in. All on commodity hardware. You could even have your cache / filesystem log on NVDIMM. </p>
+<p>Still doesn&#8217;t help you when the components are crap though, as many SSD these days are.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-230">
+        <div id="dsq-comment-header-230" class="dsq-comment-header">
+            <cite id="dsq-cite-230">
+                <a id="dsq-author-user-230" href="http://blog.4zal.net/" target="_blank" rel="nofollow">Karol &#8220;Zal&#8221; Zalewski</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-230" class="dsq-comment-body">
+            <div id="dsq-comment-message-230" class="dsq-comment-message"><p>Consumer grade Samsung SSDs with newest firmware declare that they support queued TRIM. The funny thing is that they don&#8217;t do that [1] &#8211; they lockup (power down is needed). And now you say that other Samsung disk do similar thing for un-queued TRIM? Scary thing&#8230;</p>
+<p>[1] <a href="https://bugs.launchpad.net/ubuntu/+source/fstrim/+bug/1449005/comments/53" rel="nofollow">https://bugs.launchpad.net/ubuntu/+source/fstrim/+bug/1449005/comments/53</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-231">
+        <div id="dsq-comment-header-231" class="dsq-comment-header">
+            <cite id="dsq-cite-231">
+                <span id="dsq-author-user-231">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-231" class="dsq-comment-body">
+            <div id="dsq-comment-message-231" class="dsq-comment-message"><p>NCQ causes a lot of issues with a lot of drives and it wouldn&#8217;t be the first time Linux blamed drive firmware for its own bugs. I&#8217;ve not seen any performance issues since disabling NCQ globally so I rather not risk it. There should be a stress test tool that does random read/write/delete/trim and verifies integrity. Something like a badblocks for trim, that you could run on each new setup for a day or so before going productive.</p>
+<p>The problem with TRIM is that it&#8217;s literally everywhere. Enabled by default and performed unasked by mkfs and other tools. Some people set issue_discards in lvm.conf because they misunderstand that as allowing trim instead of having LVM itself perform wantonly trim on each lvremove lvresize snapshot etc.</p>
+<p>If possible do TRIM in a cron-job using fstrim or such. If things blow up right after the cron-job ran it&#8217;s easier to pinpoint the cause of the trouble.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-232">
+        <div id="dsq-comment-header-232" class="dsq-comment-header">
+            <cite id="dsq-cite-232">
+                <span id="dsq-author-user-232">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-232" class="dsq-comment-body">
+            <div id="dsq-comment-message-232" class="dsq-comment-message"><p>Oh and if you want to run your own tests, beware: Linux cheats. It does not remove from its caches what has been trimmed. So the only way to verify that data is still intact after TRIM is to drop caches to force re-read from hardware (and hope the hardware does not have its own cache).</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-236">
+        <div id="dsq-comment-header-236" class="dsq-comment-header">
+            <cite id="dsq-cite-236">
+                <span id="dsq-author-user-236">anon</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-236" class="dsq-comment-body">
+            <div id="dsq-comment-message-236" class="dsq-comment-message"><p>BTW, this also sounds similar to the recent mdraid bug with raid0 that was introduced in various stable kernels, where TRIM would actually trim the wrong files/regions, zero-ing out random files on the file system. Seems like TRIM is pretty dangerous. 🙂 See: <a href="https://lkml.org/lkml/2015/5/21/167" rel="nofollow">https://lkml.org/lkml/2015/5/21/167</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-265">
+        <div id="dsq-comment-header-265" class="dsq-comment-header">
+            <cite id="dsq-cite-265">
+                <span id="dsq-author-user-265">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-265" class="dsq-comment-body">
+            <div id="dsq-comment-message-265" class="dsq-comment-message"><p>This got introduced in 4.0 afaik. We thought it might be the raid0 but since it did not happen on different drives with identical software stack, we had to go lower.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-238">
+        <div id="dsq-comment-header-238" class="dsq-comment-header">
+            <cite id="dsq-cite-238">
+                <span id="dsq-author-user-238">David</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-238" class="dsq-comment-body">
+            <div id="dsq-comment-message-238" class="dsq-comment-message"><p>TRIM or not TRIM, since SSDs are available I&#8217;ve always found it was better to have an end-to-end Intel solution aka motherboard with Intel Chips &amp; an Intel SSD =&gt; Intel is the only manufacturer around that can implement his hardware properly because of this. Just remember how much OCZ&#8217;s SSD firmware sucked and how it led to performance issues and data loss.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-264">
+        <div id="dsq-comment-header-264" class="dsq-comment-header">
+            <cite id="dsq-cite-264">
+                <span id="dsq-author-user-264">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-264" class="dsq-comment-body">
+            <div id="dsq-comment-message-264" class="dsq-comment-message"><p>I used to work for Intel and if I have a choice, I tend to stay with Intel.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-277">
+        <div id="dsq-comment-header-277" class="dsq-comment-header">
+            <cite id="dsq-cite-277">
+                <span id="dsq-author-user-277">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-277" class="dsq-comment-body">
+            <div id="dsq-comment-message-277" class="dsq-comment-message"><p>I&#8217;ve had loads of issues with Intel hardware. Intel SSD had the 8MB bug. Intel mainboard had stability issue and stopped getting updates rather quickly. Intel CPU (Haswell) is incompatible with Linux after microcode update (can&#8217;t handle TSX or whatever is disabled on-the-fly). Hardware properly is a fairy tale especially when it comes to SSD. I&#8217;ll take Intel CPU and NIC but I don&#8217;t think they&#8217;re immune to any kind of issues.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-288">
+        <div id="dsq-comment-header-288" class="dsq-comment-header">
+            <cite id="dsq-cite-288">
+                <span id="dsq-author-user-288">ZeDestructor</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-288" class="dsq-comment-body">
+            <div id="dsq-comment-message-288" class="dsq-comment-message"><p>Intel boards: there&#8217;s a reason they discontinued the entire lineup of motherboards.</p>
+<p>TSX-NI: they found hardware bugs. Unfixable hardware bugs. So they pushed a microcode update to disable it instead. Any breakage comes either from your programs requiring TSX (in which case why are you compiling then with TSX requirements?) or elsewhere.</p>
+<p>SSDs: so far, Intel SSDs have been the gold standard of reliability for the consumer lines.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-239">
+        <div id="dsq-comment-header-239" class="dsq-comment-header">
+            <cite id="dsq-cite-239">
+                <span id="dsq-author-user-239">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-239" class="dsq-comment-body">
+            <div id="dsq-comment-message-239" class="dsq-comment-message"><p>The &#8220;512 bytes&#8221; seems very weird to me, by the way. Are your partitions misaligned by 512 bytes? Normally the SSD use much larger page sizes internally (&gt;=4k) so 512 byte is difficult to get wrong.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-250">
+        <div id="dsq-comment-header-250" class="dsq-comment-header">
+            <cite id="dsq-cite-250">
+                <span id="dsq-author-user-250">7eggert</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-250" class="dsq-comment-body">
+            <div id="dsq-comment-message-250" class="dsq-comment-message"><p>If I may guess, the firmware could split and combine sector groups across it&#8217;s blocks, so if you write by &#8220;sector&#8221;, you end with a block containing sectors from different files. Then that other file gets erased, and thus the whole block.</p>
+<p>File a: (Data-a, nothing, nothing, nothing, nothing, nothing, nothing, nothing)<br />
+File b: (Data-b, Data-b, Data-b, Data-b, Data-b, nothing, nothing, nothing)</p>
+<p>On disk: (Data-a, Data-b, Data-b, Data-b, Data-b, Data-b, nothing, nothing)<br />
+After trim: (nothing, &#8230;)</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-293">
+        <div id="dsq-comment-header-293" class="dsq-comment-header">
+            <cite id="dsq-cite-293">
+                <span id="dsq-author-user-293">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-293" class="dsq-comment-body">
+            <div id="dsq-comment-message-293" class="dsq-comment-message"><p>Even so it still seems odd. Would the drive really put the first 512byte of a (larger) file into the same block as some random other file. I could understand if it was an entire page (4k, 8k, whatever the samsung uses &#8211; it certainly isn&#8217;t 512 byte?) but it just seems fishy somehow.</p>
+<p>Then again not the first time fishy things in Samsung SSD&#8230; old data gets slow bug, eh?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-295">
+        <div id="dsq-comment-header-295" class="dsq-comment-header">
+            <cite id="dsq-cite-295">
+                <span id="dsq-author-user-295">The guy who was</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-295" class="dsq-comment-body">
+            <div id="dsq-comment-message-295" class="dsq-comment-message"><p>Some SSDs have different sector sizes.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-4" id="dsq-comment-296">
+        <div id="dsq-comment-header-296" class="dsq-comment-header">
+            <cite id="dsq-cite-296">
+                <span id="dsq-author-user-296">7eggert</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-296" class="dsq-comment-body">
+            <div id="dsq-comment-message-296" class="dsq-comment-message"><p>I guess they want to be smart. If you write two small files, they&#8217;d each use a whole block. But if you put them into one block, you&#8217;ve created a spare block. These spare blocks add to the free space and speed up further write accesses just like the blocks you generate using discard().</p>
+<p>But this algorithm isn&#8217;t good enough to only collect small files, your database will randomly make it seem as if the writes go to small blocks. On other occasions, the files will grow, the sectors will get fragmented. It&#8217;s still a win because of the extra free blocks &#8211; unless you get it wrong while trimming the data.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-306">
+        <div id="dsq-comment-header-306" class="dsq-comment-header">
+            <cite id="dsq-cite-306">
+                <span id="dsq-author-user-306">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-306" class="dsq-comment-body">
+            <div id="dsq-comment-message-306" class="dsq-comment-message"><p>I still think it&#8217;s odd. Also that engineers have to come to the server or the server to the engineers. Linux is Open Source, surely there is a way to make it record all commands it sends to the SSD and replay to reproduce the issue?</p>
+<p>That they have to travel about means no one can reproduce it anywhere else, so it may still be something local to their setup (like a faulty controller that shifts data by 512 byte but not TRIM requests &#8211; those SSDs don&#8217;t have a windows alignment jumper do they?).</p>
+<p>For Samsung it&#8217;s a PR matter with all the attention the blog is getting. For users (whose data may or may not be at risk) it&#8217;d be better if it turned out to be a false alarm after all. We will see&#8230;</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-307">
+        <div id="dsq-comment-header-307" class="dsq-comment-header">
+            <cite id="dsq-cite-307">
+                <a id="dsq-author-user-307" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-307" class="dsq-comment-body">
+            <div id="dsq-comment-message-307" class="dsq-comment-message"><p>512 bytes is not weird, it is the default on a lot of devices (mainly for backward compatibility reasons).</p>
+<p>Here is the output of parted on one SM843T SSD:<br />
+Model: ATA SAMSUNG MZ7WD480 (scsi)<br />
+Disk /dev/sdc: 480GB<br />
+Sector size (logical/physical): 512B/512B</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-308">
+        <div id="dsq-comment-header-308" class="dsq-comment-header">
+            <cite id="dsq-cite-308">
+                <span id="dsq-author-user-308">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-308" class="dsq-comment-body">
+            <div id="dsq-comment-message-308" class="dsq-comment-message"><p>It represents 512 byte sectors to the OS for compatibility reason, but that&#8217;s no relation to how it works internally. I can create a single sector partition on my SSD and I can TRIM it with blkdiscard and it will say it successfully trimmed but even after dropping caches the data is still there so it didn&#8217;t trim nothing. The SSD simply does not track erased&#8217;ness by the 512 byte, it uses pages of 4K or more. The minimum size my SSD trims and actually have the data gone is 4K and those 4K must be aligned.</p>
+<p>512 byte is a silly unit, has been too small to be useful for a long time, even old filesystems like ext2 have a bare minimum of 1K and if a filesystem is able to squeeze several small files into a single block they give it special names&#8230;</p>
+<p>Off by 512 byte errors are weird. More likely it&#8217;s the data that&#8217;s off by 512 bytes by having partitions that are not aligned. TRIM should not kill the wrong stuff even so (and since misaligned partitions are common I doubt this is the issue) but who knows where that error happens as TRIM is handed down through all sorts of storage layers.</p>
+<p>Anyway, looking forward to the solution of the mystery 🙂</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-319">
+        <div id="dsq-comment-header-319" class="dsq-comment-header">
+            <cite id="dsq-cite-319">
+                <span id="dsq-author-user-319">Frank Drebin</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-319" class="dsq-comment-body">
+            <div id="dsq-comment-message-319" class="dsq-comment-message"><p>Yeah, erase blocks are a lot larger than 4k.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-242">
+        <div id="dsq-comment-header-242" class="dsq-comment-header">
+            <cite id="dsq-cite-242">
+                <span id="dsq-author-user-242">Spammer</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-242" class="dsq-comment-body">
+            <div id="dsq-comment-message-242" class="dsq-comment-message"><p>Hi, this isn&#8217;t exactly related, but I&#8217;d be grateful if you looked at it since you seem to be more qualified. After seeing this article I thought that maybe my SSD is the cause of the problems with my home computer. It&#8217;s a GOODRAM C40 MLC drive with Phison S3108 controller, but I also have used few Samsung 840 and 840 Pro drives and I had similar issues. It&#8217;s very well described here and in the reddit thread linked there: <a href="https://answers.launchpad.net/ubuntu/+question/267542" rel="nofollow">https://answers.launchpad.net/ubuntu/+question/267542</a> I provide a lot of information in the comments. Few days ago another thing got broken &#8211; dpkg doesn&#8217;t work: <a href="https://bugs.launchpad.net/ubuntu/+source/dpkg/+bug/1464927" rel="nofollow">https://bugs.launchpad.net/ubuntu/+source/dpkg/+bug/1464927</a></p>
+<p>Is it possible that it&#8217;s caused by the SSD? Do you know ways to somehow prove its ssd? Should I buy an Intel one?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-244">
+        <div id="dsq-comment-header-244" class="dsq-comment-header">
+            <cite id="dsq-cite-244">
+                <span id="dsq-author-user-244">Yel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-244" class="dsq-comment-body">
+            <div id="dsq-comment-message-244" class="dsq-comment-message"><p>So does this apply to Windows Server? If I am running one on 840 Pro should I change asap? I&#8217;ve had few random system lockups I can&#8217;t figure out, could trim cause this?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-252">
+        <div id="dsq-comment-header-252" class="dsq-comment-header">
+            <cite id="dsq-cite-252">
+                <span id="dsq-author-user-252">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-252" class="dsq-comment-body">
+            <div id="dsq-comment-message-252" class="dsq-comment-message"><p>Not sure about Windows. Definitely worth testing for consistency of the files and the FS.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-274">
+        <div id="dsq-comment-header-274" class="dsq-comment-header">
+            <cite id="dsq-cite-274">
+                <span id="dsq-author-user-274">HenkPoley</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-274" class="dsq-comment-body">
+            <div id="dsq-comment-message-274" class="dsq-comment-message"><p>A TRIM bug is a TRIM bug I guess. You could test it by writing known good files (e.g. SHA256 hashed) to a sacrificial drive, do some delete operations, etc. Then check the remaining known files.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-253">
+        <div id="dsq-comment-header-253" class="dsq-comment-header">
+            <cite id="dsq-cite-253">
+                <span id="dsq-author-user-253">Diogo Carvalho</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-253" class="dsq-comment-body">
+            <div id="dsq-comment-message-253" class="dsq-comment-message"><p>Complete non-savvy user here, but very concerned end-user on Mac OS X with trim force enable via Trim enabler, on a Fusion drive with one Samsung 840 PRO 256Gb. Am I on the verge of finding my life work corrupted? I&#8217;ve disable trim now, but have extensive backups that should have permeated the possibly corrupted zeroed files on them. Please advise.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-267">
+        <div id="dsq-comment-header-267" class="dsq-comment-header">
+            <cite id="dsq-cite-267">
+                <span id="dsq-author-user-267">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-267" class="dsq-comment-body">
+            <div id="dsq-comment-message-267" class="dsq-comment-message"><p>Hard to say how Mac OS X behaves, and mainly in Fusion drive. Definitely keep backups and if you come to a weird file, take a look for zeroed blocks.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-269">
+        <div id="dsq-comment-header-269" class="dsq-comment-header">
+            <cite id="dsq-cite-269">
+                <span id="dsq-author-user-269">Diogo Carvalho</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-269" class="dsq-comment-body">
+            <div id="dsq-comment-message-269" class="dsq-comment-message"><p>Thanks for the input, but won&#8217;t the possibly zeroed affected files be permeated to the backups? How do I check for zeroed blocks?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-278">
+        <div id="dsq-comment-header-278" class="dsq-comment-header">
+            <cite id="dsq-cite-278">
+                <span id="dsq-author-user-278">Theo Brinkman</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-278" class="dsq-comment-body">
+            <div id="dsq-comment-message-278" class="dsq-comment-message"><p>If you use TimeMachine for backups,you&#8217;ll be able to roll back to versions *before* the zeroed block happened.  To *see* the zeroed block, you&#8217;ll need to open the file in a hex editor, or something similar.  A block of 512 bytes worth of &#8217;00&#8217; will stand out pretty easily.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-279">
+        <div id="dsq-comment-header-279" class="dsq-comment-header">
+            <cite id="dsq-cite-279">
+                <span id="dsq-author-user-279">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-279" class="dsq-comment-body">
+            <div id="dsq-comment-message-279" class="dsq-comment-message"><p>&gt; Am I on the verge of finding my life work corrupted?</p>
+<p>Anyone who does not have backups is on that verge. And Apple&#8217;s idea of not enabling trim is understandable when it&#8217;s a) often buggy and b) not really as important as people make it out to be. SSD work well without TRIM.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-283">
+        <div id="dsq-comment-header-283" class="dsq-comment-header">
+            <cite id="dsq-cite-283">
+                <span id="dsq-author-user-283">You are wrong</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-283" class="dsq-comment-body">
+            <div id="dsq-comment-message-283" class="dsq-comment-message"><p>Backups don&#8217;t save you from file corruption.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-285">
+        <div id="dsq-comment-header-285" class="dsq-comment-header">
+            <cite id="dsq-cite-285">
+                <span id="dsq-author-user-285">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-285" class="dsq-comment-body">
+            <div id="dsq-comment-message-285" class="dsq-comment-message"><p>But they do, unless you&#8217;re cracknob enough to delete your old backups in favour of new ones, thereby replacing intact backups with corrupt ones&#8230;</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-290">
+        <div id="dsq-comment-header-290" class="dsq-comment-header">
+            <cite id="dsq-cite-290">
+                <span id="dsq-author-user-290">David C.</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-290" class="dsq-comment-body">
+            <div id="dsq-comment-message-290" class="dsq-comment-message"><p>Yes, but how far back do you want to keep them?  A few months?  A few years?  Forever?  When a whole system backup can fill a few hard drives, you probably can&#8217;t afford to keep several dozen lying around just in case.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-291">
+        <div id="dsq-comment-header-291" class="dsq-comment-header">
+            <cite id="dsq-cite-291">
+                <span id="dsq-author-user-291">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-291" class="dsq-comment-body">
+            <div id="dsq-comment-message-291" class="dsq-comment-message"><p>As far back as possible. I prefer incremental backups that just add new/changed files instead of re-backing up the same files over and over again. It&#8217;s not going to use more or less storage if you overwrite your old intact copy with a new corrupted one.</p>
+<p>Maybe I&#8217;m too oldfashioned though. I still don&#8217;t use ZFS/btrfs. 😉</p>
+<p>For small static data (photos) I make extra copies to optical media. At least they survive when lightning hits while your entire HDD zoo is working on those backups&#8230;</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-3" id="dsq-comment-284">
+        <div id="dsq-comment-header-284" class="dsq-comment-header">
+            <cite id="dsq-cite-284">
+                <span id="dsq-author-user-284">Rob Cadwallader</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-284" class="dsq-comment-body">
+            <div id="dsq-comment-message-284" class="dsq-comment-message"><p>I think this is an important distinction that a lot of people don&#8217;t understand. TRIM is a hook that allows an OS to invoke garbage collection (usually through the recycle bin/trash can function in the OS). Disabling TRIM in the OS doesn&#8217;t disable garbage collection, it simply diverts the garbage collection to the firmware on the SSD controller instead of being invoked at the OS level.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-298">
+        <div id="dsq-comment-header-298" class="dsq-comment-header">
+            <cite id="dsq-cite-298">
+                <span id="dsq-author-user-298">David C.</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-298" class="dsq-comment-body">
+            <div id="dsq-comment-message-298" class="dsq-comment-message"><p>Not quite.  Trim doesn&#8217;t trigger garbage collection.  TRIM tells the drive firmware that a block is no-longer in use so it can be garbage collected at some later time.  The reason it improves performance is that without TRIM, the drive doesn&#8217;t know that the block is no longer in-use until the OS wants to overwrite it with new data, so there typically ends up being a lot of garbage that can&#8217;t otherwise be collected.  This undetectable garbage will be preserved and moved to different physical locations on the SSD as garbage collection runs.  When TRIM is used, then those blocks don&#8217;t get preserved, so the garbage collection runs more efficiently. </p>
+<p>This has nothing to do with emptying trash.  That deletes files, but file deletion simply marks the blocks as free in the OS&#8217;s file-system structures.  The drive itself doesn&#8217;t know anything happened unless the OS explicitly tells it that they are now free &#8211; which is what TRIM does (and that&#8217;s all TRIM does.)  And TRIM does this whenever files are deleted, whether or not a trash/recycler system is used to facilitate that deletion.</p>
+<p>The fact that some manufacturers have critical bugs, where the drive is garbage-collecting the wrong blocks doesn&#8217;t change any of this.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-254">
+        <div id="dsq-comment-header-254" class="dsq-comment-header">
+            <cite id="dsq-cite-254">
+                <span id="dsq-author-user-254">syxbit</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-254" class="dsq-comment-body">
+            <div id="dsq-comment-message-254" class="dsq-comment-message"><p>Nooooo. I just bought a Samsung 850 Pro. I&#8217;ll be on the lookout</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-257">
+        <div id="dsq-comment-header-257" class="dsq-comment-header">
+            <cite id="dsq-cite-257">
+                <span id="dsq-author-user-257">Mike Blaszczak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-257" class="dsq-comment-body">
+            <div id="dsq-comment-message-257" class="dsq-comment-message"><p>What does &#8220;8-series&#8221; mean?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-266">
+        <div id="dsq-comment-header-266" class="dsq-comment-header">
+            <cite id="dsq-cite-266">
+                <span id="dsq-author-user-266">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-266" class="dsq-comment-body">
+            <div id="dsq-comment-message-266" class="dsq-comment-message"><p>Means that the drives are called Samsung 8-something. Like 840, 850, 843 etc.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-258">
+        <div id="dsq-comment-header-258" class="dsq-comment-header">
+            <cite id="dsq-cite-258">
+                <span id="dsq-author-user-258">Steven Howe</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-258" class="dsq-comment-body">
+            <div id="dsq-comment-message-258" class="dsq-comment-message"><p>I had that issue with a Crucial SSD 120 GB drive. I finally gave up and tossed it. The speed boost was not worth the rebuild times.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-273">
+        <div id="dsq-comment-header-273" class="dsq-comment-header">
+            <cite id="dsq-cite-273">
+                <span id="dsq-author-user-273">HenkPoley</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-273" class="dsq-comment-body">
+            <div id="dsq-comment-message-273" class="dsq-comment-message"><p>Do you happen to know the type of Crucial drive? They have a few commonly used 120GB: <a href="http://ssd.userbenchmark.com/Search?searchTerm=%2BSubdomain%3A%22ssd%22%20%2BBrand%3A%22Crucial%22%20%2B120gb" rel="nofollow">http://ssd.userbenchmark.com/Search?searchTerm=%2BSubdomain%3A%22ssd%22%20%2BBrand%3A%22Crucial%22%20%2B120gb</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-262">
+        <div id="dsq-comment-header-262" class="dsq-comment-header">
+            <cite id="dsq-cite-262">
+                <span id="dsq-author-user-262">Theodore Ts&#8217;o</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-262" class="dsq-comment-body">
+            <div id="dsq-comment-message-262" class="dsq-comment-message"><p>Nearly all of the ext4 bugs that have been fixed in the last couple of releases are ones which were around for years, and very hard to trigger (in one case we fixed a bug in ext4 that was also in ext3, and had survived multiple rounds of enterprise linux release testing by IBM, HP, Red Hat, and SuSE), or are ones which were introduced during the merge window and for which the fix was quickly caught and pushed out before the kernel was released.    The sort of bugs that we worry about are ones where you have blocks that are being written using async I/O and direct I/O racing with the same blocks getting allocated or truncated or punched out using the new punch hole functionality.   Most applications don&#8217;t have these sorts of extreme workload characteristics; they just append to a file, or rewrite blocks that were already allocated.</p>
+<p>In particular, if you are using a standard 4k block file system, with the default mkfs options, I really wouldn&#8217;t worry too much.   The bugs tend to happen in the newer, more esoteric file system features, such as inline data, bigalloc file systems (especially if you are doing random sparse writes tracing with truncates/punch hole operaitons), etc.    But that&#8217;s not how most people use ext4.</p>
+<p>If it will make you feel any better about file system bugs, we run very careful regression testing during the entire file system development process, and if a commit causes a regression, I&#8217;ll drop the patch.   And the regression tests are generally far more rigorous than typical file system workloads.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-263">
+        <div id="dsq-comment-header-263" class="dsq-comment-header">
+            <cite id="dsq-cite-263">
+                <span id="dsq-author-user-263">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-263" class="dsq-comment-body">
+            <div id="dsq-comment-message-263" class="dsq-comment-message"><p>I still have great confidence in the work you do and great respect for it</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-321">
+        <div id="dsq-comment-header-321" class="dsq-comment-header">
+            <cite id="dsq-cite-321">
+                <span id="dsq-author-user-321">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-321" class="dsq-comment-body">
+            <div id="dsq-comment-message-321" class="dsq-comment-message"><p>Any news?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-268">
+        <div id="dsq-comment-header-268" class="dsq-comment-header">
+            <cite id="dsq-cite-268">
+                <span id="dsq-author-user-268">l0rd carlos</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-268" class="dsq-comment-body">
+            <div id="dsq-comment-message-268" class="dsq-comment-message"><p>Fuck, I got two Samsung 850 pro in my Windows Desktop. Though sometimes I fiddle around with linux.</p>
+<p>Do I need TRIM if I got overprovision / unpartioned space?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-270">
+        <div id="dsq-comment-header-270" class="dsq-comment-header">
+            <cite id="dsq-cite-270">
+                <span id="dsq-author-user-270">Venky Anand</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-270" class="dsq-comment-body">
+            <div id="dsq-comment-message-270" class="dsq-comment-message"><p>Not sure if you use the Self Encryption option in the drive. If yes, there is a possibility of TRIM being triggered internally by the controller when you issue cryptographic erase.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-271">
+        <div id="dsq-comment-header-271" class="dsq-comment-header">
+            <cite id="dsq-cite-271">
+                <span id="dsq-author-user-271">Rick</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-271" class="dsq-comment-body">
+            <div id="dsq-comment-message-271" class="dsq-comment-message"><p>So what consumer level SSDs are worth buying? Intel 730, 520, 320, 1500? Plextor? Anything else?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-286">
+        <div id="dsq-comment-header-286" class="dsq-comment-header">
+            <cite id="dsq-cite-286">
+                <span id="dsq-author-user-286">Spammer Rick</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-286" class="dsq-comment-body">
+            <div id="dsq-comment-message-286" class="dsq-comment-message"><p>I ordered Intel 730. From my research 730, 320, 310 and X-25 have Intel controllers, probably 9 series too, I don&#8217;t know. The data center SSDs have intel controllers too. Everything else has Sandstorms which are much worse according to this (intel 330) <a href="http://www.aerospike.com/docs/operations/plan/ssd/ssd_certification.html" rel="nofollow">http://www.aerospike.com/docs/operations/plan/ssd/ssd_certification.html</a></p>
+<p>This 730 that I ordered uses the same controller as data center SSDs Intel S3500 and Intel S3700. It also supposedly has power loss protection: <a href="https://communities.intel.com/thread/75984" rel="nofollow">https://communities.intel.com/thread/75984</a> and AES encryption. According to this <a href="http://www.anandtech.com/show/7803/intel-ssd-730-480gb-review" rel="nofollow">http://www.anandtech.com/show/7803/intel-ssd-730-480gb-review</a> it seems like the whole drive is overclocked S3500 so better than it?! Probably not since it doesn&#8217;t seem to have HET NAND (more durable) and uses normal MLC NAND. That said it&#8217;s likely it will be close to the outstanding performance of S3500, test of which is here: <a href="http://www.aerospike.com/docs/operations/plan/ssd/ssd_certification.html" rel="nofollow">http://www.aerospike.com/docs/operations/plan/ssd/ssd_certification.html</a></p>
+<p>I&#8217;ll share with you how it performs and if it solves my computer problems.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-301">
+        <div id="dsq-comment-header-301" class="dsq-comment-header">
+            <cite id="dsq-cite-301">
+                <a id="dsq-author-user-301" href="http://www.your-moms-vagina.com/" target="_blank" rel="nofollow">Hugh Briss</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-301" class="dsq-comment-body">
+            <div id="dsq-comment-message-301" class="dsq-comment-message"><p>I have yet to have a single problem with the discount brands SSD snobs turn up their noses at: Mushkin, Patriot, Apotop, etc. They may not be the coolest SSDs in existence but they&#8217;re plenty fast and don&#8217;t seem to fail easily.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-272">
+        <div id="dsq-comment-header-272" class="dsq-comment-header">
+            <cite id="dsq-cite-272">
+                <span id="dsq-author-user-272">Pascal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-272" class="dsq-comment-body">
+            <div id="dsq-comment-message-272" class="dsq-comment-message"><p>Why do you alert for a problem with a single machine (and get woken up at night) if it does not impact the service?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-282">
+        <div id="dsq-comment-header-282" class="dsq-comment-header">
+            <cite id="dsq-cite-282">
+                <span id="dsq-author-user-282">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-282" class="dsq-comment-body">
+            <div id="dsq-comment-message-282" class="dsq-comment-message"><p>Because it was an error that we have not seen before so it triggered a weird behaviour in the application itself. For most of the issues, we do not page.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-275">
+        <div id="dsq-comment-header-275" class="dsq-comment-header">
+            <cite id="dsq-cite-275">
+                <span id="dsq-author-user-275">Laci</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-275" class="dsq-comment-body">
+            <div id="dsq-comment-message-275" class="dsq-comment-message"><p>Were the drives using the latest firmware? Samsung has a tool to update it but it only works on windows.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-281">
+        <div id="dsq-comment-header-281" class="dsq-comment-header">
+            <cite id="dsq-cite-281">
+                <span id="dsq-author-user-281">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-281" class="dsq-comment-body">
+            <div id="dsq-comment-message-281" class="dsq-comment-message"><p>Yes, the firmware was the latest. And till this moment there is nothing newer.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-289">
+        <div id="dsq-comment-header-289" class="dsq-comment-header">
+            <cite id="dsq-cite-289">
+                <span id="dsq-author-user-289">David C.</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-289" class="dsq-comment-body">
+            <div id="dsq-comment-message-289" class="dsq-comment-message"><p>Sounds like the Linux community needs to do what Apple did.  Don&#8217;t allow TRIM to be enabled, except on drives that have been explicitly tested and proven compatible.  Don&#8217;t assume &#8220;compatible&#8221; if the drive isn&#8217;t on either list.</p>
+<p>Of course, since Apple only tests drives that they ship in their computers, this rule effectively means that third-party SSDs have no TRIM support unless you apply a hack.  But that&#8217;s definitely better than enabling it on an incompatible drive and discovering corrupted files all over the place.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-292">
+        <div id="dsq-comment-header-292" class="dsq-comment-header">
+            <cite id="dsq-cite-292">
+                <span id="dsq-author-user-292">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-292" class="dsq-comment-body">
+            <div id="dsq-comment-message-292" class="dsq-comment-message"><p>The Linux world should definitely tone down on the TRIM. There&#8217;s too much of it everywhere.</p>
+<p>mkfs shouldn&#8217;t trim. If I wanted it to do that, I could always use blkdiscard first.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-299">
+        <div id="dsq-comment-header-299" class="dsq-comment-header">
+            <cite id="dsq-cite-299">
+                <span id="dsq-author-user-299">David C.</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-299" class="dsq-comment-body">
+            <div id="dsq-comment-message-299" class="dsq-comment-message"><p>I will politely disagree with you.  I think using TRIM whenever you erase files or file systems is a good thing.  The fact that some manufacturers have implementations that end up freeing the wrong blocks simply means that those drives should not be used, not that there is a problem with TRIM itself.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-300">
+        <div id="dsq-comment-header-300" class="dsq-comment-header">
+            <cite id="dsq-cite-300">
+                <span id="dsq-author-user-300">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-300" class="dsq-comment-body">
+            <div id="dsq-comment-message-300" class="dsq-comment-message"><p>Have you ever used photorec? Never? Honestly? Good for you. Good for everyone else? People make mistakes. On HDD you can revert some of them. On SSD it&#8217;s game over, cause SSD happily throw away gigabytes of data in an eyeblink.</p>
+<p>It&#8217;s may be worth the extra performance and lifetime on a hot database server. For the average Linux User it may be different.</p>
+<p>I&#8217;m not asking to remove functionality. I just wish for saner defaults.</p>
+<p>fstrim offers best of both worlds. TRIM yes, no long term performance degradation, but it&#8217;s not instant so there&#8217;s still time to disable the weekly/monthly fstrim cron job after sending the wrong rm command.</p>
+<p>But that only works if other programs stop issuing TRIM without asking you.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-347">
+        <div id="dsq-comment-header-347" class="dsq-comment-header">
+            <cite id="dsq-cite-347">
+                <span id="dsq-author-user-347">Hugo Vinícius</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-347" class="dsq-comment-body">
+            <div id="dsq-comment-message-347" class="dsq-comment-message"><p>I&#8217;ve heard of problems involving the TRIM command, but I&#8217;ve never gave any importance to them. Now, reading this article, I&#8217;ll be more cautious about it, even because I have two 850 Pros and one 850 EVO.</p>
+<p>For recovery of accidental deleted files, I always turn to File History in my Windows 8 machine. Also, all my data are on SSDs, but with periodic, manual copies to HDs and my laptop. Since then, I don&#8217;t remember of losing a file anymore.</p>
+<p>PS: sorry for my English. It isn&#8217;t my native language.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-465">
+        <div id="dsq-comment-header-465" class="dsq-comment-header">
+            <cite id="dsq-cite-465">
+                <span id="dsq-author-user-465">Dooshe Nozzle</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-465" class="dsq-comment-body">
+            <div id="dsq-comment-message-465" class="dsq-comment-message"><p>Your English is quite good. No need to apologize.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-309">
+        <div id="dsq-comment-header-309" class="dsq-comment-header">
+            <cite id="dsq-cite-309">
+                <span id="dsq-author-user-309">Uwe Brauer</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-309" class="dsq-comment-body">
+            <div id="dsq-comment-message-309" class="dsq-comment-message"><p>JFS?<br />
+I am using a Samsung 840 no pro, and I have not run into any problem. However I am using<br />
+jfs, could that make the difference?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-310">
+        <div id="dsq-comment-header-310" class="dsq-comment-header">
+            <cite id="dsq-cite-310">
+                <span id="dsq-author-user-310">issafram</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-310" class="dsq-comment-body">
+            <div id="dsq-comment-message-310" class="dsq-comment-message"><p>First of all, thank you for this detailed blog entry about your experience.<br />
+Second, I have been eyeing a Samsung 850 PRO 1TB drive for almost a year now.  Do you recommend that I stay away from the entire 850 series until Samsung issues a firmware update or what?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-313">
+        <div id="dsq-comment-header-313" class="dsq-comment-header">
+            <cite id="dsq-cite-313">
+                <span id="dsq-author-user-313">Hans-Peter Jansen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-313" class="dsq-comment-body">
+            <div id="dsq-comment-message-313" class="dsq-comment-message"><p>What makes this issue even worse, is Samsung&#8217;s absolute lousy way to deal with it. Sure, you&#8217;re lucky: they even send an engineering team for examination, but in the end, they&#8217;re going to sweep the problem under the carpet as good as they can &#8211; as usual. No public errata listing, no pro-active problem solving, no definitive user advice.</p>
+<p>May be, in some month, there will appear some revised firmware blob on the support pages. If we, the owner of these buggy devices, are lucky enough to co-relate our issues to them. Needless to say, that this firmware blob will be packed in a windows exe, and of course, it will be a major hassle to flash it in non windows environments.</p>
+<p>Updating drive firmware takes a lot of confidence in the manufacturer. This is something, that Samsung has to earn from its customers, and is something, they have missed so far.</p>
+<p>Intel learned it the hard way (fdiv bug). Before, they thought, it&#8217;s bad for their revenue to spread the word about such problems, now they perform an extensive errata management (not, that this couldn&#8217;t be excelled ;).</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-315">
+        <div id="dsq-comment-header-315" class="dsq-comment-header">
+            <cite id="dsq-cite-315">
+                <span id="dsq-author-user-315">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-315" class="dsq-comment-body">
+            <div id="dsq-comment-message-315" class="dsq-comment-message"><p>It will do no one any good to rush or panic without any plan. What&#8217;s Samsung supposed to do as long as the root cause is unknown and they&#8217;re not even able to reproduce the issue (nor is anyone else)? If there is a firmware bug it&#8217;s not one that is triggered easily, engineers don&#8217;t have to travel for those.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-318">
+        <div id="dsq-comment-header-318" class="dsq-comment-header">
+            <cite id="dsq-cite-318">
+                <span id="dsq-author-user-318">Frank Drebin</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-318" class="dsq-comment-body">
+            <div id="dsq-comment-message-318" class="dsq-comment-message"><p>At the very least I would expect my money back if they ship a defective product. That&#8217;s already the law in most countries.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-409">
+        <div id="dsq-comment-header-409" class="dsq-comment-header">
+            <cite id="dsq-cite-409">
+                <span id="dsq-author-user-409">James</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-409" class="dsq-comment-body">
+            <div id="dsq-comment-message-409" class="dsq-comment-message"><p>Looks like Samsung dealt with it just fine 🙂</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-410">
+        <div id="dsq-comment-header-410" class="dsq-comment-header">
+            <cite id="dsq-cite-410">
+                <span id="dsq-author-user-410">Hans-Peter Jansen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-410" class="dsq-comment-body">
+            <div id="dsq-comment-message-410" class="dsq-comment-message"><p>Yes, and I&#8217;m glad to hear that. </p>
+<p>OTOH, it&#8217;s hard to believe, that only CERTAIN Samsung devices are affected, but e.g. no Intel ones, given, that the failure is located in the md RAID 0/10 DISCARD handling. Something still fishy here.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-323">
+        <div id="dsq-comment-header-323" class="dsq-comment-header">
+            <cite id="dsq-cite-323">
+                <span id="dsq-author-user-323">issafram</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-323" class="dsq-comment-body">
+            <div id="dsq-comment-message-323" class="dsq-comment-message"><p>What is the latest update after the Samsung visit?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-324">
+        <div id="dsq-comment-header-324" class="dsq-comment-header">
+            <cite id="dsq-cite-324">
+                <span id="dsq-author-user-324">Christian Affolter</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-324" class="dsq-comment-body">
+            <div id="dsq-comment-message-324" class="dsq-comment-message"><p>Any news from Samsung already? I&#8217;m keenly awaiting your next update, as we also experience similar issues within parts of our own infrastructure, running the same SSDs. Until now, we do not know if it&#8217;s the RAID controller or the SSD which is to blame. Thanks for keeping us posted.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-345">
+        <div id="dsq-comment-header-345" class="dsq-comment-header">
+            <cite id="dsq-cite-345">
+                <span id="dsq-author-user-345">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-345" class="dsq-comment-body">
+            <div id="dsq-comment-message-345" class="dsq-comment-message"><p>Which raid controller(s) are you using?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-346">
+        <div id="dsq-comment-header-346" class="dsq-comment-header">
+            <cite id="dsq-cite-346">
+                <span id="dsq-author-user-346">Christian Affolter</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-346" class="dsq-comment-body">
+            <div id="dsq-comment-message-346" class="dsq-comment-message"><p>The affected nodes are using either Adaptec 7805 or 72405</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-376">
+        <div id="dsq-comment-header-376" class="dsq-comment-header">
+            <cite id="dsq-cite-376">
+                <span id="dsq-author-user-376">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-376" class="dsq-comment-body">
+            <div id="dsq-comment-message-376" class="dsq-comment-message"><p>Just posted an update. No progress so far. The only way around is to disable any usage of trim in the meanwhile. You experience the same issues?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-325">
+        <div id="dsq-comment-header-325" class="dsq-comment-header">
+            <cite id="dsq-cite-325">
+                <a id="dsq-author-user-325" href="http://gathman.org/vitae" target="_blank" rel="nofollow">CustomDesigned</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-325" class="dsq-comment-body">
+            <div id="dsq-comment-message-325" class="dsq-comment-message"><p>Some practical end-user tools:<br />
+rpm -Va | grep &#8216;^..5&#8217;   # system files with md5 not matching RPM database.  Only config files should be changed.</p>
+<p>rsync -ravnc /home/ /my/home/backup  # compares m5 of user files to last backup.  Look for unexpected mismatches.</p>
+<p>It would probably be worth writing a utility that looks for aligned blocks of 512 zeros, and then compares md5 with a backup, or uses rpm -V</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-342">
+        <div id="dsq-comment-header-342" class="dsq-comment-header">
+            <cite id="dsq-cite-342">
+                <span id="dsq-author-user-342">Marek</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-342" class="dsq-comment-body">
+            <div id="dsq-comment-message-342" class="dsq-comment-message"><p>Hi, just FYI i have been using TRIM with Samsung 850 PRO 512GB in OS X Yosemite since couple of weeks, so far no problems.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-350">
+        <div id="dsq-comment-header-350" class="dsq-comment-header">
+            <cite id="dsq-cite-350">
+                <span id="dsq-author-user-350">Mancave001</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-350" class="dsq-comment-body">
+            <div id="dsq-comment-message-350" class="dsq-comment-message"><p>Me too.  Except mine&#8217;s the Evo.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-351">
+        <div id="dsq-comment-header-351" class="dsq-comment-header">
+            <cite id="dsq-cite-351">
+                <span id="dsq-author-user-351">Dexter</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-351" class="dsq-comment-body">
+            <div id="dsq-comment-message-351" class="dsq-comment-message"><p>I am worried Samsung disappeared them. Are you guys OK?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-356">
+        <div id="dsq-comment-header-356" class="dsq-comment-header">
+            <cite id="dsq-cite-356">
+                <span id="dsq-author-user-356">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-356" class="dsq-comment-body">
+            <div id="dsq-comment-message-356" class="dsq-comment-message"><p>They probably got abducted by aliens and are still in the middle of anal probing.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-375">
+        <div id="dsq-comment-header-375" class="dsq-comment-header">
+            <cite id="dsq-cite-375">
+                <span id="dsq-author-user-375">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-375" class="dsq-comment-body">
+            <div id="dsq-comment-message-375" class="dsq-comment-message"><p>Still alive, not aware of any probes, but even to Neo it looked like a dream 😉</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-358">
+        <div id="dsq-comment-header-358" class="dsq-comment-header">
+            <cite id="dsq-cite-358">
+                <span id="dsq-author-user-358">l0rd carlos</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-358" class="dsq-comment-body">
+            <div id="dsq-comment-message-358" class="dsq-comment-message"><p>Any updates on this?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-374">
+        <div id="dsq-comment-header-374" class="dsq-comment-header">
+            <cite id="dsq-cite-374">
+                <span id="dsq-author-user-374">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-374" class="dsq-comment-body">
+            <div id="dsq-comment-message-374" class="dsq-comment-message"><p>Just posted, sorry for the delay.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-362">
+        <div id="dsq-comment-header-362" class="dsq-comment-header">
+            <cite id="dsq-cite-362">
+                <span id="dsq-author-user-362">Stanislav German-Evtushenko</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-362" class="dsq-comment-body">
+            <div id="dsq-comment-message-362" class="dsq-comment-message"><p>Does any of software on top of mdraid use O_DIRECT?<br />
+<a href="https://bugzilla.kernel.org/show_bug.cgi?id=99171" rel="nofollow">https://bugzilla.kernel.org/show_bug.cgi?id=99171</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-363">
+        <div id="dsq-comment-header-363" class="dsq-comment-header">
+            <cite id="dsq-cite-363">
+                <span id="dsq-author-user-363">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-363" class="dsq-comment-body">
+            <div id="dsq-comment-message-363" class="dsq-comment-message"><p>Interesting. After running ./a.out /dev/mdX, and running a sync_action<br />
+check afterwards, mismatch_cnt = 128. But I could not reproduce it with HDD<br />
+storage (mismatch_cnt = 0). md *does* behave oddly with loop/tmpfs devices, not sure if fault of md or loop or tmpfs.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-364">
+        <div id="dsq-comment-header-364" class="dsq-comment-header">
+            <cite id="dsq-cite-364">
+                <span id="dsq-author-user-364">Stanislav German-Evtushenko</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-364" class="dsq-comment-body">
+            <div id="dsq-comment-message-364" class="dsq-comment-message"><p>It happens for any block device. You probably should adjust delay and counts to reproduce it.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-366">
+        <div id="dsq-comment-header-366" class="dsq-comment-header">
+            <cite id="dsq-cite-366">
+                <span id="dsq-author-user-366">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-366" class="dsq-comment-body">
+            <div id="dsq-comment-message-366" class="dsq-comment-message"><p>Can&#8217;t reproduce it; but how often does a software write, and have an other thread race-modify the data it is writing? Even if the RAID does not go out of sync, is what you have written not garbage in any case? I think there is something similar in the RAID documentation where it may go out of sync when swapping (when the swap decides its no longer needed in mid-write).</p>
+<p>Just trying to understand your findings and whether it would affect me in practice 🙂</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-367">
+        <div id="dsq-comment-header-367" class="dsq-comment-header">
+            <cite id="dsq-cite-367">
+                <span id="dsq-author-user-367">Stanislav German-Evtushenko</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-367" class="dsq-comment-body">
+            <div id="dsq-comment-message-367" class="dsq-comment-message"><p>I am able to reproduce it on any hardware with Ubuntu 14.04 and latest updates.</p>
+<p>There is a case when we do not care if some data was in flight while part of this was changed. In that special case the only important thing is to get the same data from block drive subsystem you put there before. And I know at least to examples when it applies.</p>
+<p>First example is a swap file. If you have a VM which uses O_DIRECT on top of DRBD or MDRAID and this VM actively uses swap (valid for both Windows and Linux guests) then you&#8217;ll get these DRBD and MDRAID  inconsistent soon.</p>
+<p>Another example is a cache file in some applications. I&#8217;ve got this issue using Graylog2 inside a VM on top of DRBD. I have not done much investigation but my guess is that some of components of Graylog2 use cache file opened with O_DIRECT flag.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-368">
+        <div id="dsq-comment-header-368" class="dsq-comment-header">
+            <cite id="dsq-cite-368">
+                <span id="dsq-author-user-368">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-368" class="dsq-comment-body">
+            <div id="dsq-comment-message-368" class="dsq-comment-message"><p>See man md, /unexpected mismatch &#8211; it seems to be documented. Data that changed in mid-write was invalid to begin with and will never be read back, that&#8217;s the assumption the RAID system seems to make in this particular case.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-369">
+        <div id="dsq-comment-header-369" class="dsq-comment-header">
+            <cite id="dsq-cite-369">
+                <span id="dsq-author-user-369">Stanislav German-Evtushenko</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-369" class="dsq-comment-body">
+            <div id="dsq-comment-message-369" class="dsq-comment-message"><p>This is it. That&#8217;s why it does not happen when host cache is involved and happens only when data comes to block device directly from userspace where it can be changed at any moment and we can&#8217;t get to know in advance if any application is going to behave like this or not. In case of hypervisor this behaviour usually can be avoided as we can configure it so it does not use O_DIRECT.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-373">
+        <div id="dsq-comment-header-373" class="dsq-comment-header">
+            <cite id="dsq-cite-373">
+                <span id="dsq-author-user-373">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-373" class="dsq-comment-body">
+            <div id="dsq-comment-message-373" class="dsq-comment-message"><p>No, we do not use O_DIRECT in our software. But maybe fstrim?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-365">
+        <div id="dsq-comment-header-365" class="dsq-comment-header">
+            <cite id="dsq-cite-365">
+                <span id="dsq-author-user-365">issafram</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-365" class="dsq-comment-body">
+            <div id="dsq-comment-message-365" class="dsq-comment-message"><p>Hey @adamsurak:disqus, people are really hoping you could give an update.  Even if Samsung is still looking into it.  Any sort of word from you on the latest would be helpful.  From my perspective, Amazon&#8217;s Prime Day is coming up.  I was hoping to buy this solid state drive this coming week.  But this blog entry has caused me to hesitate.  I think others can relate.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-372">
+        <div id="dsq-comment-header-372" class="dsq-comment-header">
+            <cite id="dsq-cite-372">
+                <span id="dsq-author-user-372">Adam Surak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-372" class="dsq-comment-body">
+            <div id="dsq-comment-message-372" class="dsq-comment-message"><p>I have just posted an update. Sorry for the delay.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-377">
+        <div id="dsq-comment-header-377" class="dsq-comment-header">
+            <cite id="dsq-cite-377">
+                <span id="dsq-author-user-377">Anders Aagaard</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-377" class="dsq-comment-body">
+            <div id="dsq-comment-message-377" class="dsq-comment-message"><p>Checking in on this every now and again, really appriciate you guys trying to get to the root of the problem, and updating the blog along the way.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-381">
+        <div id="dsq-comment-header-381" class="dsq-comment-header">
+            <cite id="dsq-cite-381">
+                <span id="dsq-author-user-381">Allan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-381" class="dsq-comment-body">
+            <div id="dsq-comment-message-381" class="dsq-comment-message"><p>So does this change your mind at all on Samsung&#8217;s level of cooperation?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-382">
+        <div id="dsq-comment-header-382" class="dsq-comment-header">
+            <cite id="dsq-cite-382">
+                <span id="dsq-author-user-382">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-382" class="dsq-comment-body">
+            <div id="dsq-comment-message-382" class="dsq-comment-message"><p>Looking forward to the kernel patch, that should give us the whole picture then. 🙂</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-401">
+        <div id="dsq-comment-header-401" class="dsq-comment-header">
+            <cite id="dsq-cite-401">
+                <span id="dsq-author-user-401">leexgx</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-401" class="dsq-comment-body">
+            <div id="dsq-comment-message-401" class="dsq-comment-message"><p>really need to to get them to push out the Qued Trim firmware fix (disable the advertising support for it), for samsung it be better if they just simply stop advertising a feature(s) they don&#8217;t support it correctly resulting in errors (crucial have issued fixs for there most of there current SSDs, the older SSD m550? still has the queued trim bug does not seem they are going to issue a fix for the older drive)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-383">
+        <div id="dsq-comment-header-383" class="dsq-comment-header">
+            <cite id="dsq-cite-383">
+                <span id="dsq-author-user-383">Gerhard Islinger</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-383" class="dsq-comment-body">
+            <div id="dsq-comment-message-383" class="dsq-comment-message"><p>While all seems to center on Samsung and it being a Linux bug&#8230; In that case i find it puzzling  that it works with Intel SSDs&#8230;? Could anyone test it on Intel? </p>
+<p>Or am i missing something?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-384">
+        <div id="dsq-comment-header-384" class="dsq-comment-header">
+            <cite id="dsq-cite-384">
+                <span id="dsq-author-user-384">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-384" class="dsq-comment-body">
+            <div id="dsq-comment-message-384" class="dsq-comment-message"><p>We are still missing the patch itself, it should solve the mystery. Bugs can be weird, and trigger only under obscure circumstances, if it happens only under specific loads it could be a timing issue or whatever.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-386">
+        <div id="dsq-comment-header-386" class="dsq-comment-header">
+            <cite id="dsq-cite-386">
+                <a id="dsq-author-user-386" href="http://gustik.eu/" target="_blank" rel="nofollow">Lars Schotte</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-386" class="dsq-comment-body">
+            <div id="dsq-comment-message-386" class="dsq-comment-message"><p>First things first, when I read Samsung Engineers, I ask myself if it is being meant seriously. Believing in Samsung is like believing in Santa Claus. So I would be interested if these Problems also have risen on other Operating Systems like FreeBSD, because I do not believe that different TRIM triggering implementations would have the same problem. So a Bug in Linux kernel is a good theory, but it happens just much more often that Samsung messes things up and then is not ready to stand for it. I am using Kingston SSDs and Crucial and never had some problems, yet. I have to state clearly that I do not believe in Samsung at all. Why are the Intel SSDs working? Care that to investigate?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-387">
+        <div id="dsq-comment-header-387" class="dsq-comment-header">
+            <cite id="dsq-cite-387">
+                <span id="dsq-author-user-387">7eggert</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-387" class="dsq-comment-body">
+            <div id="dsq-comment-message-387" class="dsq-comment-message"><p>Believing in Samsung Engineers is a sane thing, things don&#8217;t work that bad by accident.</p>
+<p>The hardware is usually good, but the software is sometimes non-usable.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-388">
+        <div id="dsq-comment-header-388" class="dsq-comment-header">
+            <cite id="dsq-cite-388">
+                <span id="dsq-author-user-388">SSD-User</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-388" class="dsq-comment-body">
+            <div id="dsq-comment-message-388" class="dsq-comment-message"><p>So, it&#8217;s July 20th, but I haven&#8217;t read anything about the release of Samsung&#8217;s information. Does anybody know more?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-391">
+        <div id="dsq-comment-header-391" class="dsq-comment-header">
+            <cite id="dsq-cite-391">
+                <span id="dsq-author-user-391">john Doe</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-391" class="dsq-comment-body">
+            <div id="dsq-comment-message-391" class="dsq-comment-message"><p>So any updates on the Samsung Patch ???</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-393">
+        <div id="dsq-comment-header-393" class="dsq-comment-header">
+            <cite id="dsq-cite-393">
+                <span id="dsq-author-user-393">7eggert</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-393" class="dsq-comment-body">
+            <div id="dsq-comment-message-393" class="dsq-comment-message"><p>A blog referred me to:<br />
+<a href="https://bugs.launchpad.net/ubuntu/+source/fstrim/+bug/1449005" rel="nofollow">https://bugs.launchpad.net/ubuntu/+source/fstrim/+bug/1449005</a><br />
+(queued TRIM commands don&#8217;t work in spite of being announced by the firmware).</p>
+<p>This may or may not be connected.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-394">
+        <div id="dsq-comment-header-394" class="dsq-comment-header">
+            <cite id="dsq-cite-394">
+                <span id="dsq-author-user-394">SSD-User</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-394" class="dsq-comment-body">
+            <div id="dsq-comment-message-394" class="dsq-comment-message"><p>It is not connected, and Fefe should know this. 😉<br />
+See the June-16-update of this blog-article.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-397">
+        <div id="dsq-comment-header-397" class="dsq-comment-header">
+            <cite id="dsq-cite-397">
+                <span id="dsq-author-user-397">Heinz Kurtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-397" class="dsq-comment-body">
+            <div id="dsq-comment-message-397" class="dsq-comment-message"><p>It&#8217;s this one: <a href="http://www.spinics.net/lists/raid/msg49440.html" rel="nofollow">http://www.spinics.net/lists/raid/msg49440.html</a>  (19 July)</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-398">
+        <div id="dsq-comment-header-398" class="dsq-comment-header">
+            <cite id="dsq-cite-398">
+                <span id="dsq-author-user-398">Allan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-398" class="dsq-comment-body">
+            <div id="dsq-comment-message-398" class="dsq-comment-message"><p>I believe Adam should post a follow-up given the stir this blog created in the community and the negative press it gave to Samsung.  Does this patch work with their software to eliminate the issue using their tests?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-3" id="dsq-comment-406">
+        <div id="dsq-comment-header-406" class="dsq-comment-header">
+            <cite id="dsq-cite-406">
+                <span id="dsq-author-user-406">7eggert</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-406" class="dsq-comment-body">
+            <div id="dsq-comment-message-406" class="dsq-comment-message"><p>Also I&#8217;m not sure what&#8217;s the thing about the blacklist. The affected disks were not blacklisted in the initially used kernel, but I don&#8217;t see weather blacklisting the affected disks for queued TRIM was tried and weather that did help.</p>
+<p>(I guess the SSDs are configured to use the 512-byte-block interface.)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-435">
+        <div id="dsq-comment-header-435" class="dsq-comment-header">
+            <cite id="dsq-cite-435">
+                <a id="dsq-author-user-435" href="http://www.appwench.com" target="_blank" rel="nofollow">Neirinck Mike</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-435" class="dsq-comment-body">
+            <div id="dsq-comment-message-435" class="dsq-comment-message"><p>Dear Sir, in your article you state all damage was caused by a bug in the linux kernel. Even more it seems any SSD could get corrupted. May I ask why Intel showed no data loss contrary to Samsung? Yours sincerely</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-447">
+        <div id="dsq-comment-header-447" class="dsq-comment-header">
+            <cite id="dsq-cite-447">
+                <span id="dsq-author-user-447">Jack Micheal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-447" class="dsq-comment-body">
+            <div id="dsq-comment-message-447" class="dsq-comment-message"><p>Hello</p>
+<p>Carefully read your blogs ,and i like them!</p>
+<p>I do also want one of my how-to IT article to be shown in front of </p>
+<p>many readers who has this issue,</p>
+<p>would you post it on your blog or just simply add a link?</p>
+<p>Of course. i can give you something in return.</p>
+<p>Email:sunny.sun@minitool.com</p>
+<p>Regards</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-461">
+        <div id="dsq-comment-header-461" class="dsq-comment-header">
+            <cite id="dsq-cite-461">
+                <span id="dsq-author-user-461">Santiago Franco</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-461" class="dsq-comment-body">
+            <div id="dsq-comment-message-461" class="dsq-comment-message"><p>Hi, just bought a new Samsung SSD 850 EVO (Not Pro), and installed Ubuntu 15.10.  After reading this, (I had some strange index errors after a couple of days with everything fine).  I disabled Trim and now it works, (login takes 5 mins approx, which should be much faster with a SSD), at least no error messages on booting.  Does anybody know if this is fixed, and if not, should the SSD drive be ok without TRIMs or<br />
+ will performance degrade with use? Thanks!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-464">
+        <div id="dsq-comment-header-464" class="dsq-comment-header">
+            <cite id="dsq-cite-464">
+                <span id="dsq-author-user-464">Rimas Kalpokas</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-464" class="dsq-comment-body">
+            <div id="dsq-comment-message-464" class="dsq-comment-message"><p>So, did the kernel patch found its way into Ubuntu 14.04 kernel? I tried but found no information on this sadly..</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-516">
+        <div id="dsq-comment-header-516" class="dsq-comment-header">
+            <cite id="dsq-cite-516">
+                <span id="dsq-author-user-516">Mark</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-516" class="dsq-comment-body">
+            <div id="dsq-comment-message-516" class="dsq-comment-message"><p>Is that TRIM command effective enough for any average user? As I understood, it&#8217;s going rather about security standards and not real security issues, am I right? Also i saw an article from a recovery team that ssds are also difficult to recover (no matter if it&#8217;s a data owner or a thief) <a href="https://hetmanrecovery.com/recovery_news/securely-destroying-information-the-issue-of-solid-state-drives.htm" rel="nofollow">https://hetmanrecovery.com/recovery_news/securely-destroying-information-the-issue-of-solid-state-drives.htm</a>.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-523">
+        <div id="dsq-comment-header-523" class="dsq-comment-header">
+            <cite id="dsq-cite-523">
+                <span id="dsq-author-user-523">diabolik62</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-523" class="dsq-comment-body">
+            <div id="dsq-comment-message-523" class="dsq-comment-message"><p>Hello,<br />
+I searched the net but can not find anything that I ssd samsun with new archlinux installation, he has gnerato this fstab:<br />
+[eva@ectorpc ~]$ sudo cat /etc/fstab<br />
+[sudo] password di eva:<br />
+#<br />
+# /etc/fstab: static file system information<br />
+#<br />
+#<br />
+# /dev/sda4<br />
+UUID=81d5807b-de09-4be6-9759-56fb595f954e	/         	ext4      	rw,relatime,stripe=8191,data=ordered	0 1</p>
+<p># /dev/sda3<br />
+UUID=9AC7-6A17      	/boot     	vfat      	rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,errors=remount-ro	0 2</p>
+<p>[eva@ectorpc ~]$<br />
+my lsblk<br />
+[eva@ectorpc ~]$ lsblk<br />
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT<br />
+sda      8:0    0 232,9G  0 disk<br />
+├─sda1   8:1    0     1G  0 part<br />
+├─sda2   8:2    0 109,9G  0 part<br />
+├─sda3   8:3    0  1003M  0 part /boot<br />
+└─sda4   8:4    0    13G  0 part /<br />
+sdb      8:16   0 698,7G  0 disk<br />
+├─sdb1   8:17   0   400M  0 part<br />
+├─sdb2   8:18   0   260M  0 part<br />
+├─sdb3   8:19   0   128M  0 part<br />
+├─sdb4   8:20   0 606,6G  0 part<br />
+├─sdb5   8:21   0    72G  0 part<br />
+├─sdb6   8:22   0   854M  0 part<br />
+├─sdb7   8:23   0   486M  0 part<br />
+├─sdb8   8:24   0   450M  0 part<br />
+└─sdb9   8:25   0  17,5G  0 part<br />
+sr0     11:0    1  1024M  0 rom<br />
+[eva@ectorpc ~]$<br />
+I read the wiki arch, but I can not understand what he must do in the fstab, someone experienced I can indicate what should I add to the fstab?<br />
+or<br />
+I can leave the generated fstab.</p>
+<p>I also enabled fstrim.service</p>
+<p>[Ectorpc eva @ ~] $ systemctl status fstrim.timer<br />
+● fstrim.timer &#8211; Discard unused blocks once a week<br />
+    Loaded: loaded (/usr/lib/systemd/system/fstrim.timer; enabled; preset vendor:<br />
+    Active: active (waiting) since Wed 10/19/2016 14:45:05 CEST; 7min August<br />
+      Docs: man: fstrim</p>
+<p>19 October 14:45:05 ectorpc systemd [1]: Started Discard unused blocks once a week.</p>
+<p>[1] + Stopped systemctl status fstrim.timer<br />
+I have to disable it or to leave it on.<br />
+Thanks x the help</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-524">
+        <div id="dsq-comment-header-524" class="dsq-comment-header">
+            <cite id="dsq-cite-524">
+                <span id="dsq-author-user-524">diabolik62</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-524" class="dsq-comment-body">
+            <div id="dsq-comment-message-524" class="dsq-comment-message"><p>sorry my ssd estern<br />
+[eva@ectorpc ~]$ sudo  hdparm -I /dev/sda<br />
+[sudo] password di eva: </p>
+<p>/dev/sda:</p>
+<p>ATA device, with non-removable media<br />
+	Model Number:       Samsung Portable SSD T1 250GB<br />
+	Serial Number:      S25JNAAGB10322Y<br />
+	Firmware Revision:  EMT41P6Q<br />
+	Transport:          Serial, ATA8-AST, SATA 1.0a, SATA II Extensions, SATA Rev 2.5, SATA Rev 2.6, SATA Rev 3.0<br />
+Standards:<br />
+	Used: unknown (minor revision code 0x0039)<br />
+	Supported: 9 8 7 6 5<br />
+	Likely used: 9<br />
+Configuration:<br />
+	Logical		max	current<br />
+	cylinders	16383	16383<br />
+	heads		16	16<br />
+	sectors/track	63	63<br />
+	&#8212;<br />
+	CHS current addressable sectors:   16514064<br />
+	LBA    user addressable sectors:  268435455<br />
+	LBA48  user addressable sectors:  488397168<br />
+	Logical  Sector size:                   512 bytes<br />
+	Physical Sector size:                   512 bytes<br />
+	Logical Sector-0 offset:                  0 bytes<br />
+	device size with M = 1024*1024:      238475 MBytes<br />
+	device size with M = 1000*1000:      250059 MBytes (250 GB)<br />
+	cache/buffer size  = unknown<br />
+	Nominal Media Rotation Rate: Solid State Device<br />
+Capabilities:<br />
+	LBA, IORDY(can be disabled)<br />
+	Queue depth: 32<br />
+	Standby timer values: spec&#8217;d by Standard, no device specific minimum<br />
+	R/W multiple sector transfer: Max = 1	Current = 1<br />
+	DMA: mdma0 mdma1 mdma2 udma0 udma1 udma2 udma3 udma4 udma5 *udma6<br />
+	     Cycle time: min=120ns recommended=120ns<br />
+	PIO: pio0 pio1 pio2 pio3 pio4<br />
+	     Cycle time: no flow control=120ns  IORDY flow control=120ns<br />
+Commands/features:<br />
+	Enabled	Supported:<br />
+	   *	SMART feature set<br />
+	   *	Power Management feature set<br />
+	   *	Write cache<br />
+	   *	Look-ahead<br />
+	   *	WRITE_BUFFER command<br />
+	   *	READ_BUFFER command<br />
+	   *	NOP cmd<br />
+	   *	DOWNLOAD_MICROCODE<br />
+	    	SET_MAX security extension<br />
+	   *	48-bit Address feature set<br />
+	   *	Mandatory FLUSH_CACHE<br />
+	   *	FLUSH_CACHE_EXT<br />
+	   *	SMART error logging<br />
+	   *	SMART self-test<br />
+	   *	General Purpose Logging feature set<br />
+	   *	WRITE_{DMA|MULTIPLE}_FUA_EXT<br />
+	   *	64-bit World wide name<br />
+	    	Write-Read-Verify feature set<br />
+	   *	WRITE_UNCORRECTABLE_EXT command<br />
+	   *	{READ,WRITE}_DMA_EXT_GPL commands<br />
+	   *	Segmented DOWNLOAD_MICROCODE<br />
+	   *	Gen1 signaling speed (1.5Gb/s)<br />
+	   *	Gen2 signaling speed (3.0Gb/s)<br />
+	   *	Gen3 signaling speed (6.0Gb/s)<br />
+	   *	Native Command Queueing (NCQ)<br />
+	   *	Phy event counters<br />
+	   *	READ_LOG_DMA_EXT equivalent to READ_LOG_EXT<br />
+	    	DMA Setup Auto-Activate optimization<br />
+	   *	Asynchronous notification (eg. media change)<br />
+	   *	Software settings preservation<br />
+	   *	reserved 69[4]<br />
+	   *	DOWNLOAD MICROCODE DMA command<br />
+	   *	SET MAX SETPASSWORD/UNLOCK DMA commands<br />
+	   *	WRITE BUFFER DMA command<br />
+	   *	READ BUFFER DMA command<br />
+	   *	Data Set Management TRIM supported (limit 8 blocks)<br />
+Security:<br />
+		supported<br />
+	not	enabled<br />
+	not	locked<br />
+	not	frozen<br />
+	not	expired: security count<br />
+		supported: enhanced erase<br />
+	2min for SECURITY ERASE UNIT. 8min for ENHANCED SECURITY ERASE UNIT.<br />
+Logical Unit WWN Device Identifier: 5002538d00000000<br />
+	NAA		: 5<br />
+	IEEE OUI	: 002538<br />
+	Unique ID	: d00000000<br />
+Checksum: correct<br />
+[eva@ectorpc ~]$</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/christmas-gifthub-awesome-autocomplete/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/12/github1-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/12/github1-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/12/github1-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/christmas-gifthub-awesome-autocomplete/'>Github Awesome Autocomplete browser extension for Chrome and Firefox</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/dns-fallback-for-better-resilience/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2015/05/dns-fallback-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2015/05/dns-fallback-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2015/05/dns-fallback-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/dns-fallback-for-better-resilience/'>DNS fallback for better resilience</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fwhen-solid-state-drives-are-not-that-solid%2F&amp;t=When+Solid+State+Drives+are+not+that+solid" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=When+Solid+State+Drives+are+not+that+solid&amp;url=https%3A%2F%2Fblog.algolia.com%2Fwhen-solid-state-drives-are-not-that-solid%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fwhen-solid-state-drives-are-not-that-solid%2F&amp;title=When+Solid+State+Drives+are+not+that+solid&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"3735 https:\/\/blog.algolia.com\/?p=3735","disqusShortname":"algoliablog","disqusTitle":"When Solid State Drives are not that solid","disqusUrl":"https:\/\/blog.algolia.com\/when-solid-state-drives-are-not-that-solid\/","options":{"manualSync":false},"postId":"3735"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'3735',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '3735' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

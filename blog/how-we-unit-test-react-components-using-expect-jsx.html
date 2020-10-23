@@ -1,0 +1,926 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>How we unit test React components using expect-jsx - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; How we unit test React components using expect-jsx Comments Feed" href="https://blog.algolia.com/how-we-unit-test-react-components-using-expect-jsx/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=4337' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fhow-we-unit-test-react-components-using-expect-jsx%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fhow-we-unit-test-react-components-using-expect-jsx%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=0598E95056B51C73D7048E5C5A536B6F');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="How we unit test React components using expect-jsx"/>
+  <meta property="og:url" content="https://blog.algolia.com/how-we-unit-test-react-components-using-expect-jsx/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="React was designed to solve one problem—how to build applications with data that changes over time. Considering the as-you-type search experience offered by Algolia wherein whole results pages, hits and refinement links alike, are updated at each keystroke, React was the obvious choice when we neede"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2015/11/React_illo_final_720x400.png"/>
+  <meta property="article:published_time" content="2015-11-03T08:46:39+00:00"/>
+  <meta property="article:modified_time" content="2015-12-16T15:03:01+00:00" />
+  <meta property="og:updated_time" content="2015-12-16T15:03:01+00:00" />
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="How we unit test React components using expect-jsx"/>
+  <meta itemprop="description" content="React was designed to solve one problem—how to build applications with data that changes over time. Considering the as-you-type search experience offered by Algolia wherein whole results pages, hits and refinement links alike, are updated at each keystroke, React was the obvious choice when we neede"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2015/11/React_illo_final_720x400.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="How we unit test React components using expect-jsx"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/how-we-unit-test-react-components-using-expect-jsx/"/>
+  <meta name="twitter:description" content="React was designed to solve one problem—how to build applications with data that changes over time. Considering the as-you-type search experience offered by Algolia wherein whole results pages, hits and refinement links alike, are updated at each keystroke, React was the obvious choice when we neede"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2015/11/React_illo_final_720x400.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-4337 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-4337" class="cf post-4337 post type-post status-publish format-standard has-post-thumbnail hentry category-technology tag-javascript tag-react tag-reactjs tag-tdd tag-tests" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">How we unit test React components using expect-jsx</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/d27b84b2f345cee4af097edb753d42b5?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person"><a href="https://github.com/vvo/" title="Visit Vincent&#8217;s website" rel="author external">Vincent</a></span> |
+                    <time class="updated entry-time" datetime="2015-11-03" itemprop="datePublished">November 3, 2015</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/how-we-unit-test-react-components-using-expect-jsx/" title="How we unit test React components using expect-jsx">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2015/11/React_illo_final_720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2015/11/React_illo_final_720x400.png 720w, https://blog.algolia.com/wp-content/uploads/2015/11/React_illo_final_720x400-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2015/11/React_illo_final_720x400-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead"><a href="http://facebook.github.io/react/docs/why-react.html" target="_blank">React was designed to solve one problem</a>—how to build applications with data that changes over time. Considering the as-you-type search experience offered by Algolia wherein whole results pages, hits and refinement links alike, are updated at each keystroke, React was the obvious choice when we needed a tool to build out our new library of UI widgets: <a href="https://github.com/algolia/instantsearch.js/">instantsearch.js</a>.</p>
+<p>We quickly struggled, however, with the unit test best practices for React components. We jumped from Github issues in <a href="https://github.com/facebook/react">facebook/react</a> to <a href="https://www.google.com/search?q=testing+react+components">blog posts</a> and <a href="https://discuss.reactjs.org/">discuss.reactjs.org</a> but couldn&#8217;t find a clear unit testing strategy.</p>
+<p>Now that we&#8217;re happy with our testing stack, we wanted to share it with the community to hopefully make your testing process a bit easier. Feel free to also <a href="https://blog.algolia.com/modern-javascript-libraries-the-isomorphic-way/">check out the unit testing tips we shared a few months ago.</a></p>
+<h2><a id="how-to-test-a-react-component" class="anchor" href="#how-to-test-a-react-component" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>How to test a React component</h2>
+<p>Before digging into the whole testing stack, how do we test a React component?</p>
+<a href="https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-140040_836x437_scrot.png"><img class="alignnone size-full wp-image-4342" src="https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-140040_836x437_scrot.png" alt="2015-10-20-140040_836x437_scrot" width="836" height="437" srcset="https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-140040_836x437_scrot.png 836w, https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-140040_836x437_scrot-320x167.png 320w, https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-140040_836x437_scrot-720x376.png 720w" sizes="(max-width: 836px) 100vw, 836px" /></a>
+<p>If you search for <a href="https://www.google.com/search?q=react+unit+testing">&#8220;React unit testing&#8221;</a>, you&#8217;ll quickly find the popular React discussion—<a href="https://discuss.reactjs.org/t/whats-the-prefered-way-to-test-react-js-components/26">What’s the preferred way to test React.js components?</a> In the thread, React developer <a href="https://twitter.com/soprano">Ben Alpert</a> advises testing React components using a technique known as <a href="https://facebook.github.io/react/docs/test-utils.html#shallow-rendering">shallow rendering</a>.</p>
+<p>Here&#8217;s an example of a <strong>Button</strong> and a <strong>Label</strong> component tested with <a href="https://mochajs.org/">mocha</a>:</p>
+<div class="oembed-gist"><script src="https://gist.github.com/vvo/b4afa17a77f6cc5c0eaf.js"></script><noscript>View the code on <a href="https://gist.github.com/vvo/b4afa17a77f6cc5c0eaf">Gist</a>.</noscript></div>
+<p>And here is the output when you run it:</p>
+<p><a href="https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-150031_890x197_scrot.png"><img class="alignnone wp-image-4345 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-150031_890x197_scrot.png" alt="2015-10-20-150031_890x197_scrot" width="890" height="197" srcset="https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-150031_890x197_scrot.png 890w, https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-150031_890x197_scrot-320x71.png 320w, https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-150031_890x197_scrot-720x159.png 720w" sizes="(max-width: 890px) 100vw, 890px" /></a>What about failing test cases? Let&#8217;s make it fail by changing our test:</p>
+<div class="oembed-gist"><script src="https://gist.github.com/vvo/364216ad02b82e9ed3cb.js"></script><noscript>View the code on <a href="https://gist.github.com/vvo/364216ad02b82e9ed3cb">Gist</a>.</noscript></div>
+<p><a href="https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-150207_1061x621_scrot.png"><img class="alignnone size-full wp-image-4346" src="https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-150207_1061x621_scrot.png" alt="2015-10-20-150207_1061x621_scrot" width="1061" height="621" srcset="https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-150207_1061x621_scrot.png 1061w, https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-150207_1061x621_scrot-304x178.png 304w, https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-150207_1061x621_scrot-683x400.png 683w" sizes="(max-width: 1061px) 100vw, 1061px" /></a>Not too bad. Shallow rendering provides a way to render a React element <strong>only</strong> <strong>one level deep</strong>. This means that if you have children elements (like <strong>Label</strong> in our Button), it will not trigger their render methods. Very nice for unit testing!</p>
+<p>The shallow rendering technique is simple to use and well suited for unit testing as it takes a React Element as <em>INPUT</em> and produces a React Element as <em>OUTPUT</em>.</p>
+<p>There are <a href="http://reactkungfu.com/2015/07/approaches-to-testing-react-components-an-overview/">other techniques available</a>, but this is the currently recommended one and we expect (😏) the React team to develop more tools around it in the future.</p>
+<p>But wait, it&#8217;s not over! Did you see that diff? You passed some nice expected JSX (<em>&lt;div&gt;&lt;Label name=&#8221;Marie&#8221; /&gt;&lt;/div&gt;</em>), and all you got was a weird object output diff.</p>
+<p>This is because JSX is <a href="https://babeljs.io/repl/#?experimental=true&amp;evaluate=true&amp;loose=false&amp;spec=false&amp;code=%3Cdiv%3E%3CLabel%20name%3D%22Marie%22%20%2F%3E%3C%2Fdiv%3E">transpiled</a> to a <a href="https://facebook.github.io/react/docs/top-level-api.html#react.createelement">React.createElement</a> call that then returns a React element (a JavaScript object). So when doing <em>expect(something).toEqual(somethingElse)</em>, you are just comparing two JavaScript objects.</p>
+<p>It would be better to get something like this:</p>
+<p><a href="https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-152034_977x396_scrot.png"><img class="alignnone size-full wp-image-4347" src="https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-152034_977x396_scrot.png" alt="2015-10-20-152034_977x396_scrot" width="977" height="396" srcset="https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-152034_977x396_scrot.png 977w, https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-152034_977x396_scrot-320x130.png 320w, https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-152034_977x396_scrot-720x292.png 720w" sizes="(max-width: 977px) 100vw, 977px" /></a>Let&#8217;s make it happen! OK, we need a bit of tooling to get there.</p>
+<h2><a id="what%c2%a0is-the-rackt%c2%a0team%c2%a0using" class="anchor" href="#what%c2%a0is-the-rackt%c2%a0team%c2%a0using" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>What is the rackt team using?</h2>
+<p>After we found out about shallow rendering, we needed a good stack to make assertions and run the tests. We decided to have a look at what <a href="https://github.com/rackt">rackt</a>, the Github org responsible for <a href="https://github.com/rackt/react-router">react-router</a> and <a href="https://github.com/rackt/redux">redux</a> (two very popular react libraries) was using. After all, the closer you are to the tools of your community, the easier it is to get contributions.</p>
+<p>The rackt team is using <a href="https://github.com/mjackson/expect">mochajs/mocha</a> to run the tests and <a href="https://github.com/mjackson/expect">mjackson/expect</a> to write assertions. They also follow the <a href="https://github.com/facebook/jest">facebook/jest</a> convention of putting tests next to the files they are testing:</p>
+<a href="https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-154505_742x439_scrot.png"><img class="alignnone size-full wp-image-4348" src="https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-154505_742x439_scrot.png" alt="2015-10-20-154505_742x439_scrot" width="742" height="439" srcset="https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-154505_742x439_scrot.png 742w, https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-154505_742x439_scrot-301x178.png 301w, https://blog.algolia.com/wp-content/uploads/2015/10/2015-10-20-154505_742x439_scrot-676x400.png 676w" sizes="(max-width: 742px) 100vw, 742px" /></a>
+<h2><a id="introducing-expect-jsx" class="anchor" href="#introducing-expect-jsx" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Introducing expect-jsx</h2>
+<p>After choosing <a href="https://github.com/mjackson/expect">mjackson/expect</a> as our assertion library and <a href="https://github.com/mjackson/expect">mochajs/mocha</a> as our test runner, we wanted better JSX diffs instead of long object diffs when our tests were failing.</p>
+<p><a href="https://github.com/facebook/react/issues/4835#issuecomment-146987782">We asked the React community</a> how to do this and got some great feedback. In fact, another assertion library already did it—<a href="https://github.com/bruderstein/unexpected-react-shallow">bruderstein/unexpected-react-shallow</a>. <a href="https://github.com/alexlande/react-to-jsx">alexlande/react-to-jsx</a> was also a candidate for implementing the JSX string diff in the expect assertion library.</p>
+<p>Unfortunately, those libraries were not meeting our expectations. So&#8230;we built <a href="https://github.com/algolia/expect-jsx">algolia/expect-jsx</a>.</p>
+<p>Let&#8217;s enhance our previous test with this new module:</p>
+<div class="oembed-gist"><script src="https://gist.github.com/vvo/25921ae98995c47554bb.js"></script><noscript>View the code on <a href="https://gist.github.com/vvo/25921ae98995c47554bb">Gist</a>.</noscript></div>
+<p>expect-jsx transforms the passed React elements to JSX strings to nicely compare them. This seems a rather naive approach, but this is completely OK for unit testing.</p>
+<p>Using expect-jsx will save you a good amount of time and spare you from having to write things like  <em>expect(result.props.children[0].props.children.className).toEqual(&#8216;U mad?&#8217;);</em></p>
+<p>expect-jsx is based on <a href="https://github.com/algolia/react-element-to-jsx-string">algolia/react-element-to-jsx-string</a>. This means that if you&#8217;re using <a href="https://github.com/substack/tape">tape</a>, <a href="http://chaijs.com/">chaijs</a> or <a href="https://github.com/jasmine/jasmine">jasmine</a>, you can easily build the same assertions goodness within a day and publish it to npm.</p>
+<p>Since we released <em>react-element-to-jsx-string</em>, developers have implemented JSX diff in multiple assertion libraries:</p>
+<ul>
+<li><a href="https://www.npmjs.com/package/tape-jsx-equals">tape-jsx-equals</a></li>
+<li><a href="https://www.npmjs.com/package/jsx-chai">jsx-chai</a></li>
+<li><a href="https://www.npmjs.com/package/jasmine-expect-jsx">jasmine-expect-jsx</a></li>
+</ul>
+<p>Warning: If you use <a href="http://karma-runner.github.io/">Karma runner</a> to launch mocha tests within browsers, you will not have any nice object or string diff. This is currently an <a href="https://github.com/mochajs/mocha/issues/1348">issue in the html-reporter</a>.</p>
+<h2><a id="simulating-events%c2%a0like-onclick" class="anchor" href="#simulating-events%c2%a0like-onclick" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Simulating events like onClick</h2>
+<p>As of today, the shallow rendering technique <a href="https://github.com/facebook/react/issues/1445">does not support</a> simulating clicks using <a href="https://facebook.github.io/react/docs/test-utils.html#simulate">React test utilities Simulate</a>.</p>
+<p>This means you have to resort to directly calling the underlying function of your handlers props. Doing so doesn&#8217;t introduce any test-specific nonsense, as it&#8217;s the same thing Simulate would do in the end.</p>
+<p>Let&#8217;s change our Button component to illustrate this:</p>
+<div class="oembed-gist"><script src="https://gist.github.com/vvo/3948a3a284be96bc5f4b.js"></script><noscript>View the code on <a href="https://gist.github.com/vvo/3948a3a284be96bc5f4b">Gist</a>.</noscript></div>
+<p>Our test now looks like:</p>
+<div class="oembed-gist"><script src="https://gist.github.com/vvo/5767fc83e86c42905175.js"></script><noscript>View the code on <a href="https://gist.github.com/vvo/5767fc83e86c42905175">Gist</a>.</noscript></div>
+<p>As you can see on line 24, we&#8217;re just calling the <em>props.onClick</em> handler directly to check that our custom handler has been called properly. Easy, right?</p>
+<p>Well, that&#8217;s the way we unit test our component handlers. If you have a better solution, leave it in the comments!</p>
+<h2><a id="testing-using-references" class="anchor" href="#testing-using-references" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Testing using references</h2>
+<p>Shallow rendering does not have access to any <a href="https://facebook.github.io/react/docs/more-about-refs.html">references</a> you may have defined in your Component, so you cannot use them when testing with the shallow rendering technique. This is <a href="https://github.com/facebook/react/issues/2393">being investigated</a> by the React team.</p>
+<p>In the meantime test your refs dependent Components using the standard <a href="https://facebook.github.io/react/docs/test-utils.html">Test Utilities</a>.</p>
+<h2><a id="npm-run-testwatch" class="anchor" href="#npm-run-testwatch" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>npm run test:watch</h2>
+<p>At Algolia, we try to minimize the entry cost to a project for any developer. All projects have an <em>npm run test:watch</em> task that we can use to <a href="https://en.wikipedia.org/wiki/Test-driven_development">TDD</a> with a rapid feedback loop.</p>
+<p>You can easily get one by adding the following to your package.json:</p>
+<div class="oembed-gist"><script src="https://gist.github.com/vvo/b6b723480aba66753c05.js"></script><noscript>View the code on <a href="https://gist.github.com/vvo/b6b723480aba66753c05">Gist</a>.</noscript></div>
+<p>Your development workflow will then look like this:</p>
+<a href="https://blog.algolia.com/wp-content/uploads/2015/10/lol.gif"><img class="alignnone size-full wp-image-4349" src="https://blog.algolia.com/wp-content/uploads/2015/10/lol.gif" alt="lol" width="900" height="417" /></a>
+<h2><a id="where-to-go-from-here" class="anchor" href="#where-to-go-from-here" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Where to go from here?</h2>
+<p>The whole code used in this article can be found at <a href="https://github.com/algolia/react-test-boilerplate">algolia/react-test-boilerplate</a>.</p>
+<p>If you need some DOM features in your tests, check out <a href="https://github.com/tmpvar/jsdom">tmpvar/jsdom</a> and <a href="https://github.com/rstacruz/mocha-jsdom">rstacruz/mocha-jsdom</a>.</p>
+<p>If you need to run your tests in real browsers, you can use <a href="http://karma-runner.github.io">karma-runner</a> or <a href="https://github.com/defunctzombie/zuul">defunctzombie/zuul</a> coupled with <a href="https://saucelabs.com/">Sauce Labs</a> or <a href="https://www.browserstack.com/">Browser Stack</a>.</p>
+<p>If you liked this post and are interested in a follow-up article about those subjects, leave a comment or tweet <a href="https://twitter.com/algolia">@algolia</a>.</p>
+<p>Happy coding!</p>
+<p><a class="btn-cta" style="text-align: center; width: 380px; margin: 0 auto; display: block; float: none;" href="https://www.algolia.com/doc?utm_medium=social-owned&amp;utm_source=blog&amp;utm_campaign=ReactJS">Learn more</a></p>
+<p><strong>Update November 02 2015</strong></p>
+<p>We did a talk about this at <a href="http://www.meetup.com/fr/ReactJS-Paris/">ReactJS Paris</a>, here are the slides:</p>
+<p><iframe src="//slides.com/vvo/react-component-unit-testing/embed?style=light" width="576" height="420" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen"></iframe></p>
+<p><strong>Sources</strong></p>
+<ul>
+<li><a href="https://discuss.reactjs.org/t/whats-the-prefered-way-to-test-react-js-components/26">What’s the prefered way to test React.js components?</a></li>
+<li><a href="http://simonsmith.io/unit-testing-react-components-without-a-dom/">Unit testing React components without a DOM</a></li>
+<li><a href="http://jaketrent.com/post/testing-react-with-jsdom/">Testing React on Jsdom</a></li>
+<li><a href="https://facebook.github.io/react/docs/test-utils.html">Test Utilities</a></li>
+<li><a href="http://reactkungfu.com/2015/07/approaches-to-testing-react-components-an-overview/">Approaches to testing React components &#8211; an overview</a></li>
+<li><a href="http://www.asbjornenge.com/wwc/testing_react_components.html">Testing React Components</a></li>
+<li><a href="https://reactjsnews.com/testing-the-easy-way/">Testing Components, The Easy Way</a></li>
+<li><a href="https://github.com/bruderstein/unexpected-react-shallow">bruderstein/unexpected-react-shallow</a></li>
+<li><a href="https://github.com/facebook/react/issues/4835">facebook/react/#4835</a></li>
+<li><a href="https://github.com/mjackson/expect/issues/37">mjackson/expect/#37</a></li>
+<li><a href="https://github.com/jquense/teaspoon">jquense/teaspoon</a></li>
+</ul>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fhow-we-unit-test-react-components-using-expect-jsx%2F&amp;t=How+we+unit+test+React+components+using+expect-jsx" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=How+we+unit+test+React+components+using+expect-jsx&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhow-we-unit-test-react-components-using-expect-jsx%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhow-we-unit-test-react-components-using-expect-jsx%2F&amp;title=How+we+unit+test+React+components+using+expect-jsx&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                <div class="tags-container"><ul class="tags"><li><a href="https://blog.algolia.com/tag/javascript/" rel="tag">JavaScript</a></li><li><a href="https://blog.algolia.com/tag/react/" rel="tag">React</a></li><li><a href="https://blog.algolia.com/tag/reactjs/" rel="tag">reactjs</a></li><li><a href="https://blog.algolia.com/tag/tdd/" rel="tag">TDD</a></li><li><a href="https://blog.algolia.com/tag/tests/" rel="tag">tests</a></li></ul></div>
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-436">
+        <div id="dsq-comment-header-436" class="dsq-comment-header">
+            <cite id="dsq-cite-436">
+                <span id="dsq-author-user-436">Nicolas Martel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-436" class="dsq-comment-body">
+            <div id="dsq-comment-message-436" class="dsq-comment-message"><p>Loving this.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-443">
+        <div id="dsq-comment-header-443" class="dsq-comment-header">
+            <cite id="dsq-cite-443">
+                <a id="dsq-author-user-443" href="http://function.fr/" target="_blank" rel="nofollow">Vincent Voyer</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-443" class="dsq-comment-body">
+            <div id="dsq-comment-message-443" class="dsq-comment-message"><p>Thanks a lot for dropping this comment</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-437">
+        <div id="dsq-comment-header-437" class="dsq-comment-header">
+            <cite id="dsq-cite-437">
+                <a id="dsq-author-user-437" href="https://github.com/ColCh/" target="_blank" rel="nofollow">ColCh</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-437" class="dsq-comment-body">
+            <div id="dsq-comment-message-437" class="dsq-comment-message"><p>Comparing actual and expected JSX &#8211; common dude, you serious? 🙁 Instead of using &#8220;onClick&#8221; as props, you should use React TestUtils Simulate&#8230;</p>
+<p>Yeah It (TestUtils) is not working for now with shallow rendering (it expects window in global), you should inject `global.window` with jsdom to get gears spinning.</p>
+<p>I recommend you to use jsdom and test your components right way.<br />
+I use `mocha-jsdom` module for sugar DOM injecting in global space.</p>
+<p>Sorry for being hot temper, I hope my comment will be helpful.</p>
+<p>I can explain (why I chosed jsdom) and give a link to repo if you&#8217;re interested in it.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-439">
+        <div id="dsq-comment-header-439" class="dsq-comment-header">
+            <cite id="dsq-cite-439">
+                <a id="dsq-author-user-439" href="http://function.fr/" target="_blank" rel="nofollow">Vincent Voyer</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-439" class="dsq-comment-body">
+            <div id="dsq-comment-message-439" class="dsq-comment-message"><p>Hi ColCh, thanks for commenting.</p>
+<p>I am sorry I did not get your issue about &#8220;Comparing actual and expected JSX &#8211; common dude, you serious?&#8221; How do you test the structure of your render method as part of your unit testing strategy?</p>
+<p>Yet you can use TestUtils.simulate but that&#8217;s a different need, first we need to ensure the structure that is generated is the one we are expecting (nodes, text, classes ..) and then we want to test the behavior of the handlers.</p>
+<p>For the first part (structure), comparing JSX is a nice solution, there are others and maybe that&#8217;s what you wanted to say?</p>
+<p>For the second part we do say that if you need it you can use TestUtils.simulate and use mocha-jsdom as we already use also at Algolia.</p>
+<p>Thanks for contributing.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-440">
+        <div id="dsq-comment-header-440" class="dsq-comment-header">
+            <cite id="dsq-cite-440">
+                <a id="dsq-author-user-440" href="https://github.com/ColCh/" target="_blank" rel="nofollow">ColCh</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-440" class="dsq-comment-body">
+            <div id="dsq-comment-message-440" class="dsq-comment-message"><p>Hi. We stick with BEM naming approach. So, in tests we just find elements by ClassName and manipulate with them (and make assertions).</p>
+<p>I don&#8217;t recommend to assert JSX because it&#8217;s doubling of your layout &#8211; it&#8217;s getting very hard to refactor components in future.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-441">
+        <div id="dsq-comment-header-441" class="dsq-comment-header">
+            <cite id="dsq-cite-441">
+                <a id="dsq-author-user-441" href="http://function.fr/" target="_blank" rel="nofollow">Vincent Voyer</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-441" class="dsq-comment-body">
+            <div id="dsq-comment-message-441" class="dsq-comment-message"><p>Actually we did already refactor a lot of them and it was not so painful. It really depends on the usecase I guess.</p>
+<p>Doing find by class name can be tricky because you do not assert the underlying structure, and we need to. The structure could be completely broken and it would still work in the test.</p>
+<p>Unit testing is a lot about unit taste(ing) 🙂</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-442">
+        <div id="dsq-comment-header-442" class="dsq-comment-header">
+            <cite id="dsq-cite-442">
+                <a id="dsq-author-user-442" href="https://github.com/ColCh/" target="_blank" rel="nofollow">ColCh</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-442" class="dsq-comment-body">
+            <div id="dsq-comment-message-442" class="dsq-comment-message"><p>Agree. So, I didn&#8217;t know your case for testing 🙂 </p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-444">
+        <div id="dsq-comment-header-444" class="dsq-comment-header">
+            <cite id="dsq-cite-444">
+                <span id="dsq-author-user-444">Jon Perl</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-444" class="dsq-comment-body">
+            <div id="dsq-comment-message-444" class="dsq-comment-message"><p>Thank you this is super helpful. I also found your instant search feature through this &#8212; we are definitely using that in our next major project, that demo is insanely awesome.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-449">
+        <div id="dsq-comment-header-449" class="dsq-comment-header">
+            <cite id="dsq-cite-449">
+                <a id="dsq-author-user-449" href="http://function.fr/" target="_blank" rel="nofollow">Vincent Voyer</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-449" class="dsq-comment-body">
+            <div id="dsq-comment-message-449" class="dsq-comment-message"><p>AWESOME! Let us know how it goes</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-457">
+        <div id="dsq-comment-header-457" class="dsq-comment-header">
+            <cite id="dsq-cite-457">
+                <span id="dsq-author-user-457">franleplant</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-457" class="dsq-comment-body">
+            <div id="dsq-comment-message-457" class="dsq-comment-message"><p>Good resource, first of it&#8217;s kind. Good coverage of testing handlers</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-459">
+        <div id="dsq-comment-header-459" class="dsq-comment-header">
+            <cite id="dsq-cite-459">
+                <span id="dsq-author-user-459">Adam Beck</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-459" class="dsq-comment-body">
+            <div id="dsq-comment-message-459" class="dsq-comment-message"><p>How are you using mocha with this?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-472">
+        <div id="dsq-comment-header-472" class="dsq-comment-header">
+            <cite id="dsq-cite-472">
+                <span id="dsq-author-user-472">oksas</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-472" class="dsq-comment-body">
+            <div id="dsq-comment-message-472" class="dsq-comment-message"><p>Thanks so much for putting this together! The boiler plate project on GitHub is really useful 😀</p>
+<p>I followed all these steps and tried running my test command, only for npm to tell me that it couldn&#8217;t find &#8220;babel/register&#8221;, I presume because some of the changes to babel in version 6, I think? I&#8217;m not entirely sure what&#8217;s behind it, but to get around this, I had to run `npm install babel-register`, and in my mocha.opts file, change `js:babel/register` to `js:babel-register`, which did the trick 😀</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-473">
+        <div id="dsq-comment-header-473" class="dsq-comment-header">
+            <cite id="dsq-cite-473">
+                <span id="dsq-author-user-473">oksas</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-473" class="dsq-comment-body">
+            <div id="dsq-comment-message-473" class="dsq-comment-message"><p>Update! Apparently in the latest babel, the `register` bit is now part of the `babel-core` package and not the `babel` package, so a better solution to what I said above would be to simply use the `babel-core` package instead of `babel` (ie your package.json&#8217;s dependencies should have `babel-core` and not `babel`, I think?), and in mocha.opts, change `js:babel/register` to `js:babel-core/register` and all will be well. No need to separately install `babel-register` or anything like that.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-474">
+        <div id="dsq-comment-header-474" class="dsq-comment-header">
+            <cite id="dsq-cite-474">
+                <a id="dsq-author-user-474" href="http://function.fr/" target="_blank" rel="nofollow">Vincent Voyer</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-474" class="dsq-comment-body">
+            <div id="dsq-comment-message-474" class="dsq-comment-message"><p>Hi oksas, thanks for the comment. Can you open a github issue on the boilerplate project so we can fix it? Thanks</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-479">
+        <div id="dsq-comment-header-479" class="dsq-comment-header">
+            <cite id="dsq-cite-479">
+                <span id="dsq-author-user-479">oksas</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-479" class="dsq-comment-body">
+            <div id="dsq-comment-message-479" class="dsq-comment-message"><p>Just filed an issue. Sorry for the slowness!</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-481">
+        <div id="dsq-comment-header-481" class="dsq-comment-header">
+            <cite id="dsq-cite-481">
+                <a id="dsq-author-user-481" href="http://function.fr/" target="_blank" rel="nofollow">Vincent Voyer</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-481" class="dsq-comment-body">
+            <div id="dsq-comment-message-481" class="dsq-comment-message"><p>Fixed the repo and the article to work with babel6, thanks!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-482">
+        <div id="dsq-comment-header-482" class="dsq-comment-header">
+            <cite id="dsq-cite-482">
+                <a id="dsq-author-user-482" href="http://mariouher.com" target="_blank" rel="nofollow">Mario Uher</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-482" class="dsq-comment-body">
+            <div id="dsq-comment-message-482" class="dsq-comment-message"><p>Great article. However I did go for airbnb&#8217;s enzyme for now, because of the nicer API. Do you have any experience with it? Is there a way to use both libs together?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-483">
+        <div id="dsq-comment-header-483" class="dsq-comment-header">
+            <cite id="dsq-cite-483">
+                <a id="dsq-author-user-483" href="http://function.fr/" target="_blank" rel="nofollow">Vincent Voyer</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-483" class="dsq-comment-body">
+            <div id="dsq-comment-message-483" class="dsq-comment-message"><p>Thanks! Indeed we are also using enzyme now at Algolia but I think enzyme lacks a simple way to do JSX structure output comparison. Which still makes sense I think.</p>
+<p>Maybe you can help in adding that to enzyme?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-484">
+        <div id="dsq-comment-header-484" class="dsq-comment-header">
+            <cite id="dsq-cite-484">
+                <a id="dsq-author-user-484" href="http://function.fr/" target="_blank" rel="nofollow">Vincent Voyer</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-484" class="dsq-comment-body">
+            <div id="dsq-comment-message-484" class="dsq-comment-message"><p>It seems there&#8217;s an enzyme contains method that could just do that. But I don&#8217;t know the output of it: <a href="http://airbnb.io/enzyme/docs/api/ShallowWrapper/contains.html" rel="nofollow">http://airbnb.io/enzyme/docs/api/ShallowWrapper/contains.html</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-552">
+        <div id="dsq-comment-header-552" class="dsq-comment-header">
+            <cite id="dsq-cite-552">
+                <a id="dsq-author-user-552" href="http://www.gr0wing.com/" target="_blank" rel="nofollow">Gaël Blanchemain</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-552" class="dsq-comment-body">
+            <div id="dsq-comment-message-552" class="dsq-comment-message"><p>Thanks, those example where very helpful as I&#8217;m facing the same type of situation.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/modern-javascript-libraries-the-isomorphic-way/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2015/04/js-update-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2015/04/js-update-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2015/04/js-update-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/modern-javascript-libraries-the-isomorphic-way/'>Modern JavaScript libraries: the isomorphic way</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/announcing-instantsearch-js-everything-you-need-for-great-search-in-one-library/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2015/11/illus-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Algolia instantsearch.js" srcset="https://blog.algolia.com/wp-content/uploads/2015/11/illus-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2015/11/illus-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/announcing-instantsearch-js-everything-you-need-for-great-search-in-one-library/'>Announcing instantsearch.js: Everything you need for great search in one library</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fhow-we-unit-test-react-components-using-expect-jsx%2F&amp;t=How+we+unit+test+React+components+using+expect-jsx" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=How+we+unit+test+React+components+using+expect-jsx&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhow-we-unit-test-react-components-using-expect-jsx%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhow-we-unit-test-react-components-using-expect-jsx%2F&amp;title=How+we+unit+test+React+components+using+expect-jsx&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"4337 https:\/\/blog.algolia.com\/?p=4337","disqusShortname":"algoliablog","disqusTitle":"How we unit test React components using expect-jsx","disqusUrl":"https:\/\/blog.algolia.com\/how-we-unit-test-react-components-using-expect-jsx\/","options":{"manualSync":false},"postId":"4337"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'4337',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '4337' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

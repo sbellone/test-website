@@ -1,0 +1,867 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Why Android APK Format is a Mistake - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="While developing Algolia for Android, we came across a problem with the Android APK format. Learn about our APK design choices at the Algolia Blog!"/>
+<meta name="robots" content="noodp"/>
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Why Android APK Format is a Mistake Comments Feed" href="https://blog.algolia.com/why-android-apk-format-is-a-terrible-mistake/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=817' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fwhy-android-apk-format-is-a-terrible-mistake%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fwhy-android-apk-format-is-a-terrible-mistake%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=4F2718C404C9F8588C74AA44F6E3ADD6');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Why Android APK Format is a Mistake"/>
+  <meta property="og:url" content="https://blog.algolia.com/why-android-apk-format-is-a-terrible-mistake/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="When I started to develop for Android it appeared to me that an APK file was just an archive, a simple approach that you can find in many systems today. Files are extracted from the archive at installation and you can access them via the file-system.
+
+This seemed even more reasonable since Android"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png"/>
+  <meta property="article:published_time" content="2013-01-24T13:27:24+00:00"/>
+  <meta property="article:modified_time" content="2015-04-06T23:42:40+00:00" />
+  <meta property="og:updated_time" content="2015-04-06T23:42:40+00:00" />
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Why Android APK Format is a Mistake"/>
+  <meta itemprop="description" content="When I started to develop for Android it appeared to me that an APK file was just an archive, a simple approach that you can find in many systems today. Files are extracted from the archive at installation and you can access them via the file-system.
+
+This seemed even more reasonable since Android"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Why Android APK Format is a Mistake"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/why-android-apk-format-is-a-terrible-mistake/"/>
+  <meta name="twitter:description" content="When I started to develop for Android it appeared to me that an APK file was just an archive, a simple approach that you can find in many systems today. Files are extracted from the archive at installation and you can access them via the file-system.
+
+This seemed even more reasonable since Android"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-817 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-817" class="cf post-817 post type-post status-publish format-standard has-post-thumbnail hentry category-technology tag-android tag-development" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Why Android APK Format is a Mistake</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/25760a5d4e793e491f26da5db64bb738?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">julien</span> |
+                    <time class="updated entry-time" datetime="2013-01-24" itemprop="datePublished">January 24, 2013</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/why-android-apk-format-is-a-terrible-mistake/" title="Why Android APK Format is a Mistake">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png 720w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">When I started to develop for Android it appeared to me that an APK file was just an archive, a simple approach that you can find in many systems today. Files are extracted from the archive at installation and you can access them via the file-system.</p>
+<p>This seemed even more reasonable since Android uses Linux which is very good in respect to POSIX standards.</p>
+<p>But I was completely wrong! An APK is not a mere archive: the application starts from and uses the APK at runtime! This is a horrible decision that will probably hurt Android for a long time&#8230;</p>
+<p><strong>[Edit 28-Jan-2013]</strong> The goal of this post was to express my point of view about the bad properties of using directly the APK file at runtime versus relying on the file system. I used memory-mapped file to illustrate this but the post is incorrect on that topic. There is in fact a way to memory-map a file directly from the APK: you can use an extension for which files are stored uncompressed inside the APK (mp3, jpg, &#8230;) and use the <code>AssetManager.openFD()</code> or <code>Resources.openRawResourceFD()</code> to have offset/length inside the APK file.</p>
+<p>All my thanks to Jay Freeman for his excellent feedback. His comments helped me to understand my mistake and to improve our Android integration!<br />
+<strong>[/Edit]</strong><br />
+<span id="more-817"></span></p>
+<h3><a id="what-is-the-problem-with-the-apk-format" class="anchor" href="#what-is-the-problem-with-the-apk-format" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>What is the Problem with the APK format?</h3>
+<p>Let&#8217;s look at our own example. At Algolia, we have designed an efficient binary data-structure that is able to answer instant-search queries in just a few milliseconds, even with a very big data set (for example with all the world cities&#8217; names from Geonames: 3M+ entries). This data-structure is designed to be used directly on disk without being copied in memory. To obtain optimal performance, we use a <a href="http://en.wikipedia.org/wiki/Memory-mapped_file" target="_blank">memory-mapped file</a> which is standard on all platforms, especially on Linux.</p>
+<p>We have been able to use memory-mapped files on all platforms, except on Android!  In fact you can only retrieve an InputStream from a file packaged in an APK. So the only solution to use a memory-mapped file is to copy the resource from the APK on disk and then to use the file-system. This seems like re-implementing an installer in each application.</p>
+<h3><a id="is-the-apk-so-bad-why-did-they-design-it-this-way" class="anchor" href="#is-the-apk-so-bad-why-did-they-design-it-this-way" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Is the APK so bad? Why did they design it this way?</h3>
+<p>I imagine that Android developers chose this approach to solve some pitfalls of file-systems. I can think for example about solving performance problems when you have a lot of small files in one folder, or reducing the size of applications on the device (resources are compressed in the APK and decompressed only when the application uses them, which actually contributes to the sluggish image of Android).</p>
+<p>I may of course be wrong, there may be other more important reasons for this approach. But if not, Android should have thought more about the consequences of their choice: in the long term, the APK constraints are more serious than those small pitfalls that could have been solved in other ways.</p>
+<p>But wait&#8230; Android applications can contain dynamic libraries (.so files) via NDK. Isn&#8217;t it the principle of dynamic libraries to be memory-mapped? In fact I am pretty sure they discovered this problem when working on NDK since dynamic libraries are automatically extracted from APK file at installation and stored in an application directory in &#8216;/data/data&#8217;. I am wondering why they decided to implement this hack instead of fixing the problem&#8230;</p>
+<h3><a id="conclusion" class="anchor" href="#conclusion" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h3>
+<p>Developing an API, a SDK or worse, a whole platform, is extremely difficult. Let&#8217;s face it, it&#8217;s unavoidable to ship some badly designed components or inconsistent APIs. We definitely need to listen to developers&#8217; feedback even when it hurts. Actually, the real difficulty comes when it&#8217;s time to put things right without alienating existing users!</p>
+<p>By the way, if you know more about APK design choices, I&#8217;m interested to hear from you!</p>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fwhy-android-apk-format-is-a-terrible-mistake%2F&amp;t=Why+Android+APK+Format+is+a+Mistake" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Why+Android+APK+Format+is+a+Mistake&amp;url=https%3A%2F%2Fblog.algolia.com%2Fwhy-android-apk-format-is-a-terrible-mistake%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fwhy-android-apk-format-is-a-terrible-mistake%2F&amp;title=Why+Android+APK+Format+is+a+Mistake&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                <div class="tags-container"><ul class="tags"><li><a href="https://blog.algolia.com/tag/android/" rel="tag">Android</a></li><li><a href="https://blog.algolia.com/tag/development/" rel="tag">Development</a></li></ul></div>
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-64">
+        <div id="dsq-comment-header-64" class="dsq-comment-header">
+            <cite id="dsq-cite-64">
+                <span id="dsq-author-user-64">Kate</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-64" class="dsq-comment-body">
+            <div id="dsq-comment-message-64" class="dsq-comment-message"><p>Is it possible to copy the file to SD/main memory on first run?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-66">
+        <div id="dsq-comment-header-66" class="dsq-comment-header">
+            <cite id="dsq-cite-66">
+                <a id="dsq-author-user-66" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-66" class="dsq-comment-body">
+            <div id="dsq-comment-message-66" class="dsq-comment-message"><p>Yes this possible and is the only way I know to workaround APK limitation.<br />
+The consequence is that your first start can be long and you will need to have a waiting screen to give feedback to users.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-65">
+        <div id="dsq-comment-header-65" class="dsq-comment-header">
+            <cite id="dsq-cite-65">
+                <span id="dsq-author-user-65">Alberto Torres</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-65" class="dsq-comment-body">
+            <div id="dsq-comment-message-65" class="dsq-comment-message"><p>Correct me if I&#8217;m wrong, but I&#8217;m pretty sure you can have a file in the APK without zip compression, and you can natively read the APK itself! The reason the .so files are extracted is because they&#8217;re compressed by the SDK, and therefore they can&#8217;t be memory-mapped.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-67">
+        <div id="dsq-comment-header-67" class="dsq-comment-header">
+            <cite id="dsq-cite-67">
+                <a id="dsq-author-user-67" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-67" class="dsq-comment-body">
+            <div id="dsq-comment-message-67" class="dsq-comment-message"><p>Yes you can have uncompressed files in your APK (for example if your file is named .jpeg, .gif, .mpg, .mp3, &#8230;) but this does not mean you can memory-map this file. The only solution I can imagine would be to memory-map the whole APK file and try to interpret APK to find the part of APK that contains the given file, but it seems very dangerous.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-68">
+        <div id="dsq-comment-header-68" class="dsq-comment-header">
+            <cite id="dsq-cite-68">
+                <a id="dsq-author-user-68" href="http://www.saurik.com/" target="_blank" rel="nofollow">Jay Freeman (saurik)</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-68" class="dsq-comment-body">
+            <div id="dsq-comment-message-68" class="dsq-comment-message"><p>Instead, you use AssetManager&#8217;s openFd, which will return a file descriptor and an offset into that file where you can find the asset data. You do not need to &#8220;try to interpret APK to find the part&#8230;&#8221;, that is simply given to you. This is a common use case with audio files.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-71">
+        <div id="dsq-comment-header-71" class="dsq-comment-header">
+            <cite id="dsq-cite-71">
+                <a id="dsq-author-user-71" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-71" class="dsq-comment-body">
+            <div id="dsq-comment-message-71" class="dsq-comment-message"><p>You are right, this is the best workaround possible. This is still a workaround since it need to memory map the whole APK file.</p>
+<p>In our case this is not really acceptable since we develop a SDK that is embedded by developers in their app and this would put constraints on their app if they want to embed an index.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-72">
+        <div id="dsq-comment-header-72" class="dsq-comment-header">
+            <cite id="dsq-cite-72">
+                <a id="dsq-author-user-72" href="http://www.saurik.com/" target="_blank" rel="nofollow">Jay Freeman (saurik)</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-72" class="dsq-comment-body">
+            <div id="dsq-comment-message-72" class="dsq-comment-message"><p>I do not understand why this would possibly be a concern.</p>
+<p>You do realize that there is no cost to memory mapping a very large file, right? You still are going to end up with only a single VMA (&#8220;virtual memory area&#8221;, one of the more insidious costs of memory maps) in your memory map, and only pages you use will get paged in; if you wanted to memory map a 1GB large file, the only pain would be the loss of address space, and you have 2-3GB of that available.</p>
+<p>Additionally, you aren&#8217;t even correct that you have to memory map the entire file: as you have a file descriptor for the file and know the offset you want into the file, you can memory map just the part of the file you need. Both the C-level mmap API and the Java-level FileChannel.map API allow you to provide a specific offset and length for the region you want to map from the file.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-73">
+        <div id="dsq-comment-header-73" class="dsq-comment-header">
+            <cite id="dsq-cite-73">
+                <a id="dsq-author-user-73" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-73" class="dsq-comment-body">
+            <div id="dsq-comment-message-73" class="dsq-comment-message"><p>From a pure technical point of view, you are right.<br />
+But imagine you are an non expert client of our lib, just asking you to package an index as a mp3, jpeg (or whatever extension that is not compressed) file and pass the whole context to do all the mmap magic behind him seems crazy, no?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-74">
+        <div id="dsq-comment-header-74" class="dsq-comment-header">
+            <cite id="dsq-cite-74">
+                <a id="dsq-author-user-74" href="http://www.saurik.com/" target="_blank" rel="nofollow">Jay Freeman (saurik)</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-74" class="dsq-comment-body">
+            <div id="dsq-comment-message-74" class="dsq-comment-message"><p>Your arguments have all been technical arguments, though: you started with a complaint that the file format was fundamentally inefficient for your use case as it isn&#8217;t possible to memory map out of the file, and then switched to this weird complaint that you&#8217;d have to memory map &#8220;the whole file&#8221;, as that would somehow &#8220;constrain&#8221; the app.</p>
+<p>The fact is that there is simply not a technical issue here: what you are trying to do is fully supported and will cause no loss of efficiency. Android really does assume that people (including their UI frameworks) will want to memory map files directly out of the APK distribution format, and has gone out of their way (zipalign) to make this quite easy.</p>
+<p>Now you seem to be arguing that the user of your library will care how your library works: no, as a user of various libraries, I really don&#8217;t care how much &#8220;magic&#8221; they have to do behind the scenes; especially in this case, as you already claim your technical advantage includes understanding how mmap works (ironic, huh? ;P).</p>
+<p>Yes: I will have to give you a reference to my Context; however, that&#8217;s really how Android APIs usual works: almost every API of merit&#8211;including the entire UI system&#8211;is based on being given a Context and a set of resource identifiers. This sounds like a great way for your library to work as well: I give you a Context, and the resource ID of the index.</p>
+<p>What this leaves is the idea that the user will be horribly confused by having to rename the index they generate with some unrelated file extension. FWIW, I agree: but that&#8217;s not a limitation of the APK file format, and it certainly doesn&#8217;t mean that APK itself &#8220;is a terrible mistake&#8221;; instead, it is a problem with the interaction of aapt and ADT.</p>
+<p>So, instead of this massive public rant about how the APK file format is fundamentally inefficient, how it was &#8220;a terrible mistake&#8221;, how the developers who designed it &#8220;should have thought more about the consequences of their choice&#8221;, you should really just be ranting about how ADT doesn&#8217;t make it easy to pass arguments to aapt.</p>
+<p>(Or, you know, not ranting at all: I maintain that this would have made a great question on StackOverflow. ;P)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-76">
+        <div id="dsq-comment-header-76" class="dsq-comment-header">
+            <cite id="dsq-cite-76">
+                <a id="dsq-author-user-76" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-76" class="dsq-comment-body">
+            <div id="dsq-comment-message-76" class="dsq-comment-message"><p>First of all, thank you for your comments, you took time to reply and give technical arguments. I am very sorry that I did not took this time to write a correct answer to your feedback before this one.</p>
+<p>As I explained I found this issue when working on the packaging of an binary file that must be memory-mapped within an Android App. I needed a solution that works with all Android versions and that can be used by any developers.</p>
+<p>To be fully transparent, I was focused on compressed resources because of the 1MB limit on uncompressed file in Android = 2.3 (no acceptable in our case)</p>
+<p>I also agree with you that you can just fix APK (everything is possible with code&#8230;). One limit have already been fixed (1MB limit of uncompressed file) and I am sure they will fix the other issue related to the file extension.</p>
+<p>The goal of this post was to express my point of view, I am still convinced that it would have been better to directly rely on file system, a least it would have avoid these issues.</p>
+<p>Btw I will add an edit at the beginning of the post, and once again thank a lot for your comments.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-78">
+        <div id="dsq-comment-header-78" class="dsq-comment-header">
+            <cite id="dsq-cite-78">
+                <a id="dsq-author-user-78" href="http://www.saurik.com/" target="_blank" rel="nofollow">Jay Freeman (saurik)</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-78" class="dsq-comment-body">
+            <div id="dsq-comment-message-78" class="dsq-comment-message"><p>First, assuming this were actually true, it isn&#8217;t something wrong with the &#8220;APK format&#8221;; like, you say &#8220;you can just fix APK&#8221;, but the APK format isn&#8217;t the problem here, it is the thing that loads it: based on the concept of what an APK is supposed to be, you were able to construct that APK just fine&#8230; there are no changes to APK required for you to have that large file.</p>
+<p>The filename extension thing is definitely irritating, but it is a problem with aapt, not the APK format. You could again see an article talking about how it was an oversight to not allow developers to pass command-line arguments through to aapt from their Eclipse project, but that is certainly not an APK issue: the APK file format itself, and even the aapt tool, happily support passing random file extensions for purposes of &#8220;this is not compressed&#8221;.</p>
+<p>What I would do in this situation (having to tell developers to use weird filenames to make their projects easy to do in Eclipse) is file this issue (along with the trivia patch) against the ADT (again: just Eclipse is an issue here), and then write a technical blog post about how not only was this suboptimal but how you are the reason it got fixed. In the documentation, you could explain that a workaround until these patches hit (or for older SDK builds) is to use a silly extension.</p>
+<p>I also will happily agree that there are benefits to simply using the filesystem APIs, which would have allowed for the reuse of more C code from other systems that already is developed against things like &#8220;open&#8221; and &#8220;mmap&#8221;. However, this is a high-level API design tradeoff for which there is then an interesting discussion to be had about &#8220;is it worth it vs. what we lose elsewhere&#8221;.</p>
+<p>Regardless, this brings me to the yet-another technical constraint you are stating keeps you from using this feature, and this one still isn&#8217;t correct :(. The UNCOMPRESS_DATA_MAX limit from Android versions before 2.3 actually applies to the in-memory uncompressed buffer used for /compressed/ files. If you are getting that error, then your file is not being stored uncompressed: it is being stored compressed. If Android gave that error on files such as MP3 and PNG, it would have been unshippable, as those are /often/ larger than 1MB.</p>
+<p>Therefore, this continues to simply be &#8220;we didn&#8217;t pay enough attention to what the actual constraints here are&#8221;. On all versions of Android, you can ship an uncompressed file of arbitrary size in an APK, and that file will be capable of being easily mmap&#8217;d using high-level APIs provided by Google. Sadly, this does mean that if you use aapt to generate your APK, and you are running aapt from Eclipse, you will have to give the file a silly extension, as there is nothing in the Eclipse ADT UI that allows you to pass the &#8220;-0idx&#8221; argument to aapt that would let you use the .idx file extension for an uncompressed file. If you don&#8217;t believe me, I&#8217;ve provided the evidence from the Android source code tree below.</p>
+<p>But&#8230; that left the question &#8220;how are your current instructions working at all&#8221;: you claim that you are telling people to put the file in res/raw so it ends up in your APK as a compressed asset, and that thereby avoids that size limitation (but at the cost of requiring the file to be copied to a temporary file in order to be memory mapped). But, that should not actually help, as this error actually only happens if you use compressed files: storing the file compressed should actually cause this problem. I was thinking of going through your instructions, but apparently rather than shipping a simple Java command-line app that generates an index I&#8217;d have to install a CPU patch, setup the Android emulator, and do a bunch of work in Eclipse to get a static index (none of which I&#8217;d do even if I wanted to use your library: it would be critical for me to have fully automatable build processes ;P).</p>
+<p>However, what I could do, is just use the exact sample code you specified for how to extract the asset (with .openRawResource), and to just place a dummy file as you specified into res/raw. I did this on Android 2.1, with an asset that was larger than 1MB; and, as expected, it didn&#8217;t work if I saved it compressed by naming it &#8220;geonames.idx&#8221;: I got an IOException when I tried to read from the InputStream, and I got the &#8220;Data exceeds UNCOMPRESS_DATA_MAX&#8221; error. As also is now expected, renaming the file to &#8220;geonames.mp3&#8221; solved the problem. Uncompressed files really do work, at which point you can either stream them or memory map them; if you saved them compressed, however, in addition to getting the performance issue, it also will not work on Android 2.2 and below.</p>
+<p> Your instructions are thereby attempting to work around a bug in reverse and are actually /causing/ the bug you are trying to avoid. As in, you are now claiming that there is a technical failing of APK that you needed to work around, but in fact it is your workaround that causes the problem and the instructions you put on your website don&#8217;t actually work. You really just need to have your users store the assets in the file uncompressed (possibly submitting a patch to ADT to help them not use silly file extenions), and then use the openFd to let your library memory map the file. This really isn&#8217;t a problem with Android, but it apparently is still a bug in your library. ;P</p>
+<p>========================</p>
+<p>Here is the actual code that was removed, and as you can see it is in _CompressedAsset::getBuffer, as the old code used to allocate a single massive memory block in which to uncompress the contents of the compressed asset. The change they made in Android 2.3-ish was to allow these compressed assets to be streamed as they are decompressed.</p>
+<p>@@ -817,12 +833,6 @@ const void* _CompressedAsset::getBuffer(bool wordAligned)<br />
+     if (mBuf != NULL)<br />
+         return mBuf;<br />
+&#8211;    if (mUncompressedLen &gt; UNCOMPRESS_DATA_MAX) {<br />
+&#8211;        LOGD(&#8220;Data exceeds UNCOMPRESS_DATA_MAX (%ld vs %d)n&#8221;,<br />
+&#8211;            (long) mUncompressedLen, UNCOMPRESS_DATA_MAX);<br />
+&#8211;        goto bail;<br />
+&#8211;    }<br />
+&#8211;<br />
+     /*<br />
+      * Allocate a buffer and read the file into it.<br />
+      */</p>
+<p>Here is the commit message that removed this error; again, you can see that this change has to do with compressed assets, not uncompressed assets. If you still don&#8217;t believe me, I can go back to a 2.2 device and scrounge around until I find an actual shipped uncompressed asset that is larger than this cutoff (which I&#8217;m certain I will be able to, due to wallpapers and fonts).</p>
+<p>&gt; Support streaming of compressed assets &gt; 1 megabyte<br />
+&gt; Compressed assets larger than one megabyte are now decompressed on demand rather than being decompressed in their entirety and held in memory. Reading the data in order is relatively efficient, as is seeking forward in the stream. Seeking backwards is supported, but requires reprocessing the compressed data from the beginning, so is very inefficient.<br />
+&gt; In addition, the size limit on compressed assets has been eliminated.</p>
+<p>Here is a response to someone with this issue on the Android-Developers mailing list, where we see the workaround proposed is to store the asset uncompressed and memory map it, instead of relying on the compressed asset storage mechanism. This is also the workaround that people propose on sites like StackOverflow for this particular error message.</p>
+<p>&gt; This is baked into the Android framework.  It&#8217;s not something you can change unless you&#8217;re building your own platform.<br />
+&gt; If the data is uncompressed and aligned (with zipalign) it can be memory-mapped directly, which is easier on the system than dedicating a large piece of physical memory to hold the entire uncompressed file. </p>
+<p><a href="https://groups.google.com/forum/?fromgroups#!topic/android-developers/YnHXirqT1-k" rel="nofollow">https://groups.google.com/forum/?fromgroups#!topic/android-developers/YnHXirqT1-k</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-79">
+        <div id="dsq-comment-header-79" class="dsq-comment-header">
+            <cite id="dsq-cite-79">
+                <a id="dsq-author-user-79" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-79" class="dsq-comment-body">
+            <div id="dsq-comment-message-79" class="dsq-comment-message"><p>Wow, I definitively missed a lot of important information when I worked on mmap on Android, thanks a lot to have corrected my mystakes.</p>
+<p>I will fix our lib and change the edit at the beginning of the post.</p>
+<p>Btw if you have some time to look at our product, your feedbacks will be more than welcome, you have already contributed to improve it with these comments.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-69">
+        <div id="dsq-comment-header-69" class="dsq-comment-header">
+            <cite id="dsq-cite-69">
+                <a id="dsq-author-user-69" href="http://www.saurik.com/" target="_blank" rel="nofollow">Jay Freeman (saurik)</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-69" class="dsq-comment-body">
+            <div id="dsq-comment-message-69" class="dsq-comment-message"><p>The .so files have to be extracted not because they cannot be memory mapped (I mean, if nothing else, the SDK could have been modified trivially): it is because the standard system executable loader is used, which is not capable of interpreting embedded files.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-70">
+        <div id="dsq-comment-header-70" class="dsq-comment-header">
+            <cite id="dsq-cite-70">
+                <a id="dsq-author-user-70" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-70" class="dsq-comment-body">
+            <div id="dsq-comment-message-70" class="dsq-comment-message"><p>I agree, I mixed two topics: the fact to have a file on file system and the mapping of this file in memory. Having a file on disk is a strong requirement to reuse unix dynamic libs loading (via LD_LIBRARY_PATH). Then the memory mapping is also required to reuse the loader as it.</p>
+<p>At the end the APK constraints are not the best to reuse existing tools/code that was build on file systems abstraction and POSIX properties.</p>
+<p>Btw I think an evolution of the APK format could be to have 2 parts:</p>
+<p> &#8211; a part what contains compressed data and stay on disk to launch the app<br />
+ &#8211; a part that is only used only for installation: extract uncompressed files and store them on file system.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-75">
+        <div id="dsq-comment-header-75" class="dsq-comment-header">
+            <cite id="dsq-cite-75">
+                <a id="dsq-author-user-75" href="http://www.saurik.com/" target="_blank" rel="nofollow">Jay Freeman (saurik)</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-75" class="dsq-comment-body">
+            <div id="dsq-comment-message-75" class="dsq-comment-message"><p>This is a fair point (and, in truth, this is my primary complaint about the way asset management is handled on Android: that it makes it difficult to reuse existing Unix tools, as the entire concept is incompatible with the standard filesystem APIs); however, for your specific use case (you need to memory map a single file out of the APK) they have you covered quite well.</p>
+<p>On the other side, the way Android is currently setup allows you to have efficient access to large assets while also being able to store the exact original package, signed and verified by the developer, with no duplication of storage. This is a compelling benefit that is worth at least some cost, although whether it is the right tradeoff would make an interesting conversation.</p>
+<p>It is not, however, at all clear that it is &#8220;a terrible mistake&#8221; or that these &#8220;constraints are more serious than those small pitfalls&#8221;; and it is simply not true that this &#8220;actually contributes to the sluggish image of Android&#8221;, as almost all resources where this would matter are actually stored uncompressed and are already being memory mapped directly from the APK.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-77">
+        <div id="dsq-comment-header-77" class="dsq-comment-header">
+            <cite id="dsq-cite-77">
+                <a id="dsq-author-user-77" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-77" class="dsq-comment-body">
+            <div id="dsq-comment-message-77" class="dsq-comment-message"><p>Yes I agree, my approach of this post was not good. I took one technical example instead of talking about the real topic : Files packaged in a signed archive and extracted on file system versus a signed package used without extraction (APK).</p>
+<p>Btw, for me the memory-mapping of file is not &#8220;covered quite well&#8221;, see my other detailed reply, there is too constraints to be well covered.</p>
+<p>Another think you probably noticed: the title is not &#8220;terrible mistake&#8221; but &#8220;mistake&#8221;, I just forgot to removed terrible from the URL (terrible mistake was my first title but I did not found it honest).</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-80">
+        <div id="dsq-comment-header-80" class="dsq-comment-header">
+            <cite id="dsq-cite-80">
+                <span id="dsq-author-user-80">abhishek</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-80" class="dsq-comment-body">
+            <div id="dsq-comment-message-80" class="dsq-comment-message"><p>any enormous data which make it sluggish will not be kept in assets, btw i really liked the compact and all complete apk package modeling.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/need-performance-on-mobile-use-c-cpp/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/need-performance-on-mobile-use-c-cpp/'>C/C++ is still the only way to have high performance on Mobile</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'>Online Search in the Cloud: Version is in Beta!</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fwhy-android-apk-format-is-a-terrible-mistake%2F&amp;t=Why+Android+APK+Format+is+a+Mistake" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Why+Android+APK+Format+is+a+Mistake&amp;url=https%3A%2F%2Fblog.algolia.com%2Fwhy-android-apk-format-is-a-terrible-mistake%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fwhy-android-apk-format-is-a-terrible-mistake%2F&amp;title=Why+Android+APK+Format+is+a+Mistake&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"817 http:\/\/blog.algolia.com\/?p=817","disqusShortname":"algoliablog","disqusTitle":"Why Android APK Format is a Mistake","disqusUrl":"https:\/\/blog.algolia.com\/why-android-apk-format-is-a-terrible-mistake\/","options":{"manualSync":false},"postId":"817"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'817',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '817' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

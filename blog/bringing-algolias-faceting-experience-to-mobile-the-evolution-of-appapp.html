@@ -1,0 +1,649 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Bringing Algolia’s faceting experience to mobile–the evolution of AppApp - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Bringing Algolia’s faceting experience to mobile–the evolution of AppApp Comments Feed" href="https://blog.algolia.com/bringing-algolias-faceting-experience-to-mobile-the-evolution-of-appapp/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=4625' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fbringing-algolias-faceting-experience-to-mobile-the-evolution-of-appapp%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fbringing-algolias-faceting-experience-to-mobile-the-evolution-of-appapp%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=1876572B595C25A3D8794F204A413C4C');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Bringing Algolia’s faceting experience to mobile–the evolution of AppApp"/>
+  <meta property="og:url" content="https://blog.algolia.com/bringing-algolias-faceting-experience-to-mobile-the-evolution-of-appapp/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="We built Algolia to make search easier for everyone, and a lot of our customers implement search within already existing websites or mobile applications.
+
+But then we also have customers like AppApp.
+
+AppApp, an independent search engine for the iOS App Store, was actually conceived after its fo"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2015/12/appappio1.png"/>
+  <meta property="article:published_time" content="2015-12-08T23:46:22+00:00"/>
+  <meta property="article:modified_time" content="2016-06-03T10:47:18+00:00" />
+  <meta property="og:updated_time" content="2016-06-03T10:47:18+00:00" />
+  <meta property="article:section" content="Customers"/>
+  <meta property="article:section" content="Design"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Bringing Algolia’s faceting experience to mobile–the evolution of AppApp"/>
+  <meta itemprop="description" content="We built Algolia to make search easier for everyone, and a lot of our customers implement search within already existing websites or mobile applications.
+
+But then we also have customers like AppApp.
+
+AppApp, an independent search engine for the iOS App Store, was actually conceived after its fo"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2015/12/appappio1.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Bringing Algolia’s faceting experience to mobile–the evolution of AppApp"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/bringing-algolias-faceting-experience-to-mobile-the-evolution-of-appapp/"/>
+  <meta name="twitter:description" content="We built Algolia to make search easier for everyone, and a lot of our customers implement search within already existing websites or mobile applications.
+
+But then we also have customers like AppApp.
+
+AppApp, an independent search engine for the iOS App Store, was actually conceived after its fo"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2015/12/appappio1.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-4625 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-4625" class="cf post-4625 post type-post status-publish format-standard has-post-thumbnail hentry category-customers category-design tag-amazon tag-apple tag-apps tag-components tag-design tag-facets tag-implementation tag-mobile" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Bringing Algolia’s faceting experience to mobile–the evolution of AppApp</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/37e607f71b47cc1e06a61e51d9cf5770?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">Guillaume Dumortier</span> |
+                    <time class="updated entry-time" datetime="2015-12-08" itemprop="datePublished">December 8, 2015</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/customers/" rel="category tag">Customers</a>, <a href="https://blog.algolia.com/category/design/" rel="category tag">Design</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/bringing-algolias-faceting-experience-to-mobile-the-evolution-of-appapp/" title="Bringing Algolia’s faceting experience to mobile–the evolution of AppApp">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2015/12/appappio.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2015/12/appappio.png 720w, https://blog.algolia.com/wp-content/uploads/2015/12/appappio-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2015/12/appappio-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">We built Algolia to make search easier for everyone, and a lot of our customers implement search within already existing websites or mobile applications.</p>
+<p>But then we also have customers like <a href="http://appapp.io">AppApp</a>.</p>
+<p>AppApp, an independent search engine for the iOS App Store, was actually conceived after its founders realized the potential of Algolia while building solutions for existing clients. Based on faceting, grouping search results into categories, AppApp lets you search within the official App Store in ways the native search does not allow. AppApp immediately saw an opportunity to bring this faceting functionality to their mobile interface and reached out to us to share their process. Dan Singerman, its founder, explains.</p>
+<hr />
+<p>&nbsp;</p>
+<p><strong>Faceting with Algolia</strong></p>
+<p>With a <a href="https://demo.algolia.com/examples/instant-search-result-page-jquery/">typical desktop faceted search design</a>, the instant nature of Algolia&#8217;s faceting allows you to quickly see the breadth of data, understand the results of your actions and know whether you have applied overly specific criteria. Toggling a filter takes fractions of a second, so there is very little perceived cost to experimenting with filter combinations to produce the desired results.</p>
+<p>Algolia obviously offers a great faceting experience, but the wheels were in motion—how do you fit it into a mobile design?</p>
+<p><strong>Making it work for mobile</strong></p>
+<p>From the beginning, we wanted the search results to visibly change as the faceting was taking place. This is, after all, the essence of instant search. Most mobile faceting interfaces take you to a separate page when refinements are applied, and you lose the instant feedback you get with a desktop design.</p>
+<p>A good example of this is Amazon.com. While they have a beautiful interface, a user would be unlikely to experiment with a large number of different faceting criteria. Who wants to keep navigating back and forth between the search categories and the results?</p>
+<img class="aligncenter wp-image-4645 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/12/1.png" alt="1" width="600" height="200" srcset="https://blog.algolia.com/wp-content/uploads/2015/12/1.png 600w, https://blog.algolia.com/wp-content/uploads/2015/12/1-320x107.png 320w" sizes="(max-width: 600px) 100vw, 600px" />
+<p><strong><br />
+Building AppApp.io for mobile</strong></p>
+<p>Our first mobile implementation was a naive attempt to replicate the desktop approach with facets vertically aligned alongside results.</p>
+<img class="aligncenter wp-image-4634 size-large" src="https://blog.algolia.com/wp-content/uploads/2015/12/image10-238x400.jpg" alt="image10" width="238" height="400" srcset="https://blog.algolia.com/wp-content/uploads/2015/12/image10-238x400.jpg 238w, https://blog.algolia.com/wp-content/uploads/2015/12/image10-106x178.jpg 106w, https://blog.algolia.com/wp-content/uploads/2015/12/image10.jpg 372w" sizes="(max-width: 238px) 100vw, 238px" />
+<p>It was immediately obvious that this was not going to be successful. The touch targets for the facets were far too small, and the design would not extend to support the large number of facet categories and values we were planning to have. We realized that showing the facet categories and their values simultaneously with the results was just not going to be possible on a mobile screen.</p>
+<p>Our next iteration moved the facet values into a modal while leaving the facet categories vertically aligned with the results.</p>
+<p>This iteration allowed facet selection to instantly update the search results, even if it was occurring in the background. Given that we didn’t have the space of a desktop, we felt this was a good compromise. The more pressing issue with this approach was that on a mobile device, the result set was very narrow and did not make good use of space.</p>
+<p>With apps, text descriptions alone do not give a good sense of whether an app is what you’re searching for. We like the official App Store’s approach of showing screen shots in line with results and wanted to replicate that in our design. Because of this, we felt that constraining the search results to only two thirds the width of a mobile screen was not optimal. We wanted to make use of the full width available whilst also having an effective faceting interface.</p>
+<p>So our next iteration did just that.</p>
+<img class="aligncenter wp-image-4641 size-large" src="https://blog.algolia.com/wp-content/uploads/2015/12/image19-240x400.jpg" alt="image19" width="240" height="400" srcset="https://blog.algolia.com/wp-content/uploads/2015/12/image19-240x400.jpg 240w, https://blog.algolia.com/wp-content/uploads/2015/12/image19-107x178.jpg 107w, https://blog.algolia.com/wp-content/uploads/2015/12/image19.jpg 372w" sizes="(max-width: 240px) 100vw, 240px" />
+<p>We floated the faceting component over the results and moved it below the default title position for the first result so the title wasn’t hidden. Now we had full width results alongside facets. In retrospect, this was a bad idea. Nobody wants components to sit permanently on top of each other. What were we thinking? But trying this on a real device very quickly told us that.</p>
+<p>So, our next evolution allowed the floating facet component to be hidden.</p>
+<img class="aligncenter size-full wp-image-4647" src="https://blog.algolia.com/wp-content/uploads/2015/12/3.png" alt="3" width="600" height="200" srcset="https://blog.algolia.com/wp-content/uploads/2015/12/3.png 600w, https://blog.algolia.com/wp-content/uploads/2015/12/3-320x107.png 320w" sizes="(max-width: 600px) 100vw, 600px" />
+<p>This was definitely an improvement in that the facet controls could be hidden so as not to obscure the result set, but it felt unnatural. You had to actively decide to hide the facets when scrolling through the results if you wanted to be unencumbered by the floating facet component. Weren’t facets the whole point of this project? This wasn’t going to work, but it did take us another step toward our current design.</p>
+<p><strong>We figured it out—our current design</strong></p>
+<img class="alignleft" src="http://i.giphy.com/3o8doY0yP4gBPrA8XC.gif" alt="AppApp" width="185" height="329" />
+<p>We wanted facets (filters) that would appear consistently when activated by the user but naturally disappear as the user focused on the results. We moved the facet control below the search box and added a tab so it can be opened in a drawer-like fashion.</p>
+<p>We chose to label the tab instead of assigning it an icon because we felt an icon alone would not be a strong or clear enough call to action. We decided on the label ‘filters’ because we thought this would be much more meaningful to users than ‘facets’ or ‘refinements’. We also made the tab bright orange so it would stand out to users and could not be easily overlooked.</p>
+<p>The facet drawer also naturally closes as you start to scroll, which gives the results more screen real estate.</p>
+<p><strong>Does it work?</strong></p>
+<p>The initial evidence is positive for this approach. Since launching a month ago, our analytics tell us that 61% of users on mobile interact with the facet controls via this interface. While we’d definitely like to increase that number, this is a good start. The analytics also show that users who interact with this control do indeed try many different combinations of facets. Ultimately, we’re pleased with the results, even though it took several iterations to get here, and continue to be impressed by the faceting capabilities of Algolia that inspired this project.</p>
+<p><em>Illustration by <a href="https://dribbble.com/srioz">Martin David</a></em></p>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fbringing-algolias-faceting-experience-to-mobile-the-evolution-of-appapp%2F&amp;t=Bringing+Algolia%E2%80%99s+faceting+experience+to+mobile%E2%80%93the+evolution+of+AppApp" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Bringing+Algolia%E2%80%99s+faceting+experience+to+mobile%E2%80%93the+evolution+of+AppApp&amp;url=https%3A%2F%2Fblog.algolia.com%2Fbringing-algolias-faceting-experience-to-mobile-the-evolution-of-appapp%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fbringing-algolias-faceting-experience-to-mobile-the-evolution-of-appapp%2F&amp;title=Bringing+Algolia%E2%80%99s+faceting+experience+to+mobile%E2%80%93the+evolution+of+AppApp&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                <div class="tags-container"><ul class="tags"><li><a href="https://blog.algolia.com/tag/amazon/" rel="tag">Amazon</a></li><li><a href="https://blog.algolia.com/tag/apple/" rel="tag">Apple</a></li><li><a href="https://blog.algolia.com/tag/apps/" rel="tag">apps</a></li><li><a href="https://blog.algolia.com/tag/components/" rel="tag">components</a></li><li><a href="https://blog.algolia.com/tag/design/" rel="tag">design</a></li><li><a href="https://blog.algolia.com/tag/facets/" rel="tag">Facets</a></li><li><a href="https://blog.algolia.com/tag/implementation/" rel="tag">Implementation</a></li><li><a href="https://blog.algolia.com/tag/mobile/" rel="tag">mobile</a></li></ul></div>
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-458">
+        <div id="dsq-comment-header-458" class="dsq-comment-header">
+            <cite id="dsq-cite-458">
+                <span id="dsq-author-user-458">Sharad Agarwal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-458" class="dsq-comment-body">
+            <div id="dsq-comment-message-458" class="dsq-comment-message"><p>are there any apps currently using this?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-469">
+        <div id="dsq-comment-header-469" class="dsq-comment-header">
+            <cite id="dsq-cite-469">
+                <span id="dsq-author-user-469">Jaya Kumar</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-469" class="dsq-comment-body">
+            <div id="dsq-comment-message-469" class="dsq-comment-message"><p>[Click here](javascript:alert(1))</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-470">
+        <div id="dsq-comment-header-470" class="dsq-comment-header">
+            <cite id="dsq-cite-470">
+                <span id="dsq-author-user-470">Jaya Kumar</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-470" class="dsq-comment-body">
+            <div id="dsq-comment-message-470" class="dsq-comment-message"><p>[click this link](data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4K)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/announcing-instantsearch-js-everything-you-need-for-great-search-in-one-library/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2015/11/illus-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Algolia instantsearch.js" srcset="https://blog.algolia.com/wp-content/uploads/2015/11/illus-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2015/11/illus-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/announcing-instantsearch-js-everything-you-need-for-great-search-in-one-library/'>Announcing instantsearch.js: Everything you need for great search in one library</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/reveal-the-hacker-within-build-a-better-search-experience-for-free-with-algolias-new-hacker-plan-4/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2015/11/algorythm1-720x400-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2015/11/algorythm1-720x400-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2015/11/algorythm1-720x400-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/reveal-the-hacker-within-build-a-better-search-experience-for-free-with-algolias-new-hacker-plan-4/'>Reveal the Hacker Within: Build a Better Search Experience for Free with Algolia’s new Hacker Plan</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fbringing-algolias-faceting-experience-to-mobile-the-evolution-of-appapp%2F&amp;t=Bringing+Algolia%E2%80%99s+faceting+experience+to+mobile%E2%80%93the+evolution+of+AppApp" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Bringing+Algolia%E2%80%99s+faceting+experience+to+mobile%E2%80%93the+evolution+of+AppApp&amp;url=https%3A%2F%2Fblog.algolia.com%2Fbringing-algolias-faceting-experience-to-mobile-the-evolution-of-appapp%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fbringing-algolias-faceting-experience-to-mobile-the-evolution-of-appapp%2F&amp;title=Bringing+Algolia%E2%80%99s+faceting+experience+to+mobile%E2%80%93the+evolution+of+AppApp&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"4625 https:\/\/blog.algolia.com\/?p=4625","disqusShortname":"algoliablog","disqusTitle":"Bringing Algolia\u2019s faceting experience to mobile\u2013the evolution of AppApp","disqusUrl":"https:\/\/blog.algolia.com\/bringing-algolias-faceting-experience-to-mobile-the-evolution-of-appapp\/","options":{"manualSync":false},"postId":"4625"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'4625',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '4625' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

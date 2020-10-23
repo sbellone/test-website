@@ -1,0 +1,917 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Why JSONP is still Mandatory - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="Learn how Algolia uses JSONP and CORS to support search queries directly from many different browsers, contributing to our rapid search as a service engine."/>
+<meta name="robots" content="noodp"/>
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Why JSONP is still Mandatory Comments Feed" href="https://blog.algolia.com/jsonp-still-mandatory/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=2294' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fjsonp-still-mandatory%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fjsonp-still-mandatory%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=229124017E258A79E06E0437D1DFB306');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Why JSONP is still Mandatory"/>
+  <meta property="og:url" content="https://blog.algolia.com/jsonp-still-mandatory/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="At Algolia, we are convinced that search queries need to be sent directly from the browser (or mobile app) to the search-engine in order to have a realtime search experience. This is why we have developed a search backend that replies within a few milliseconds through an API that handles security wh"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2014/05/jsonp.png"/>
+  <meta property="article:published_time" content="2014-05-14T15:51:15+00:00"/>
+  <meta property="article:modified_time" content="2015-04-16T14:30:57+00:00" />
+  <meta property="og:updated_time" content="2015-04-16T14:30:57+00:00" />
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Why JSONP is still Mandatory"/>
+  <meta itemprop="description" content="At Algolia, we are convinced that search queries need to be sent directly from the browser (or mobile app) to the search-engine in order to have a realtime search experience. This is why we have developed a search backend that replies within a few milliseconds through an API that handles security wh"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2014/05/jsonp.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Why JSONP is still Mandatory"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/jsonp-still-mandatory/"/>
+  <meta name="twitter:description" content="At Algolia, we are convinced that search queries need to be sent directly from the browser (or mobile app) to the search-engine in order to have a realtime search experience. This is why we have developed a search backend that replies within a few milliseconds through an API that handles security wh"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2014/05/jsonp.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-2294 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-2294" class="cf post-2294 post type-post status-publish format-standard has-post-thumbnail hentry category-technology tag-ajax tag-dev tag-javascript tag-jsonp" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Why JSONP is still Mandatory</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/25760a5d4e793e491f26da5db64bb738?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">julien</span> |
+                    <time class="updated entry-time" datetime="2014-05-14" itemprop="datePublished">May 14, 2014</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/jsonp-still-mandatory/" title="Why JSONP is still Mandatory">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2014/05/jsonp-720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/05/jsonp.png 720w, https://blog.algolia.com/wp-content/uploads/2014/05/jsonp-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2014/05/jsonp-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">At Algolia, we are convinced that search queries need to be sent directly from the browser (or mobile app) to the search-engine in order to have a realtime search experience. This is why we have developed a search backend that replies within a few milliseconds through an API that <a href="http://blog.algolia.com/handle-security-realtime-search/">handles security</a> when called from the browser.</p>
+<h2><a id="cross-domain-requests" class="anchor" href="#cross-domain-requests" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Cross domain requests</h2>
+<p>For security reasons, the default behavior of a web browser is to block all queries that are going to a domain that is different from the website they are sent from. So when using an external HTTP-based search API, all your queries should be blocked because they are sent to an external domain. There are two methods to call an external API from the browser:</p>
+<h3><a id="%c2%a0jsonp" class="anchor" href="#%c2%a0jsonp" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a> JSONP</h3>
+<p>The <a href="http://en.wikipedia.org/wiki/JSONP">JSONP</a> approach is a workaround that consists of calling an external API  with a DOM <span class="lang:default decode:true  crayon-inline">&lt;script&gt;</span>  tag. The <span class="lang:default decode:true  crayon-inline">&lt;script&gt;</span> tag is allowed to load content from any domains without security restrictions. The targeted API needs to expose a HTTP GET endpoint and return Javascript code instead of the regular JSON data. You can use this jQuery code to dynamically call a JSONP URL:</p>
+<pre class="lang:js decode:true">$.getJSON( "http://api.algolia.io/1/indexes/users?query=test", function( data ) { .... }</pre>
+<p>In order to retrieve the API answer from the newly included JavaScript code, jQuery automatically appends a callback argument to your URL (for example <span class="lang:default decode:true  crayon-inline">&amp;callback=method12</span> ) which must be called by the JavaScript code that your API generates.</p>
+<p><span style="line-height: 1.5em;">This is what a regular JSON reply would look like: </span></p>
+<pre class="lang:js decode:true">{
+  "results": [ ...]
+}</pre>
+<p>Instead, the JSONP-compliant API generates:</p>
+<pre class="lang:js decode:true">method12({"results": [ ...]});</pre>
+<h3><a id="cross-origin-resource-sharing" class="anchor" href="#cross-origin-resource-sharing" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Cross Origin Resource Sharing</h3>
+<p><a href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a> (Cross Origin Resource Sharing) is the proper approach to perform a call to an external domain. If the remote API is CORS-compliant, you can use a regular <span class="lang:js decode:true  crayon-inline">XMLHttpRequest</span>  JavaScript object to perform the API call. In practice the browser will first perform an HTTP OPTIONS request to the remote API to check which caller domains are allowed and if it is authorized to execute the requested URL.</p>
+<p>For example here is a CORS request issued by a browser. The most important lines are the last two headers that specify which permissions are checked. In this case, the method is POST and the three specific HTTP headers that are requested.</p>
+<pre class="lang:default mark:10,11 decode:true">OPTIONS http://latency.algolia.io/1/indexes/*/queries
+&gt; Host: latency.algolia.io
+&gt; Origin: http://demos.algolia.com
+&gt; Accept-Encoding: gzip,deflate,sdch
+&gt; Accept-Language: en-US,en;q=0.8,fr;q=0.6
+&gt; User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2)
+&gt; Accept: */*
+&gt; Referer: http://demos.algolia.com/eventbrite/
+&gt; Connection: keep-alive
+&gt; Access-Control-Request-Headers: x-algolia-api-key, x-algolia-application-id, content-type
+&gt; Access-Control-Request-Method: POST</pre>
+<p>The server reply will be similar to this one:</p>
+<pre class="lang:default decode:true">&lt; HTTP/1.1 200 OK
+&lt; Server: nginx/1.6.0
+&lt; Date: Tue, 13 May 2014 08:33:55 GMT
+&lt; Content-Type: text/plain
+&lt; Content-Length: 0
+&lt; Connection: keep-alive
+&lt; Access-Control-Allow-Origin: *
+&lt; Access-Control-Allow-Methods: GET, PUT, DELETE, POST, OPTIONS
+&lt; Access-Control-Allow-Headers: x-algolia-api-key, x-algolia-application-id, content-type
+&lt; Access-Control-Allow-Credentials: false &lt; Expires: Wed, 14 May 2014 08:33:55 GMT
+&lt; Cache-Control: max-age=86400
+&lt; Access-Control-Max-Age: 86400</pre>
+<p>This answer indicates that this POST method can be called from any domain (<span class="lang:default decode:true  crayon-inline ">Access-Control-Allow-Origin: *</span> ) and with the requested headers.</p>
+<p>CORS has many advantages. First, it allows access to a real REST API with all HTTP verbs (mainly GET, POST, PUT, DELETE) and it also allows to better handle errors in an API (bad requests, object not found, &#8230;). The major drawback is that it is only supported by modern browsers (Internet Explorer ≥ 10, Firefox ≥ 3.5, Chrome ≥ 3, Safari ≥ 4 &amp; Opera ≥ 12; Internet Explorer 8 &amp; 9 provides partial support via the<span class="lang:default decode:true  crayon-inline ">XDomainRequest</span>  object).</p>
+<h2><a id="our-initial-conclusion" class="anchor" href="#our-initial-conclusion" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Our initial conclusion</h2>
+<p>Because of the advantages of CORS in terms of error handling, we started with a CORS implementation of our API. We also added a specific support for Internet Explorer 8 &amp; 9 using the  <span class="lang:default decode:true  crayon-inline">XDomainRequest</span>  JavaScript object (they do not support <span class="lang:default decode:true  crayon-inline">XMLHttpRequest</span>). The main difference is that <span class="lang:default decode:true  crayon-inline ">XDomainRequest</span>  does not support HTTP headers so we added another way to specify user credentials in the body of the POST request (it was initially only supported via HTTP headers).</p>
+<p>We were confident that we were supporting almost all browsers with this implementation, as only very old browsers could cause problems. But we were wrong!</p>
+<h2><a id="cors-problems" class="anchor" href="#cors-problems" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>CORS problems</h2>
+<p>The reality is that CORS still causes problems, even with modern browsers. The biggest problem we have found was with some firewalls/proxies that refuse HTTP OPTIONS queries. We even found software on some computers that were blocking CORS requests, as the <a href="http://www.bennadel.com/blog/2559-cisco-anyconnect-vpn-client-may-block-cors-ajax-options-requests.htm">Cisco AnyConnect VPN client</a>, which is widely used in the enterprise world. We have found this issue when a TechCrunch employee was not able to operate search on <a href="http://www.crunchbase.com">crunchbase.com</a> because the AnyConnect VPN client was installed on his laptop.</p>
+<p>Even in 2014 with a large majority of browsers supporting CORS, it is not possible to have perfect service quality with a CORS-enabled REST API!</p>
+<h2><a id="the-solution" class="anchor" href="#the-solution" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The solution</h2>
+<p>Using JSONP is the only solution to ensure great compatibility with old browsers and handle problems with a misconfigured firewall/proxy. However, CORS offers the advantage of proper error-handling, so we do not want to limit ourselves to JSONP.</p>
+<p>In the latest version of our JavaScript client, we decided to use CORS with a fallback on JSONP. At client initialization time, we check if the browser supports CORS and then perform an OPTIONS query to check that there is no firewall/proxy that blocks CORS requests. If there is any error we fallback on JSONP. All this logic is available in our JavaScript client without any API/code change for our customers.</p>
+<p>Having CORS support with automatic fallback on JSONP is the best way we have found to ensure great service quality and to support all corner case scenarios. If you see any other way to do it, your feedback is very welcome.</p>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fjsonp-still-mandatory%2F&amp;t=Why+JSONP+is+still+Mandatory" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Why+JSONP+is+still+Mandatory&amp;url=https%3A%2F%2Fblog.algolia.com%2Fjsonp-still-mandatory%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fjsonp-still-mandatory%2F&amp;title=Why+JSONP+is+still+Mandatory&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                <div class="tags-container"><ul class="tags"><li><a href="https://blog.algolia.com/tag/ajax/" rel="tag">Ajax</a></li><li><a href="https://blog.algolia.com/tag/dev/" rel="tag">Dev</a></li><li><a href="https://blog.algolia.com/tag/javascript/" rel="tag">JavaScript</a></li><li><a href="https://blog.algolia.com/tag/jsonp/" rel="tag">JSONP</a></li></ul></div>
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-135">
+        <div id="dsq-comment-header-135" class="dsq-comment-header">
+            <cite id="dsq-cite-135">
+                <span id="dsq-author-user-135">tomasdev</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-135" class="dsq-comment-body">
+            <div id="dsq-comment-message-135" class="dsq-comment-message"><p>Uhm&#8230; JSONP won&#8217;t allow to send Authorization headers or even set cookies. That looks like a bigger problem than VPNs&#8230;</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-136">
+        <div id="dsq-comment-header-136" class="dsq-comment-header">
+            <cite id="dsq-cite-136">
+                <a id="dsq-author-user-136" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-136" class="dsq-comment-body">
+            <div id="dsq-comment-message-136" class="dsq-comment-message"><p>This is why we have implemented JSONP as a fallback, we just believe it is still not possible today to have just a CORS implementation.<br />
+For the Authorization headers, we send them as a GET arguments in case of JSONP fallback.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-140">
+        <div id="dsq-comment-header-140" class="dsq-comment-header">
+            <cite id="dsq-cite-140">
+                <span id="dsq-author-user-140">tomasdev</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-140" class="dsq-comment-body">
+            <div id="dsq-comment-message-140" class="dsq-comment-message"><p>What about setting cookies ? I guess POST could be a faked _method parameter</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-146">
+        <div id="dsq-comment-header-146" class="dsq-comment-header">
+            <cite id="dsq-cite-146">
+                <span id="dsq-author-user-146">Salman Abbas</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-146" class="dsq-comment-body">
+            <div id="dsq-comment-message-146" class="dsq-comment-message"><p>What&#8217;s stopping you from setting cookies in response to a JSONP request?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-147">
+        <div id="dsq-comment-header-147" class="dsq-comment-header">
+            <cite id="dsq-cite-147">
+                <span id="dsq-author-user-147">tomasdev</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-147" class="dsq-comment-body">
+            <div id="dsq-comment-message-147" class="dsq-comment-message"><p>Since it&#8217;s in a different domain / protocol it won&#8217;t affect the site, same happens with XHR requests without `.withCredentials = true` &#8211; doesn&#8217;t it?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-137">
+        <div id="dsq-comment-header-137" class="dsq-comment-header">
+            <cite id="dsq-cite-137">
+                <span id="dsq-author-user-137">sq</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-137" class="dsq-comment-body">
+            <div id="dsq-comment-message-137" class="dsq-comment-message"><p>Why not use SSL? Proxies can&#8217;t interfere then.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-138">
+        <div id="dsq-comment-header-138" class="dsq-comment-header">
+            <cite id="dsq-cite-138">
+                <span id="dsq-author-user-138">Assaf</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-138" class="dsq-comment-body">
+            <div id="dsq-comment-message-138" class="dsq-comment-message"><p>IE won&#8217;t let you access HTTPS resource from an HTTP page.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-139">
+        <div id="dsq-comment-header-139" class="dsq-comment-header">
+            <cite id="dsq-cite-139">
+                <a id="dsq-author-user-139" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-139" class="dsq-comment-body">
+            <div id="dsq-comment-message-139" class="dsq-comment-message"><p>Yes there is some browser that block the query when there is a protocol mismatch. Our API is fully exposed in HTTPS and only search queries are available in HTTP in order to support all browsers.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-141">
+        <div id="dsq-comment-header-141" class="dsq-comment-header">
+            <cite id="dsq-cite-141">
+                <span id="dsq-author-user-141">whatupderek</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-141" class="dsq-comment-body">
+            <div id="dsq-comment-message-141" class="dsq-comment-message"><p>For browsers that don&#8217;t support CORS we fallback to our server as a proxy. Not an exact one to one solution since we are no longer requesting directly from the client and a server is necessary, but it was a simple enough solution for us w/o having to support JSONP requests.</p>
+<p>&#8220;`<br />
+var API_HOST = &#8216;https://api.diy.org&#8217;;</p>
+<p>if (!CORS) API_HOST = &#8216;https://diy.org/api/`; // transparent api proxy<br />
+&#8220;`</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-153">
+        <div id="dsq-comment-header-153" class="dsq-comment-header">
+            <cite id="dsq-cite-153">
+                <a id="dsq-author-user-153" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-153" class="dsq-comment-body">
+            <div id="dsq-comment-message-153" class="dsq-comment-message"><p>Yes this is a good option if installing a proxy is not a real problem.</p>
+<p>In our case the JSONP fallback is a kind of proxy and has the big advantage to do not require anything on the servers of our users.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-142">
+        <div id="dsq-comment-header-142" class="dsq-comment-header">
+            <cite id="dsq-cite-142">
+                <span id="dsq-author-user-142">jtsoi</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-142" class="dsq-comment-body">
+            <div id="dsq-comment-message-142" class="dsq-comment-message"><p>Depending on your use case, you can proxy via an iframe. That is what we do. Has much better browser support. (postMessage is required <a href="http://caniuse.com/#feat=x-doc-messaging" rel="nofollow">http://caniuse.com/#feat=x-doc-messaging</a>) If you can live without IE7 &amp; IE6.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-152">
+        <div id="dsq-comment-header-152" class="dsq-comment-header">
+            <cite id="dsq-cite-152">
+                <a id="dsq-author-user-152" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-152" class="dsq-comment-body">
+            <div id="dsq-comment-message-152" class="dsq-comment-message"><p>In this case this is not really an API 🙂 In our case we cannot do that since we distribute a realtime API that you can use directly in JS to embed search results in your page.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-143">
+        <div id="dsq-comment-header-143" class="dsq-comment-header">
+            <cite id="dsq-cite-143">
+                <span id="dsq-author-user-143">laurencerowe</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-143" class="dsq-comment-body">
+            <div id="dsq-comment-message-143" class="dsq-comment-message"><p>The preflight OPTIONS request is not required for simple GET/POST based CORS usage, see: <a href="http://www.html5rocks.com/en/tutorials/cors/#toc-types-of-cors-requests" rel="nofollow">http://www.html5rocks.com/en/tutorials/cors/#toc-types-of-cors-requests</a></p>
+<p>I suspect your custom headers are triggering the preflight OPTIONS request. Switching these to query parameters should allow you to make CORS requests even when OPTIONS is blocked without falling back to JSONP.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-151">
+        <div id="dsq-comment-header-151" class="dsq-comment-header">
+            <cite id="dsq-cite-151">
+                <a id="dsq-author-user-151" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-151" class="dsq-comment-body">
+            <div id="dsq-comment-message-151" class="dsq-comment-message"><p>I will check, I am not sure all browsers will ignore the OPTIONS request in this case.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-144">
+        <div id="dsq-comment-header-144" class="dsq-comment-header">
+            <cite id="dsq-cite-144">
+                <a id="dsq-author-user-144" href="http://sebastien.saunier.me/" target="_blank" rel="nofollow">Sébastien Saunier</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-144" class="dsq-comment-body">
+            <div id="dsq-comment-message-144" class="dsq-comment-message"><p>Kudos for explaining JSONP in the most effective &amp; concise way.</p>
+<p>I understand where CORS is great (keeping your API restful for the browser client), isn&#8217;t it too much overhead in term of RTT: a CORS search has to perform two requests whereas JSONP only needs one request?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-150">
+        <div id="dsq-comment-header-150" class="dsq-comment-header">
+            <cite id="dsq-cite-150">
+                <a id="dsq-author-user-150" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-150" class="dsq-comment-body">
+            <div id="dsq-comment-message-150" class="dsq-comment-message"><p>CORS performs two queries when you have security check to verify (Auth headers in our case) and you can cache this OPTIONS request. So the problem is not really to have two queries but the fact this query can be refused by some VPN/firewall.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-145">
+        <div id="dsq-comment-header-145" class="dsq-comment-header">
+            <cite id="dsq-cite-145">
+                <a id="dsq-author-user-145" href="http://xavier-carpentier.fr/" target="_blank" rel="nofollow">Xavier Carpentier</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-145" class="dsq-comment-body">
+            <div id="dsq-comment-message-145" class="dsq-comment-message"><p>Conclusion : web applications can&#8217;t meet the REST principle because JSONP is a fact standard and CORS isn&#8217;t completely supported in browser (except using a proxy)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-148">
+        <div id="dsq-comment-header-148" class="dsq-comment-header">
+            <cite id="dsq-cite-148">
+                <a id="dsq-author-user-148" href="http://nuttersmark.com/" target="_blank" rel="nofollow">Mark Nutter</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-148" class="dsq-comment-body">
+            <div id="dsq-comment-message-148" class="dsq-comment-message"><p>I&#8217;m curious, how old was the TechCrunch employee&#8217;s AnyConnect installation? I think this issue is similar to the one reported here <a href="https://twitter.com/mattvlasach/status/256214425000890368" rel="nofollow">https://twitter.com/mattvlasach/status/256214425000890368</a> and could potentially be fixed by now.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-149">
+        <div id="dsq-comment-header-149" class="dsq-comment-header">
+            <cite id="dsq-cite-149">
+                <a id="dsq-author-user-149" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-149" class="dsq-comment-body">
+            <div id="dsq-comment-message-149" class="dsq-comment-message"><p>I don&#8217;t know if AnyConnect has fixed the issue. The problem is that AnyConnect binaries are distributed by the organization that use the VP</p>
+<p>As of today you still find a lot of organization that distribute version with the bug (I won&#8217;t give any name by a simple search for &#8220;Cisco AnyConnect Client for Macintosh&#8221; will give you version with the bug.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-154">
+        <div id="dsq-comment-header-154" class="dsq-comment-header">
+            <cite id="dsq-cite-154">
+                <a id="dsq-author-user-154" href="http://nuttersmark.com/" target="_blank" rel="nofollow">Mark Nutter</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-154" class="dsq-comment-body">
+            <div id="dsq-comment-message-154" class="dsq-comment-message"><p>I reached out to Cisco but haven&#8217;t heard back. At any rate, a few companies not updating their VPN software doesn&#8217;t seem like a good justification for this blog post&#8217;s title. Also, an apparent workaround is use https which makes it impossible for AnyConnect to sniff the headers and block OPTIONS preflight requests, which in my opinion solves the problem since all sites should be using https by default anyways.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-155">
+        <div id="dsq-comment-header-155" class="dsq-comment-header">
+            <cite id="dsq-cite-155">
+                <span id="dsq-author-user-155">Mike</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-155" class="dsq-comment-body">
+            <div id="dsq-comment-message-155" class="dsq-comment-message"><p>Alternate idea: Use SSL, so the firewall, VPN, etc. wouldn&#8217;t see the contents and wouldn&#8217;t know to block.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-156">
+        <div id="dsq-comment-header-156" class="dsq-comment-header">
+            <cite id="dsq-cite-156">
+                <span id="dsq-author-user-156">szahn</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-156" class="dsq-comment-body">
+            <div id="dsq-comment-message-156" class="dsq-comment-message"><p>Interesting article, I never realized certain enterprise software actually block CORS requests</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/handle-security-realtime-search/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/security-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/security-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/security-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/handle-security-realtime-search/'>Realtime Search: Security and our Javascript Client</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'>Online Search in the Cloud: Version is in Beta!</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fjsonp-still-mandatory%2F&amp;t=Why+JSONP+is+still+Mandatory" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Why+JSONP+is+still+Mandatory&amp;url=https%3A%2F%2Fblog.algolia.com%2Fjsonp-still-mandatory%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fjsonp-still-mandatory%2F&amp;title=Why+JSONP+is+still+Mandatory&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"2294 http:\/\/blog.algolia.com\/?p=2294","disqusShortname":"algoliablog","disqusTitle":"Why JSONP is still Mandatory","disqusUrl":"https:\/\/blog.algolia.com\/jsonp-still-mandatory\/","options":{"manualSync":false},"postId":"2294"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'2294',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '2294' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

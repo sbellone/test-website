@@ -1,0 +1,1533 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Ranking Algorithm Unveiled: How Algolia Makes Search Better</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="We designed Algolia with database search as our main use-case. Check out how this design decision impacted our ranking algorithm and made it better."/>
+<meta name="robots" content="noodp"/>
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Ranking Algorithm Unveiled: How Algolia Makes Search Better Comments Feed" href="https://blog.algolia.com/search-ranking-algorithm-unveiled/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=1949' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fsearch-ranking-algorithm-unveiled%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fsearch-ranking-algorithm-unveiled%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=8A449FBF675FF9F37D25FD134761AD99');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Ranking Algorithm Unveiled: How Algolia Makes Search Better"/>
+  <meta property="og:url" content="https://blog.algolia.com/search-ranking-algorithm-unveiled/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Most search engines rank results based on a unique float value that is hard, if not impossible, to decipher. This is because their ranking algorithm has been designed for document search. They take into account the number of occurrences of query words in matching documents to determine their relevan"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2014/01/algorythm1.png"/>
+  <meta property="article:published_time" content="2014-01-31T18:25:08+00:00"/>
+  <meta property="article:modified_time" content="2017-02-01T04:51:43+00:00" />
+  <meta property="og:updated_time" content="2017-02-01T04:51:43+00:00" />
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Ranking Algorithm Unveiled: How Algolia Makes Search Better"/>
+  <meta itemprop="description" content="Most search engines rank results based on a unique float value that is hard, if not impossible, to decipher. This is because their ranking algorithm has been designed for document search. They take into account the number of occurrences of query words in matching documents to determine their relevan"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2014/01/algorythm1.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Ranking Algorithm Unveiled: How Algolia Makes Search Better"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/search-ranking-algorithm-unveiled/"/>
+  <meta name="twitter:description" content="Most search engines rank results based on a unique float value that is hard, if not impossible, to decipher. This is because their ranking algorithm has been designed for document search. They take into account the number of occurrences of query words in matching documents to determine their relevan"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2014/01/algorythm1.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-1949 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-1949" class="cf post-1949 post type-post status-publish format-standard has-post-thumbnail hentry category-technology" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Ranking Algorithm Unveiled: How Algolia Makes Search Better</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/785489bc2ac2e08ae66648a8936c1101?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">nicolas</span> |
+                    <time class="updated entry-time" datetime="2014-01-31" itemprop="datePublished">January 31, 2014</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/search-ranking-algorithm-unveiled/" title="Ranking Algorithm Unveiled: How Algolia Makes Search Better">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2014/01/algorythm1-720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/01/algorythm1.png 720w, https://blog.algolia.com/wp-content/uploads/2014/01/algorythm1-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2014/01/algorythm1-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">Most search engines rank results based on a unique float value that is hard, if not impossible, to decipher. This is because their ranking algorithm has been designed for document search. They take into account the number of occurrences of query words in matching documents to determine their relevance, usually using a <a title="tf-idf scoring" href="http://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">tf-idf</a> based scoring.</p>
+<p>We designed Algolia with database search as our main use-case. The foremost impact of this design decision is that we don&#8217;t care about the number of occurrences of query words. Instead of assigning a global float score to each result, our ranking algorithm rates each matching record on several criteria (such as the number of typos or the geo-distance), to which we individually assign a integer value score.</p>
+<p>You even have the option to assign a custom criterium, allowing you to consider additional factors for your ranking, instead of applying a superficial boost has nothing to do with the ranking and that can seriously muddy your results.</p>
+<p>Here is how it works:</p>
+<ul>
+<li><span style="line-height: 1.5em;">All the matching records are sorted according to the first criterion.</span></li>
+<li><span style="line-height: 1.5em;">If any records are tied, those records are then sorted according the second criterion.</span></li>
+<li><span style="line-height: 1.5em;">If there are still records that are tied, those are then sorted according to the third criterion</span></li>
+<li><span style="line-height: 1.5em;">and so on, until each record in the search results has a distinct position.</span></li>
+</ul>
+<p>A record’s score on each criterium is explicitly listed in the search results (see <span class="lang:default decode:true crayon-inline ">_rankingInfo</span>  below for the query &#8220;the rains&#8221;), so you can understand why one record ranked higher than another one. We will explain each of these criteria in this article.</p>
+<pre class="lang:js decode:true">"hits": [
+{
+    "name": "The Rains Came",
+    "url": "/title/tt0031835/",
+    "rating": 6.8,
+    "year": "(1939)",
+    "nb_voters": 881,
+    "rank": 16232,
+    "objectID": "24324",
+    "_highlightResult": {
+        "name": {
+            "value": "&lt;em&gt;The&lt;/em&gt; &lt;em&gt;Rains&lt;/em&gt; Came",
+            "matchLevel": "full"
+        },
+        "year": {
+            "value": "(1939)",
+            "matchLevel": "none"
+        }
+    },
+    "_rankingInfo": {
+        "nbTypos": 0,
+        "firstMatchedWord": 0,
+        "proximityDistance": 1,
+        "userScore": 2379657,
+        "geoDistance": 0,
+        "geoPrecision": 1,
+        "nbExactWords": 2
+    }
+},
+...</pre>
+<h2><a id="search-as-you-type" class="anchor" href="#search-as-you-type" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Search-as-you-type</h2>
+<p>Before diving into our &#8220;secret sauce&#8221;, you first need to understand that Algolia searches for matching prefixes, not matching whole-words. For example, if you are searching for “Joe B”, we would consider all the following records as matches:</p>
+<ul>
+<li><strong style="line-height: 1.5em;">Joe B</strong><span style="line-height: 1.5em;">lack</span></li>
+<li><strong style="line-height: 1.5em;">Joe B</strong><span style="line-height: 1.5em;">enson</span></li>
+<li><strong style="line-height: 1.5em;">Joe B</strong><span style="line-height: 1.5em;">olick</span></li>
+</ul>
+<p>Prefix matching is what enables us to return relevant results even when a user has only typed a single letter. When Google introduced instant search, they claimed that showing results before you finish typing can save 2-5 seconds per search.</p>
+<p><span style="text-decoration: underline;">Note</span>: By default, when the query contains multiple terms, Algolia only uses the last term as a prefix. This is because when searching, say, for a person by name, it&#8217;s quite normal to type their entire first name but not their last (e.g George Cloo). Not so for the reverse (e.g. Geo Clooney). You can override this behavior by setting  <span class="lang:default decode:true crayon-inline ">queryType=prefixAll</span> .</p>
+<h2><a id="ranking-algorithm-criteria" class="anchor" href="#ranking-algorithm-criteria" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Ranking algorithm criteria</h2>
+<p>By default, Algolia ranks every matching record by using the following criteria, in the order listed below. The higher up the criterion on the list, the more importance it has on ranking. You can easily change this order if you want, but we have found that this default order is the best one in 90% of the use cases.</p>
+<ol>
+<li><span style="line-height: 1.5em;">Typos</span></li>
+<li><span style="line-height: 1.5em;">Geo-location (if applicable)</span></li>
+<li><span style="line-height: 1.5em;">Proximity</span></li>
+<li><span style="line-height: 1.5em;">Attributes</span></li>
+<li>Exact</li>
+<li>Custom</li>
+</ol>
+<p>Let&#8217;s understand each one of these criteria by applying them to an example:</p>
+<pre class="lang:default decode:true">[
+  {
+    "objectID": 1,
+    "name": "Jo Blak",
+    "company": "Utility Trailer Sales",
+    "nbCalls": 4
+  },
+  {
+    "objectID": 2,
+    "name": "Jo T. Black",
+    "company": "Steritek Inc",
+    "nbCalls": 45
+  },
+  {
+    "objectID": 3,
+    "name": "Joe Black",
+    "company": "Pip Printing",
+    "nbCalls": 9
+  },
+  {
+    "objectID": 4,
+    "name": "Joe Thompson",
+    "company": "Black Birds inc",
+    "nbCalls": 9
+  },
+  {
+    "objectID": 5,
+    "name": "Deanna Gerbi",
+    "company": "Thompson, Joey &amp; Blackburn ltd",
+    "nbCalls": 7
+  }
+]</pre>
+<h3 style="padding-left: 30px;">1. Typos</h3>
+<p>Are there words that start (that is, are prefixed) with a term typed by the user? And if so, do they match exactly the query?</p>
+<ul>
+<li><span style="line-height: 1.5em;">0 points means there are prefixes that exactly match all the terms in the query.</span></li>
+<li><span style="line-height: 1.5em;">1 point means there is a 1-character discrepancy between the matching prefixes and the query terms.</span></li>
+<li><span style="line-height: 1.5em;">2 points means there is a 2-character discrepancy, and so on.</span></li>
+</ul>
+<p>Example: for the query “joe black”, here is how each result would rank for typos only (joey is considered as a typo as only the last word of the query is searched as a prefix):</p>
+<div dir="ltr">
+<table class=" aligncenter">
+<colgroup>
+<col width="78" />
+<col width="143" />
+<col width="65" />
+<col width="*" /></colgroup>
+<tbody>
+<tr>
+<td>
+<p dir="ltr"><strong>Rank</strong></p>
+</td>
+<td style="text-align: left;">
+<p dir="ltr"><strong>Record</strong></p>
+</td>
+<td style="text-align: left;">
+<p dir="ltr"><strong>Score</strong></p>
+</td>
+<td>
+<p dir="ltr" style="text-align: left;"><strong>Why</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">record 3</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr"><strong>joe</strong> <strong>black</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">record 4</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr"><strong>joe</strong> thompson <strong>black</strong> birds inc<strong> </strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">record 5</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">thompson,<strong> joe<span style="color: #ff0000;">_</span></strong> &amp; <strong>black</strong>burn ltd</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">2</p>
+</td>
+<td>
+<p dir="ltr">record 2</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr"><strong>jo</strong><span style="color: #ff0000;">_</span> t. <strong>black</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">3</p>
+</td>
+<td>
+<p dir="ltr">record 1</p>
+</td>
+<td>
+<p dir="ltr">2</p>
+</td>
+<td>
+<p dir="ltr"><strong>jo</strong><span style="color: #ff0000;">_</span> <strong>bla</strong><span style="color: #ff0000;">_</span><strong>k</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><span style="text-decoration: underline;">Note</span>: By default, Algolia accepts 1 typo for words having at least 3 characters and 2 typos for words having at least 7 characters (this behavior can be configured withminWordSizefor1Typo  andminWordSizefor2Typos  query parameters). This means that the query &#8220;ab&#8221; only matches words starting with &#8220;ab&#8221;, while the query &#8220;abc&#8221; matches words starting by &#8220;abc&#8221; but also &#8220;aba&#8221;, &#8220;abb&#8221;, &#8220;aac&#8221;, etc.  A typo is defined by an insertion, deletion, or substitution of a single character, or a transposition of two adjacent characters (<a title="Damerau-Levenshtein distance" href="http://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance">Damerau–Levenshtein distance</a>). As it is extremely unusual to mistype the first character of a word, a typo on the first character counts for 2 points instead of 1.</p>
+<h3 style="padding-left: 30px;">2. Geo-location (if using)</h3>
+<p>Is the record found within a certain radius of the specified location? And if so, how far from it? The <span class="lang:default decode:true crayon-inline">geoDistance</span>  score is expressed in meters, the shorter the better.</p>
+<p>However, you may want to consider results &#8220;100m distant&#8221; and &#8220;102m distant&#8221; equal for ranking consideration. To do so, you can use the <span class="lang:default decode:true crayon-inline ">aroundPrecision</span>  query parameter. For example, with <span class="lang:default decode:true crayon-inline ">aroundPrecision=10</span> , two results up to 10 meters close will be considered equal.</p>
+<p>We don&#8217;t use geo-location in our example, but you can find a dedicated <a title="Geo-search guide" href="https://www.algolia.com/doc#Geo-Search" target="_blank">guide</a> in our documentation.</p>
+<h3 style="padding-left: 30px;">3. Proximity</h3>
+<p>For a query that contains two or more words, how physically near are those words in the matching record?</p>
+<p>Algolia adds 1 point for each word in between query words, with a maximum of 8 points.</p>
+<ul>
+<li><span style="line-height: 1.5em;">0 points means no proximity: there was only one word in the query.</span></li>
+<li><span style="line-height: 1.5em;">1 point means the best possible match: the words are next to each other.</span></li>
+<li><span style="line-height: 1.5em;">2 points means there is one word between the matched query words.</span></li>
+<li><span style="line-height: 1.5em;">and so on.</span></li>
+</ul>
+<p>When words are in different attributes they get automatically the maximum of 8 points per new attribute. So if three query words are in three different attributes, the score is 16. If three words are in two different attributes, the score is 8.<span style="color: #ff0000;"><br />
+</span></p>
+<p>In our example, we have a 3-way tie between records 1, 3 and 5 (&#8216;&amp;&#8217; is considered as a separator and is not taken into account). Record 2 has a word in between the matched query words (Jo T. Black), while record 4 matches in two different attributes:</p>
+<div dir="ltr">
+<table class=" aligncenter">
+<colgroup>
+<col width="78" />
+<col width="143" />
+<col width="65" /></colgroup>
+<tbody>
+<tr>
+<td>
+<p dir="ltr"><strong>Rank</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Record</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Score</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">record 1</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">record 3</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">record 5</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">record 2</p>
+</td>
+<td>
+<p dir="ltr">2</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">2</p>
+</td>
+<td>
+<p dir="ltr">record 4</p>
+</td>
+<td>
+<p dir="ltr">8</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 style="padding-left: 30px;">4. Attributes</h3>
+<p>This is the order of the attributes (fields) Algolia will follow to search inside a record. Records where there is a match in the 1st listed attribute rank higher (that is, gets fewer points) than records with a match in an attribute that’s lower on the list.</p>
+<p>Depending of the first matching attribute, results will get a score in a specific range:</p>
+<ul>
+<li><span style="line-height: 1.5em;">1st attribute: 0-999 points</span></li>
+<li><span style="line-height: 1.5em;">2nd attribute: 1000-1999 points</span></li>
+<li><span style="line-height: 1.5em;">3rd attribute: 2000-2999 points</span></li>
+<li><span style="line-height: 1.5em;">and so on.</span></li>
+</ul>
+<p><span style="line-height: 1.5em;">The exact number of points are determined by the position of the first matching word in the attribute:</span></p>
+<ul>
+<li><span style="line-height: 1.5em;">1st word in attribute: 0 </span></li>
+<li><span style="line-height: 1.5em;">2nd word in attribute: 1</span></li>
+<li><span style="line-height: 1.5em;">3rd workd in attribute: 2</span></li>
+</ul>
+<p>In our example, say we consider the name as more important than the company. We would then use the setting <span class="lang:default decode:true crayon-inline">attributesToIndex:[&#8220;name&#8221;, &#8220;company&#8221;]</span> to indicate that we want to index, i.e. search in, the attributes &#8220;name&#8221; then &#8220;company&#8221;, in this specific order of importance.</p>
+<table class=" aligncenter">
+<colgroup>
+<col width="78" />
+<col width="143" />
+<col width="65" /></colgroup>
+<tbody>
+<tr>
+<td>
+<p dir="ltr"><strong>Rank</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Record</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Score</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">record 1</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">record 2</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">record 3</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">record 4</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">2</p>
+</td>
+<td>
+<p dir="ltr">record 5</p>
+</td>
+<td>
+<p dir="ltr">1001</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: left;">Lastly, matching text at the beginning of a given attribute will be considered more important than matching text further in this attribute. You can disable this behavior if you add your attribute inside <span class="lang:default decode:true crayon-inline">unordered(AttributeName)</span>. If we considered the position of the match not relevant for the attribute &#8220;company&#8221;, we would use the setting <span class="lang:default decode:true crayon-inline ">attributesToIndex:[&#8220;name&#8221;, &#8220;unordered(company)&#8221;]</span> . In that case the &#8220;attribute score&#8221; of record 5 would be 1000 and not 1001.</p>
+<h3 style="padding-left: 30px;">5. Exact</h3>
+<p>Records with words (not just prefixes) that exactly match the query terms rank higher. A record gets 1 point for every word that is exactly matched.</p>
+<p>Here is how our records would rank based on exact-matching alone for the query &#8220;joe black&#8221;:</p>
+<div dir="ltr">
+<table class=" aligncenter">
+<colgroup>
+<col width="78" />
+<col width="143" />
+<col width="65" />
+<col width="*" /></colgroup>
+<tbody>
+<tr>
+<td>
+<p dir="ltr"><strong>Rank</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Record</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Score</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Why</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">record 3</p>
+</td>
+<td>
+<p dir="ltr">2</p>
+</td>
+<td>
+<p dir="ltr"><strong>joe</strong> <strong>black</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">record 4</p>
+</td>
+<td>
+<p dir="ltr">2</p>
+</td>
+<td>
+<p dir="ltr"><strong>joe</strong> tompson<strong> black </strong>bird inc</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">2</p>
+</td>
+<td>
+<p dir="ltr">record 2</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">jo t. <strong>black</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">3</p>
+</td>
+<td>
+<p dir="ltr">record 1</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td></td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">3</p>
+</td>
+<td>
+<p dir="ltr">record 5</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<h3 style="padding-left: 30px;">6. Custom / Business metrics</h3>
+<p>At this stage, the previous five criteria have ascertained a record&#8217;s relevance for a user&#8217;s search query. Now you can specify additional criteria.</p>
+<p>A common approach is to use one or several business metrics that express the popularity of a record. With other search engines, you have to choose between sorting the results according to their relevance to the user&#8217;s query, or according to their popularity (number of visits, ratings, sales, etc). You just cannot do both. This means users may get results that are outrageously popular, but completely irrelevant to their search.</p>
+<p>With Algolia, you can integrate popularity (or anything else, like population, or the last date of update) into the relevance calculation. To us, it is just an additional criterium so it will not outweigh classic relevance criteria. The ranking will just make additional sense.</p>
+<p>In our example, we may consider people with whom we had many calls more popular than others. For people having the same number of calls, we can just order them by alphabetical order. We would then use the setting:  <span class="lang:default decode:true crayon-inline">customRanking:[&#8220;desc(nbCalls)&#8221;, &#8220;asc(name)&#8221;]</span></p>
+</div>
+<p>For this criterium alone, here&#8217;s how our example records rank:</p>
+<table class=" aligncenter">
+<colgroup>
+<col width="78" />
+<col width="143" />
+<col width="65" />
+<col width="*" /></colgroup>
+<tbody>
+<tr>
+<td>
+<p dir="ltr"><strong>Rank</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Record</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Score</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Why</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">record 2</p>
+</td>
+<td>
+<p dir="ltr">4</p>
+</td>
+<td>
+<p dir="ltr">nbCalls=45</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">2</p>
+</td>
+<td>
+<p dir="ltr">record 3</p>
+</td>
+<td>
+<p dir="ltr">3</p>
+</td>
+<td>
+<p dir="ltr">nbCalls=9, <span class="lang:default decode:true crayon-inline">&#8220;Joe B&#8221;</span>  &lt; <span class="lang:default decode:true crayon-inline">&#8220;Joe T&#8221;</span></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">3</p>
+</td>
+<td>
+<p dir="ltr">record 4</p>
+</td>
+<td>
+<p dir="ltr">2</p>
+</td>
+<td>
+<p dir="ltr">nbCalls=9</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">4</p>
+</td>
+<td>
+<p dir="ltr">record 5</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">nbCalls=7</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">5</p>
+</td>
+<td>
+<p dir="ltr">record 1</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">nbCalls=4</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The score is actually the order of entries in the index (biggest score being first). There is never equal scores for this criterium. Therefore, custom should always be the last criterium of your ranking as no subsequent criterium would ever be checked.</p>
+<p><span style="text-decoration: underline;">Note</span>: Custom ranking is computed at index time (for performance reasons) and cannot be changed dynamically with each query. If you need to change the ranking depending on context, you need to create one index per desired ranking formula. Algolia proposes a primary/replica feature to ease the task of keeping several indices in sync. You only need to push your updates to the primary and they are automatically replicated to the replica indices (see the <span class="lang:default decode:true crayon-inline ">replica</span>  parameter in <a title="REST API index settings" href="https://www.algolia.com/explorer#?tab=replicas" target="_blank">index settings</a>).</p>
+<h2><a id="determining-the-overall-rank" class="anchor" href="#determining-the-overall-rank" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Determining the overall rank</h2>
+<p>Let us know determine the exact ranking of our query &#8220;joe black&#8221;.</p>
+<p><strong>1. Typos</strong>: After looking at typos, we can already rank record 1 as last. Since record 3 and 4, as well as record 2 and 5, are tied, we need to compare them to the next criterion.</p>
+<div dir="ltr">
+<table class=" aligncenter">
+<colgroup>
+<col width="100" />
+<col width="100" /></colgroup>
+<tbody>
+<tr>
+<td></td>
+<td>
+<p dir="ltr"><strong>Typos</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 3</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 4</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 2</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 5</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 1</p>
+</td>
+<td>
+<p dir="ltr">2</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>2. Geo</strong>:  Not applicable. All records have a score of 0. Next!</p>
+<div dir="ltr">
+<table class=" aligncenter">
+<colgroup>
+<col width="100" />
+<col width="100" />
+<col width="100" /></colgroup>
+<tbody>
+<tr>
+<td></td>
+<td>
+<p dir="ltr"><strong>Typos</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Geo-distance</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 3</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 4</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 2</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 5</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 1</p>
+</td>
+<td>
+<p dir="ltr">2</p>
+</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>3. Proximity</strong>: Record 4 matches in two distinct attributes is thus scored less that record 3. Record 2 has a word (T.) between query terms and thus scores less than record 5.</p>
+<div dir="ltr">
+<table class=" aligncenter">
+<colgroup>
+<col width="100" />
+<col width="100" />
+<col width="100" />
+<col width="100" /></colgroup>
+<tbody>
+<tr>
+<td></td>
+<td>
+<p dir="ltr"><strong>Typos</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Geo-distance</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Proximity</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 3</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 4</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">8</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 5</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 2</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">2</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 1</p>
+</td>
+<td>
+<p dir="ltr">2</p>
+</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span style="line-height: 1.5em;">Since each record now has a distinct rank, in this example there’s no need to go through another round and compare scores for the Attributes, Exact and Custom criteria.</span></p>
+<h2><a id="a-second-example" class="anchor" href="#a-second-example" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>A second example</h2>
+<p>Before jumping to our conclusion, let&#8217;s now look at what would be the result for the query composed of the single character &#8216;j&#8217;:</p>
+<table class=" aligncenter">
+<colgroup>
+<col width="100" />
+<col width="100" />
+<col width="100" />
+<col width="100" />
+<col width="100" />
+<col width="100" /></colgroup>
+<tbody>
+<tr>
+<td></td>
+<td>
+<p dir="ltr"><strong>Typo</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Geo-distance</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Proximity</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Attributes</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Exact</strong></p>
+</td>
+<td>
+<p dir="ltr"><strong>Custom</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 2</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">4</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 3</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">3</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 4</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">2</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 1</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">1</p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr">Record 5</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">0</p>
+</td>
+<td>
+<p dir="ltr">1001</p>
+</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>With such a simple query, we obtain a 4-way tie before checking the custom score that will finally consider record 2 as the best one because of the important number of calls it received.</p>
+<h2><a id="conclusion" class="anchor" href="#conclusion" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h2>
+<p>The advantage of prefix matching in our ranking algorithm is that Algolia initially casts a wide net of results that are already relevant and literally gets closer to the mark as you type each additional letter. Again, these are the results you get out of the box.</p>
+<p>You can easily configure ranking calculations by:</p>
+<ul>
+<li><span style="line-height: 1.5em;">changing criteria order (see </span><span class="lang:default decode:true crayon-inline" style="line-height: 1.5em;">ranking</span><span style="line-height: 1.5em;">  in the </span><a style="line-height: 1.5em;" title="Index settings" href="https://www.algolia.com/doc/rest_api#GetSettings" target="_blank">settings</a><span style="line-height: 1.5em;">)</span></li>
+<li><span style="line-height: 1.5em;">changing the order of the attributes (see </span><span class="lang:default decode:true crayon-inline " style="line-height: 1.5em;">attributesToIndex</span><span style="line-height: 1.5em;">  in the </span><a style="line-height: 1.5em;" title="Index settings" href="https://www.algolia.com/doc/rest_api#GetSettings" target="_blank">settings</a><span style="line-height: 1.5em;">)</span></li>
+<li><span style="line-height: 1.5em;">defining a custom criterion (see </span><span class="lang:default decode:true crayon-inline" style="line-height: 1.5em;">customRanking</span><span style="line-height: 1.5em;">  in the </span><a style="line-height: 1.5em;" title="Index settings" href="https://www.algolia.com/doc/rest_api#GetSettings" target="_blank">settings</a><span style="line-height: 1.5em;">)</span></li>
+<li><span style="line-height: 1.5em;">changing your geographic precision (see </span><span class="lang:default decode:true crayon-inline " style="line-height: 1.5em;">aroundPrecision</span><span style="line-height: 1.5em;">  in the </span><a style="line-height: 1.5em;" title="Search parameters" href="https://www.algolia.com/doc/rest_api#QueryIndex" target="_blank">search parameters</a><span style="line-height: 1.5em;">)</span></li>
+</ul>
+</div>
+</div>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fsearch-ranking-algorithm-unveiled%2F&amp;t=Ranking+Algorithm+Unveiled%3A+How+Algolia+Makes+Search+Better" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Ranking+Algorithm+Unveiled%3A+How+Algolia+Makes+Search+Better&amp;url=https%3A%2F%2Fblog.algolia.com%2Fsearch-ranking-algorithm-unveiled%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fsearch-ranking-algorithm-unveiled%2F&amp;title=Ranking+Algorithm+Unveiled%3A+How+Algolia+Makes+Search+Better&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-105">
+        <div id="dsq-comment-header-105" class="dsq-comment-header">
+            <cite id="dsq-cite-105">
+                <span id="dsq-author-user-105">vivekananthan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-105" class="dsq-comment-body">
+            <div id="dsq-comment-message-105" class="dsq-comment-message"><p>This is a real beauty 🙂 Definitely a well thought out for searching user objects 🙂 Well done Team</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/algolia-search-is-out/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/algolia-search-is-out/'>Algolia Search is Out!</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'>Online Search in the Cloud: Version is in Beta!</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fsearch-ranking-algorithm-unveiled%2F&amp;t=Ranking+Algorithm+Unveiled%3A+How+Algolia+Makes+Search+Better" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Ranking+Algorithm+Unveiled%3A+How+Algolia+Makes+Search+Better&amp;url=https%3A%2F%2Fblog.algolia.com%2Fsearch-ranking-algorithm-unveiled%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fsearch-ranking-algorithm-unveiled%2F&amp;title=Ranking+Algorithm+Unveiled%3A+How+Algolia+Makes+Search+Better&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"1949 http:\/\/blog.algolia.com\/?p=1949","disqusShortname":"algoliablog","disqusTitle":"Ranking Algorithm Unveiled: How Algolia Makes Search Better","disqusUrl":"https:\/\/blog.algolia.com\/search-ranking-algorithm-unveiled\/","options":{"manualSync":false},"postId":"1949"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'1949',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '1949' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

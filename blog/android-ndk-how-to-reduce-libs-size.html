@@ -1,0 +1,935 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Android NDK: How to Reduce Binaries Size - The Algolia Blog - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="Using the Android NDK, we learn how to reduce the size of our native libraries and optimize development. Read The Algolio Blog to find out how!"/>
+<meta name="robots" content="noodp"/>
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Android NDK: How to Reduce Binaries Size &#8211; The Algolia Blog Comments Feed" href="https://blog.algolia.com/android-ndk-how-to-reduce-libs-size/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=794' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fandroid-ndk-how-to-reduce-libs-size%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fandroid-ndk-how-to-reduce-libs-size%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=6B36369124CA72006B853DF5EA163C66');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Android NDK: How to Reduce Binaries Size - The Algolia Blog"/>
+  <meta property="og:url" content="https://blog.algolia.com/android-ndk-how-to-reduce-libs-size/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="When we started Algolia Development for Android, binary size optimization was not one of our main concerns. In fact we even started to develop in JAVA before switching to C/C++ for reasons of performance.
+
+We were reminded of the importance of binary size by Cyril Mottier who informed us that it w"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png"/>
+  <meta property="article:published_time" content="2013-01-10T12:37:41+00:00"/>
+  <meta property="article:modified_time" content="2015-04-06T23:44:18+00:00" />
+  <meta property="og:updated_time" content="2015-04-06T23:44:18+00:00" />
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Android NDK: How to Reduce Binaries Size - The Algolia Blog"/>
+  <meta itemprop="description" content="When we started Algolia Development for Android, binary size optimization was not one of our main concerns. In fact we even started to develop in JAVA before switching to C/C++ for reasons of performance.
+
+We were reminded of the importance of binary size by Cyril Mottier who informed us that it w"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Android NDK: How to Reduce Binaries Size - The Algolia Blog"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/android-ndk-how-to-reduce-libs-size/"/>
+  <meta name="twitter:description" content="When we started Algolia Development for Android, binary size optimization was not one of our main concerns. In fact we even started to develop in JAVA before switching to C/C++ for reasons of performance.
+
+We were reminded of the importance of binary size by Cyril Mottier who informed us that it w"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-794 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-794" class="cf post-794 post type-post status-publish format-standard has-post-thumbnail hentry category-technology tag-android tag-development" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Android NDK: How to Reduce Binaries Size &#8211; The Algolia Blog</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/25760a5d4e793e491f26da5db64bb738?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">julien</span> |
+                    <time class="updated entry-time" datetime="2013-01-10" itemprop="datePublished">January 10, 2013</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/android-ndk-how-to-reduce-libs-size/" title="Android NDK: How to Reduce Binaries Size &#8211; The Algolia Blog">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png 720w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">When we started Algolia Development for Android, binary size optimization was not one of our main concerns. In fact we even started to develop in JAVA before switching to C/C++ for <a href="http://blog.algolia.com/need-performance-on-mobile-use-c-cpp/">reasons of performance</a>.</p>
+<p>We were reminded of the importance of binary size by <a href="http://android.cyrilmottier.com" target="_blank">Cyril Mottier</a> who informed us that it would be difficult to integrate our lib in <a href="https://play.google.com/store/apps/details?id=com.cyrilmottier.android.avelov">AVelov</a> Android Application because its size. AVelov is 638KB and Algolia was 850KB, which would mean that AVelov would more than double in size with Algolia Search embedded.</p>
+<p>To address this problem we managed to reduce Algolia binary size from 850KB to 307KB. In this post we share how we did it.<br />
+<span id="more-794"></span></p>
+<h3><a id="do-not-use-exceptions-and-rtti" class="anchor" href="#do-not-use-exceptions-and-rtti" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Do not use Exceptions and RTTI</h3>
+<p>We actually do not use exceptions in our native lib, but for the sake of completeness, I&#8217;ll cover this point too.</p>
+<p>C++ exceptions and RTTI are disabled by default but you can enable them via <em>APP_CPPFLAGS</em> in your <em>Application.mk</em> file and use a compatible STL, for example:</p>
+<pre class="plain:false lang:make decode:true" data-url="exampleCPP">APP_CPPFLAGS += -fexceptions -frtti
+APP_STL := stlport_shared</pre>
+<p>Whilst using exceptions and RTTI can help you to use existing code, it will obviously increase your binary size. If you have a way to remove them, go for it! Actually, there&#8217;s another reason to avoid using C++ exceptions: their support is still far from perfect. For example if was impossible for us to catch a C++ exception and launch a Java exception in JNI. The following code results in a crash (will probably be fixed in a future release of the Android NDK toolchain):</p>
+<pre class="plain:false lang:c++ decode:true" data-url="exampleCPP">try {
+    ...
+} catch (std::exception&amp; e) {
+    env-&gt;ThrowNew(env-&gt;FindClass("java/lang/Exception"), "Error occured");
+}</pre>
+<h3><a id="do-not-use-iostream" class="anchor" href="#do-not-use-iostream" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Do not use iostream</h3>
+<p>When starting to investigate our library size following Cyril&#8217;s feedback, we discovered that Algolia binaries had vastly increased in size since our last release (from 850KB to 1.35MB)! We first suspected the Android NDK toolchain since we upgraded it and tested different toolchains, but we only observed minor changes.</p>
+<p>By dichotomy search in our commits, we discovered that a single line of code was responsible for the inflation:</p>
+<pre class="plain:false lang:c++ decode:true" data-url="exampleCPP">std::cerr &lt;&lt; .... &lt;&lt; std::endl;</pre>
+<p>As incredible as it may sound, using iostream increases a lot the binary size. Our tests shown that it adds a least 300KB per architecture! You must be very careful with iostream and prefer to use __android_log_print method:</p>
+<pre class="plain:false lang:c++ decode:true" data-url="exampleCPP">#include &lt;android/log.h&gt;
+#define APPNAME "MyApp"
+
+__android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "The value of 1 + 1 is %d", 1+1);</pre>
+<p>Make sure you also link against the logging library, in your Android.mk file:</p>
+<pre class="plain:false lang:make decode:true" data-url="exampleCPP">LOCAL_LDLIBS := -llog</pre>
+<h3><a id="use-fvisibilityhidden" class="anchor" href="#use-fvisibilityhidden" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Use -fvisibility=hidden</h3>
+<p>An efficient way to reduce binary size is to use the <a href="http://gcc.gnu.org/wiki/Visibility" target="_blank">visibility feature</a> of gcc. This feature lets you control which functions will be exported in the symbols table. Hopefully, JNI comes with a <em>JNIEXPORT</em> macro that flags JNI functions as public. You just have to check that all functions used by JNI are prefixed by JNIEXPORT, like this one:</p>
+<pre class="plain:false lang:c++ decode:true" data-url="exampleCPP">JNIEXPORT void JNICALL Java_ClassName_MethodName
+(JNIEnv *env, jobject obj, jstring javaString)</pre>
+<p>Then you have just to add <em>-fvisibility=hidden</em> for C and C++ files in <em>Android.mk</em> file:</p>
+<pre class="plain:false lang:make decode:true" data-url="exampleCPP">LOCAL_CPPFLAGS += -fvisibility=hidden
+LOCAL_CFLAGS += -fvisibility=hidden</pre>
+<p>In our case the binaries were down to 809KB (-5%) but remember the gains may be very different for your project. Make your own measures!</p>
+<h3><a id="discard-unused-functions-with-gc-sections" class="anchor" href="#discard-unused-functions-with-gc-sections" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Discard Unused Functions with gc-sections</h3>
+<div id="LC7">Another interesting approach is to remove unused code in the binary. It can drastically reduce its size if for example part of your code is only used for tests.</div>
+<div>To enable this feature, you just have to change the C and C++ compilation flags and the linker flags in <em>Android.mk</em>:</div>
+<div>
+<pre class="plain:false lang:make decode:true" data-url="exampleCPP">LOCAL_CPPFLAGS += -ffunction-sections -fdata-sections
+LOCAL_CFLAGS += -ffunction-sections -fdata-sections 
+LOCAL_LDFLAGS += -Wl,--gc-sections</pre>
+</div>
+<p>Of course you can combine this feature with the visibility one:</p>
+<div>
+<pre class="plain:false lang:make decode:true" data-url="exampleCPP">LOCAL_CPPFLAGS += -ffunction-sections -fdata-sections -fvisibility=hidden
+LOCAL_CPPFLAGS += -ffunction-sections -fdata-sections -fvisibility=hidden
+LOCAL_CFLAGS += -ffunction-sections -fdata-sections  LOCAL_LDFLAGS += -Wl,--gc-sections</pre>
+<p>This optim only got us a 1% gain, but once combined with the previous visibility one, we were down to 691KB (-18.7%).</p>
+<h3><a id="remove-duplicated-code" class="anchor" href="#remove-duplicated-code" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Remove Duplicated Code</h3>
+</div>
+<p>You can remove duplicated code with the &#8211;icf=safe option of the linker. Be careful, this option will probably remove your code inlining, you must check that this flag does not impact performance.</p>
+<p>This option is not yet available on the mips architecture so you need to add an architecture check in <em>Android.mk</em>:</p>
+<pre class="plain:false lang:make decode:true" data-url="exampleCPP">ifneq ($(TARGET_ARCH),mips)
+  LOCAL_LDFLAGS += -Wl,--icf=safe
+endif</pre>
+<div>And if you want to combine this option with gc-sections:</div>
+<pre id="LC7">ifeq ($(TARGET_ARCH),mips)
+  LOCAL_LDFLAGS += -Wl,--gc-sections
+else
+  LOCAL_LDFLAGS += -Wl,--gc-sections,--icf=safe
+endif</pre>
+<p>We actually only obtained a 0.8% gain in size with this one. All previous optimizations combined, we were now at 687KB (-19.2%).</p>
+<h3><a id="change-the-default-flags-of-the-toolchain" class="anchor" href="#change-the-default-flags-of-the-toolchain" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Change the Default Flags of the Toolchain</h3>
+<p>If you want to go even further, you can change the default compilation flags of the toolchain. Flags are not identical accross architectures, for example:</p>
+<ul>
+<li>inline-limit is set to 64 for arm and set to 300 for x86 and mips</li>
+<li>Optimization flag is set to -Os (optimize for size) for arm and set to -O2 (optimize for performance) for x86 and mips</li>
+</ul>
+<p>As arm is used by the large majority of devices, we have applied arm settings for other architectures. Here is the patch we applied on the toolchain (version r8d):</p>
+<pre class="plain:false lang:diff decode:true" data-url="exampleCPP">--- android-ndk-r8d/toolchains/mipsel-linux-android-4.6/setup.mk
++++ android-ndk-r8d.new/toolchains/mipsel-linux-android-4.6/setup.mk
+@@ -41,12 +41,12 @@
+ TARGET_C_INCLUDES := 
+     $(SYSROOT)/usr/include
+
+-TARGET_mips_release_CFLAGS := -O2 
++TARGET_mips_release_CFLAGS := -Os 
+                               -g 
+                               -DNDEBUG 
+                               -fomit-frame-pointer 
+                               -funswitch-loops     
+-                              -finline-limit=300
++                              -finline-limit=64
+
+ TARGET_mips_debug_CFLAGS := -O0 
+                             -g 
+--- android-ndk-r8d/toolchains/x86-4.6/setup.mk
++++ android-ndk-r8d.new/toolchains/x86-4.6/setup.mk
+@@ -39,13 +39,13 @@
+
+ TARGET_CFLAGS += -fstack-protector
+
+-TARGET_x86_release_CFLAGS := -O2 
++TARGET_x86_release_CFLAGS := -Os 
+                              -g 
+                              -DNDEBUG 
+                              -fomit-frame-pointer 
+                              -fstrict-aliasing    
+                              -funswitch-loops     
+-                             -finline-limit=300
++                             -finline-limit=64
+
+ # When building for debug, compile everything as x86.
+ TARGET_x86_debug_CFLAGS := $(TARGET_x86_release_CFLAGS)</pre>
+<p>We were good for a 8.5% gain with these new flags. Once combined with previous optimizations, we were now at 613KB (-27.9%).</p>
+<h3><a id="limit-the-number-of-architectures" class="anchor" href="#limit-the-number-of-architectures" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Limit the Number of Architectures</h3>
+<p>Our final suggestion is to limit the number of architectures. Supporting armeabi-v7a is mandory for performance if you have a lot of floating point computation, but armeabi will provide a similar result if you do not need a FPU. As for mips processors&#8230; well they just are not in use on the market today.</p>
+<p>And if binary size is really important to you, you can just limit your support to armeabi and x86 architectures in <em>Application.mk</em>:</p>
+<pre>APP_ABI := armeabi x86</pre>
+<p>Obviously, this optim was the killer one. Dropping two out of four architectures halved the binaries size. Overall we obtained a size of 307KB, a 64% gain from the initial 850KB (not counting the bump at 1.35MB due to iostream).</p>
+<h3><a id="conclusion" class="anchor" href="#conclusion" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h3>
+<p>I hope this post will help you to reduce the size of your native libraries on Android since default flags are far from optimal. Don&#8217;t expect to obtain the same size reductions, they will highly depend on your specific usage. And if you know other methods to reduce binary size, please share in the comments!</p>
+<p>&nbsp;</p>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fandroid-ndk-how-to-reduce-libs-size%2F&amp;t=Android+NDK%3A+How+to+Reduce+Binaries+Size+%E2%80%93+The+Algolia+Blog" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Android+NDK%3A+How+to+Reduce+Binaries+Size+%E2%80%93+The+Algolia+Blog&amp;url=https%3A%2F%2Fblog.algolia.com%2Fandroid-ndk-how-to-reduce-libs-size%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fandroid-ndk-how-to-reduce-libs-size%2F&amp;title=Android+NDK%3A+How+to+Reduce+Binaries+Size+%E2%80%93+The+Algolia+Blog&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                <div class="tags-container"><ul class="tags"><li><a href="https://blog.algolia.com/tag/android/" rel="tag">Android</a></li><li><a href="https://blog.algolia.com/tag/development/" rel="tag">Development</a></li></ul></div>
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-35">
+        <div id="dsq-comment-header-35" class="dsq-comment-header">
+            <cite id="dsq-cite-35">
+                <span id="dsq-author-user-35">Sylvain UTARD</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-35" class="dsq-comment-body">
+            <div id="dsq-comment-message-35" class="dsq-comment-message"><p>Not sure we could use any symbols/stacks if it crashes on a production<br />
+(mobile phone actually) environment. So what about stripping your<br />
+libraries ?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-36">
+        <div id="dsq-comment-header-36" class="dsq-comment-header">
+            <cite id="dsq-cite-36">
+                <a id="dsq-author-user-36" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-36" class="dsq-comment-body">
+            <div id="dsq-comment-message-36" class="dsq-comment-message"><p>Good Question, in fact the most common tips you can find on the web is to run strip -s on your librairies. But in fact the NDK toolchains automatically strip all librairies when compiled in release (default), so there is nothing to gain here:)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-37">
+        <div id="dsq-comment-header-37" class="dsq-comment-header">
+            <cite id="dsq-cite-37">
+                <a id="dsq-author-user-37" href="http://www.facebook.com/luke.weber.944" target="_blank" rel="nofollow">Luke Weber</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-37" class="dsq-comment-body">
+            <div id="dsq-comment-message-37" class="dsq-comment-message"><p>About limiting architectures that you support, I think a better approach is to just submit an apk for each architecture that only contains the libs for that specific architecture. In the store, it should download the apk that&#8217;s specific to that phone&#8217;s hardware based on having a libs/x86, libs/armeabi or libs/armbeabi-v7a directory present in that specific apk.</p>
+<p>Links:<br />
+<a href="http://developer.android.com/google/play/publishing/multiple-apks.html" rel="nofollow">http://developer.android.com/google/play/publishing/multiple-apks.html</a> &#8211; (CPU is a valid target for an apk)<br />
+<a href="http://developer.android.com/google/play/filters.html" rel="nofollow">http://developer.android.com/google/play/filters.html</a> &#8211; (Native Platform is an automatic filter for download.)<br />
+<a href="https://plus.google.com/u/1/+AndroidDevelopers/posts/cAajFQkW9Fg" rel="nofollow">https://plus.google.com/u/1/+AndroidDevelopers/posts/cAajFQkW9Fg</a> (Post that they released the feature)</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-38">
+        <div id="dsq-comment-header-38" class="dsq-comment-header">
+            <cite id="dsq-cite-38">
+                <a id="dsq-author-user-38" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-38" class="dsq-comment-body">
+            <div id="dsq-comment-message-38" class="dsq-comment-message"><p>Good approach, it would be nice if Google Play could generate these filter automatically for native libraries.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-39">
+        <div id="dsq-comment-header-39" class="dsq-comment-header">
+            <cite id="dsq-cite-39">
+                <a id="dsq-author-user-39" href="http://www.facebook.com/luke.weber.944" target="_blank" rel="nofollow">Luke Weber</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-39" class="dsq-comment-body">
+            <div id="dsq-comment-message-39" class="dsq-comment-message"><p>I also had a similar idea but They cant create new apks for you because you sign the contents so whatever you upload is what&#8217;s delivered. </p>
+<p>Also I noticed decent reduction in binary size just using clang in the newest ndks. Also ccflags contains cflags and then for large projects you can put it in you application make file like this.</p>
+<p><a href="https://github.com/lukeweber/webrtc-jingle-client/blob/master/android/voice-client-core/jni/default_final.mk" rel="nofollow">https://github.com/lukeweber/webrtc-jingle-client/blob/master/android/voice-client-core/jni/default_final.mk</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-40">
+        <div id="dsq-comment-header-40" class="dsq-comment-header">
+            <cite id="dsq-cite-40">
+                <a id="dsq-author-user-40" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-40" class="dsq-comment-body">
+            <div id="dsq-comment-message-40" class="dsq-comment-message"><p>Indeed it can only be done by the platforms-tools and not on Google Play.</p>
+<p>We have tried to use clang on our usecase but clang produced bigger binaries (+20%) compared to gcc with all our flags. There is probably some flags that are not handled or have a different name under clang.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-41">
+        <div id="dsq-comment-header-41" class="dsq-comment-header">
+            <cite id="dsq-cite-41">
+                <a id="dsq-author-user-41" href="http://www.facebook.com/luke.weber.944" target="_blank" rel="nofollow">Luke Weber</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-41" class="dsq-comment-body">
+            <div id="dsq-comment-message-41" class="dsq-comment-message"><p>It didn&#8217;t complain about any of the flags so I think they were respected, more or less. For me, I don&#8217;t see visibility doing anything, because I&#8217;m mostly linking static libraries into my shared object, in which case, visibility isn&#8217;t respected on linked statics. They are however cleaned up after striping the lib.</p>
+<p>Anyways my results:</p>
+<p>With flags:<br />
+Clang &#8211;  4.5M (28%)<br />
+gcc4.6 &#8211; 5.1M (19%)</p>
+<p>Without flags:<br />
+Clang &#8211; 6.0M (5%)<br />
+gcc4.6 &#8211; 6.3M (Baseline)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-42">
+        <div id="dsq-comment-header-42" class="dsq-comment-header">
+            <cite id="dsq-cite-42">
+                <span id="dsq-author-user-42">Philippe Hétroy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-42" class="dsq-comment-body">
+            <div id="dsq-comment-message-42" class="dsq-comment-message"><p>Hi Julien,</p>
+<p>On ARMV7 targets you may want to try -mthumb2 too?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-43">
+        <div id="dsq-comment-header-43" class="dsq-comment-header">
+            <cite id="dsq-cite-43">
+                <a id="dsq-author-user-43" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-43" class="dsq-comment-body">
+            <div id="dsq-comment-message-43" class="dsq-comment-message"><p>-mthumb2 is not recognized by toolchain (tested with gcc 4.6, gcc 4.7 and clang 3.1)</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-44">
+        <div id="dsq-comment-header-44" class="dsq-comment-header">
+            <cite id="dsq-cite-44">
+                <span id="dsq-author-user-44">Philippe Hétroy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-44" class="dsq-comment-body">
+            <div id="dsq-comment-message-44" class="dsq-comment-message"><p>Sorry, use -mthumb which triggers the use of thumb-2 instruction set on armv7<br />
+Actually setting APP_ABI=armeabi-v7a instead of armeabi should enable that option for you but it would break armv5 compatibility too.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-45">
+        <div id="dsq-comment-header-45" class="dsq-comment-header">
+            <cite id="dsq-cite-45">
+                <a id="dsq-author-user-45" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-45" class="dsq-comment-body">
+            <div id="dsq-comment-message-45" class="dsq-comment-message"><p>You are right, -mthumb is already set by default in release mode for armabi-v7a (in all toolchains).</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-46">
+        <div id="dsq-comment-header-46" class="dsq-comment-header">
+            <cite id="dsq-cite-46">
+                <span id="dsq-author-user-46">Gilles Vollant</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-46" class="dsq-comment-body">
+            <div id="dsq-comment-message-46" class="dsq-comment-message"><p>NDK now uses GCC 4.6. Did you tried option -flto (link time optimizer) ? This must reduce code size and enhance speed, but on my project, I didn&#8217;t see improvement</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-47">
+        <div id="dsq-comment-header-47" class="dsq-comment-header">
+            <cite id="dsq-cite-47">
+                <a id="dsq-author-user-47" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-47" class="dsq-comment-body">
+            <div id="dsq-comment-message-47" class="dsq-comment-message"><p>I just tested it with our code, I got a nice ICE (Internal Compiler Error)with GCC 4.6.</p>
+<p>With GCC 4.7 I had no ICE but my binaries are bigger (-flto passed as argument to compiler and linker)</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-48">
+        <div id="dsq-comment-header-48" class="dsq-comment-header">
+            <cite id="dsq-cite-48">
+                <span id="dsq-author-user-48">Gilles Vollant</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-48" class="dsq-comment-body">
+            <div id="dsq-comment-message-48" class="dsq-comment-message"><p>code is sometime bigger and faster&#8230; also, did you compare gcc and clang?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-49">
+        <div id="dsq-comment-header-49" class="dsq-comment-header">
+            <cite id="dsq-cite-49">
+                <span id="dsq-author-user-49">Gilles</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-49" class="dsq-comment-body">
+            <div id="dsq-comment-message-49" class="dsq-comment-message"><p>On my mac xcode test, clang flto reduce size</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-3" id="dsq-comment-466">
+        <div id="dsq-comment-header-466" class="dsq-comment-header">
+            <cite id="dsq-cite-466">
+                <span id="dsq-author-user-466">Gilles Vollant</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-466" class="dsq-comment-body">
+            <div id="dsq-comment-message-466" class="dsq-comment-message"><p>with gcc 4.9 (ndk 10e) and -Os, flto give smaller executable.<br />
+with clang, I cannot use link time optimization</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-50">
+        <div id="dsq-comment-header-50" class="dsq-comment-header">
+            <cite id="dsq-cite-50">
+                <a id="dsq-author-user-50" href="http://www.salmonrivers.net/%E3%81%8A%E6%B0%97%E3%81%AB%E5%85%A5%E3%82%8A-orient-%E3%82%AA%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E3%82%BB%E3%83%BC%E3%83%AB/%E7%B4%B9%E4%BB%8B%E3%81%95%E3%82%8C%E3%81%9F-" target="_blank" rel="nofollow">レディース腕時計[輸入品]</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-50" class="dsq-comment-body">
+            <div id="dsq-comment-message-50" class="dsq-comment-message"><p>I really like what you guys tend to be up too. This type of clever<br />
+work and coverage! Keep up the terrific works guys I&#8217;ve added you guys to my blogroll.</p>
+<p>my web blog &#8211; <a href="http://www.salmonrivers.net/%E3%81%8A%E6%B0%97%E3%81%AB%E5%85%A5%E3%82%8A-orient-%E3%82%AA%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E3%82%BB%E3%83%BC%E3%83%AB/%E7%B4%B9%E4%BB%8B%E3%81%95%E3%82%8C%E3%81%9F-three-star-%E3%82%B9%E3%83%AA%E3%83%BC%E3%82%B9%E3%82%BF%E3%83%BC-%E8%B4%88%E5%91%88" rel="nofollow">レディース腕時計[輸入品]</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/meet-us-at-the-mobile-world-congress/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/meet-us-at-the-mobile-world-congress/'>Meet us at the Mobile World Congress! - The Algolia Blog</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/4th-datacenter-california/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/09/sf1-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/09/sf1-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/09/sf1-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/4th-datacenter-california/'>Algolia opened its 4th datacenter in California!</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fandroid-ndk-how-to-reduce-libs-size%2F&amp;t=Android+NDK%3A+How+to+Reduce+Binaries+Size+%E2%80%93+The+Algolia+Blog" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Android+NDK%3A+How+to+Reduce+Binaries+Size+%E2%80%93+The+Algolia+Blog&amp;url=https%3A%2F%2Fblog.algolia.com%2Fandroid-ndk-how-to-reduce-libs-size%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fandroid-ndk-how-to-reduce-libs-size%2F&amp;title=Android+NDK%3A+How+to+Reduce+Binaries+Size+%E2%80%93+The+Algolia+Blog&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"794 http:\/\/blog.algolia.com\/?p=794","disqusShortname":"algoliablog","disqusTitle":"Android NDK: How to Reduce Binaries Size \u2013 The Algolia Blog","disqusUrl":"https:\/\/blog.algolia.com\/android-ndk-how-to-reduce-libs-size\/","options":{"manualSync":false},"postId":"794"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'794',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '794' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

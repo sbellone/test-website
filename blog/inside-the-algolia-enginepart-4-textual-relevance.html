@@ -1,0 +1,735 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Inside the Algolia Engine Part 4 — Textual Relevance - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Inside the Algolia Engine Part 4 — Textual Relevance Comments Feed" href="https://blog.algolia.com/inside-the-algolia-enginepart-4-textual-relevance/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=5220' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-enginepart-4-textual-relevance%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-enginepart-4-textual-relevance%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=8A897C3DD8ACEECB958C9383B7412327');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Inside the Algolia Engine Part 4 — Textual Relevance"/>
+  <meta property="og:url" content="https://blog.algolia.com/inside-the-algolia-enginepart-4-textual-relevance/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="The way we search has changed a lot in the past decade. The original function of the Enter key was to begin a search, today it’s used to select a result that’s already been displayed. The type of information that people search for has changed too.
+
+Today’s search engines are used for much more tha"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy.png"/>
+  <meta property="article:published_time" content="2016-07-07T05:36:27+00:00"/>
+  <meta property="article:modified_time" content="2017-04-21T03:56:03+00:00" />
+  <meta property="og:updated_time" content="2017-04-21T03:56:03+00:00" />
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Inside the Algolia Engine Part 4 — Textual Relevance"/>
+  <meta itemprop="description" content="The way we search has changed a lot in the past decade. The original function of the Enter key was to begin a search, today it’s used to select a result that’s already been displayed. The type of information that people search for has changed too.
+
+Today’s search engines are used for much more tha"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Inside the Algolia Engine Part 4 — Textual Relevance"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/inside-the-algolia-enginepart-4-textual-relevance/"/>
+  <meta name="twitter:description" content="The way we search has changed a lot in the past decade. The original function of the Enter key was to begin a search, today it’s used to select a result that’s already been displayed. The type of information that people search for has changed too.
+
+Today’s search engines are used for much more tha"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-5220 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-5220" class="cf post-5220 post type-post status-publish format-standard has-post-thumbnail hentry category-technology" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Inside the Algolia Engine Part 4 — Textual Relevance</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/25760a5d4e793e491f26da5db64bb738?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">julien</span> |
+                    <time class="updated entry-time" datetime="2016-07-07" itemprop="datePublished">July 7, 2016</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/inside-the-algolia-enginepart-4-textual-relevance/" title="Inside the Algolia Engine Part 4 — Textual Relevance">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy-720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy-720x400.png 720w, https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy-768x427.png 768w, https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy-340x189.png 340w, https://blog.algolia.com/wp-content/uploads/2016/07/indexing-part2-copy.png 1440w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">The way we search has changed a lot in the past decade. The original function of the Enter key was to begin a search, today it’s used to select a result that’s already been displayed. The type of information that people search for has changed too.</p>
+<p>Today’s search engines are used for much more than just web sites and documents—they’re also used to find specific items like people, places and products.</p>
+<p>The Algolia engine was designed with both of these trends in mind. Algolia’s sweet spot is providing instant, relevant access to millions of small, structured records (and now from <a href="https://www.algolia.com/infra">anywhere in the world</a>). In this blog post, we’ll talk about how the Algolia engine computes <i>textual relevance</i> and why it works well for exactly these kinds of records. By textual relevance, we mean the letter and word-based aspect of ranking query results. Textual relevance does not include business relevance, which is used to provide a <a href="https://www.algolia.com/doc/relevance/ranking#custom-ranking">custom ranking</a> based on non-textual information like price, number of followers or number of sales.</p>
+<p>In a previous post we discussed <a href="https://blog.algolia.com/how-algolia-tackled-the-relevance-problem-of-search-engines/">how our ranking formula works</a>, specifically how it uses a tie-breaking algorithm to rank each component of textual relevance one-by-one. In this post, we’ll look at each of the five individual components it uses in detail: <i>number of typos, number of words, proximity of words, importance of attributes </i>and <i>exactness</i>.</p>
+<h2><a id="1-the-five-components-of-textual-relevance" class="anchor" href="#1-the-five-components-of-textual-relevance" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1. The five components of textual relevance</h2>
+<p>Each of these components address a unique relevance challenge while also playing their part in the global relevance calculation.<br />
+<a name="1.1"></a></p>
+<h3><a id="1-1-number-of-typos" class="anchor" href="#1-1-number-of-typos" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1.1 Number of typos</h3>
+<p>The <i>number of typos</i> criterion is the number of typos in the query when compared with text in the record. This criterion allows you to rank results containing typos below results with the correct spelling. For example, in a search for<i> &#8220;Geox CEO&#8221;</i>, you would prefer to have the <i>&#8220;Geox&#8221; </i>result (a typo-free match) displayed before <i>&#8220;Gox&#8221;</i> (a 1-letter-off typo). This example has a twist—”<i>Gox”</i> is not actually a typo in the usual sense (it’s a correctly spelled proper noun) but it’s still possible that a user could have mistyped <i>“Geox”</i> when searching for it.</p>
+<pre>1st record:
+<span style="text-decoration: underline;">Title</span>: "<b>Geox</b> SpA: <b>CEO</b> and Executive"</pre>
+<pre>2nd record:
+<span style="text-decoration: underline;">Title</span>:<b> "</b>Mt. <b>Gox</b> <b>CEO</b> Resigns From Bitcoin Foundation<b>"</b></pre>
+<p><a name="1.2"></a></p>
+<h3><a id="1-2-number-of-words" class="anchor" href="#1-2-number-of-words" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1.2 Number of words</h3>
+<p>The <i>number of words</i> criterion is the number of query words found in the record. This criterion applies when the query is performed with <i>all words optional</i> (a.k.a. an &#8220;OR query&#8221;), a technique commonly used to avoid displaying no results. Here’s a simple example. If you search for <i>&#8220;supreme court apple&#8221;</i> you would prefer to have the first record before the second one as it contains all 3 of the words in the query.</p>
+<pre>1st record:
+<span style="text-decoration: underline;">Title</span>: "<b>Supreme Court</b> turns away <b>Apple</b> appeal in e-books antitrust case"</pre>
+<pre>2nd record:
+<span style="text-decoration: underline;">Title</span>: "<b>Supreme Court</b> upholds Obama’s health-law subsidies"</pre>
+<p><a name="1.3"></a></p>
+<h3><a id="1-3-proximity-of-words" class="anchor" href="#1-3-proximity-of-words" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1.3 Proximity of words</h3>
+<p>The <i>proximity of words</i> criterion is the distance between the matched words in the result. It’s used to rank records where the query words are close to each other before records where the words are farther apart. In the example below, you can see two different results for the query <i>&#8220;Michael Jackson&#8221;</i>. In the first record, the proximity criterion is 0 &#8211; the terms <i>‘Michael’</i> and <i>‘Jackson’</i> are right next to each other. In the second record, the proximity criterion is 6 because there are 6 words between the matching terms. A lower value is better, i.e. records with a lower proximity value will be ranked about records with a higher value.</p>
+<pre>1st record:
+<span style="text-decoration: underline;">Title</span>: "<b>Michael Jackson</b> songs radiate through Spike Lee's neighborhood celebration saluting the King of Pop"</pre>
+<pre>2nd record:
+<span style="text-decoration: underline;">Title</span>: "<b>Michael</b> K. Williams found inspiration in Janet <b>Jackson</b>"</pre>
+<p><a name="1.4"></a></p>
+<h3><a id="1-4-importance-of-attributes" class="anchor" href="#1-4-importance-of-attributes" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1.4 Importance of attributes</h3>
+<p>The <i>importance of attributes </i>criterion identifies the most important matching attribute(s) of the record. Since records can contain more than one attribute, it’s not uncommon for one query to match multiple attributes of the same record or different attributes of different records. However, a match of one attribute might be more important than another when it comes to ranking, and that’s precisely why we have the attribute criterion. An example is shown below. Given a query for <i>“Netflix” </i>in a collection of articles, you’d want the <i>title</i> attribute match to carry more weight than the <i>description</i> attribute, hence the title-matching record is displayed first.</p>
+<pre>1st record:
+
+<span style="text-decoration: underline;">Title</span>: "<b>Netflix</b> is making movies shunned by studios"
+
+<span style="text-decoration: underline;">Description</span>: "As the company moves into feature films with the release of “Beasts of No Nation” on its streaming service and simultaneously in a small number of theaters, it is creating the type of movies that studios no longer make."</pre>
+<pre>2nd record:
+
+<span style="text-decoration: underline;">Title</span>: "The new documentary ‘What Happened, Miss Simone?’ takes a look at the life and legacy of Nina Simone"
+
+<span style="text-decoration: underline;">Description</span>:  "The new <b>Netflix</b> documentary ‘What Happened, Miss Simone?’ takes a look at the life and legacy of the talented Nina Simone."</pre>
+<p><a name="1.5"></a></p>
+<h3><a id="1-5-exactness" class="anchor" href="#1-5-exactness" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1.5 Exactness</h3>
+<p>The <i>exactness </i>criterion is the number of words that are matched <b>exactly</b>. This criterion is very important for building quality instant (search-as-you-type) experiences because it’s important to display full-word matches before prefix matches. See the example below. If you search for <i>&#8220;Prince&#8221;</i>, you want the exact word match to appear before the match where “<b><i>Prince</i></b><i>”</i> is being considered as a prefix of “<b><i>Prince</i></b><i>ss”</i>.</p>
+<pre>1st record:
+<span style="text-decoration: underline;">Title</span>: "Reflections on <b>Prince</b>: My classmate, the rock star"</pre>
+<pre>2nd record:
+<span style="text-decoration: underline;">Title</span>: "Spain’s <b>Prince</b>ss Cristina goes on trial"</pre>
+<h2><a id="2-how-the-criteria-are-computed" class="anchor" href="#2-how-the-criteria-are-computed" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2. How the criteria are computed</h2>
+<p>We’ve just seen what each criterion does and how it can be used to influence the ranking of search results. Next, let’s look at how the five criteria are computed and what we’ve done to make their computation efficient.<br />
+<a name="2.1"></a></p>
+<h3><a id="2-1-computing-the-number-of-typos" class="anchor" href="#2-1-computing-the-number-of-typos" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2.1 Computing the number of typos</h3>
+<p>In our previous post about<a href="https://blog.algolia.com/inside-the-algolia-engine-part-3-query-processing/"> Query Processing</a>, we explained how alternative terms are added to queries. For each alternative term, we also have an associated number of typo criteria (which corresponds to the edit-distance). This value of the overall typo ranking criterion is the sum of all typos used to find the match. For example, if the record is found via 2 words having 1 typo each, the typo criterion value will be 2.</p>
+<p>It’s a very good practice to have this criterion at the top of the ranking formula. However, there is one exception: <b>typosquatting</b>. If you operate a service with a lot of user-generated content, you might already be familiar with this problem. Let’s take Twitter as an example. If you search for <i>&#8220;BarakObama&#8221;</i> on Twitter (note the typo), you would want the official <i>@BarackObama</i> account to appear before the typosquatting account <i>@BarakObama</i>. However, today it does not (as of June 2016). Typosquatting is a complex and difficult challenge.</p>
+<p>One way that we recommend to handle typosquatting is to add an <i>isPopular</i> boolean attribute to the record of popular accounts and then to put it in the ranking formula before the typo criterion. On Twitter, <i>isPopular</i> could be set to true if the account is verified. This approach ensures that the official account with a typo will be displayed before any typosquatting accounts, no need to hide any results. For this approach to work well, the number of records with <i>isPopular</i> set to true should be a relatively small percentage of the dataset (less than 1%).</p>
+<h5>2.1.1 Typo tolerance tuning</h5>
+<p>The Algolia engine provides several different ways to tune typo tolerance for specific words and attributes:</p>
+<ul>
+<li><i>minWordSizefor1Typo</i> and <i>minWordSizefor2Typos</i>: Specify the minimum number of characters in a query word before it can be considered as a 1 or 2 typo match.</li>
+<li><i>allowTyposOnNumericTokens</i>: Specify if typo tolerance is active on numeric tokens (numbers) present in the query.</li>
+<li><i>disableTypoToleranceOnWords</i>: Specify a list of words for which typo tolerance will be disabled.</li>
+<li><i>disableTypoToleranceOnAttributes</i>: Specify a list of attributes for which typo tolerance will be disabled.</li>
+<li><i>Alternative corrections</i>: Specify a set of alternative corrections with the associated number of typos.</li>
+<li><i>advancedSyntax</i>: Add quotes around query words to disable typo tolerance on them.</li>
+</ul>
+<p><a name="2.2"></a></p>
+<h3><a id="2-2-computing-the-number-of-words" class="anchor" href="#2-2-computing-the-number-of-words" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2.2 Computing the number of words</h3>
+<p>Computing this criterion is relatively easy, it’s just the number of words from the query that are present in the record. Each word might be matched exactly or matched by any alternative form (a typo, a prefix, a synonym, etc.).</p>
+<p>The position of the words criterion in the ranking is important and will impact results. For example, the query <i>&#8220;iphone case catalist&#8221;</i> with all terms as optional will have two different ways to match the record &#8220;<i>Catalyst Waterproof Case for iPhone 6/6S Orange</i>&#8220;:</p>
+<ol>
+<li><i>If </i><b><i>words</i></b><i> is before </i><b><i>typo </i></b><i>in the ranking formula:</i> The ranking will be set to <b>words=3</b> and <b>typo=1</b> as matching more words is important to the ranking (even if <i>Catalyst</i> is found via a typo).</li>
+<li><i>If </i><b><i>typo</i></b><i> is before </i><b><i>words</i></b><i> in the ranking formula:</i> The ranking will be set to <b>words=2</b> and <b>typo=0</b> as less typos are more important to the ranking (in this case it’s better to not match the <i>Catalyst</i> term and therefore not introduce a typo).</li>
+</ol>
+<p><a name="2.2.1"></a></p>
+<h5>2.2.1 The removeWordsIfNoResults parameter</h5>
+<p>Because of situations like this, we usually recommend against performing queries with all terms optional. Instead, we recommend using a<a href="https://www.algolia.com/doc/rest#param-removeWordsIfNoResults"> specific query parameter</a> that we’ve added to the API to help with these types of situations. The <i>removeWordsIfNoResults</i> parameter instructs the engine to first test the query with all terms as mandatory, then progressively retry it with more and more words as optional until there are results. This parameter gives us the best of both worlds (predictable behavior and always showing results) and also does not pollute faceting results. When all terms are optional there is a large increase in the number of matched records, as only one matching word is required to add the record to a facet. For example, in a query for “iphone black case”, any <i>black</i> item will be matched which will have a big impact on the quality of the faceting.<br />
+<a name="2.3"></a></p>
+<h3><a id="2-3-computing-the-proximity-of-words" class="anchor" href="#2-3-computing-the-proximity-of-words" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2.3 Computing the proximity of words</h3>
+<p>The proximity criterion’s value is the sum of the proximity of all pairs of words that are next to each other in the query. Computing the proximity of <i>&#8220;iphone release date&#8221;</i> is done like this: <i>proximity(&#8220;iphone&#8221;, &#8220;release&#8221;) + proximity(&#8220;release&#8221;, &#8220;date&#8221;)</i>.</p>
+<p>The engine stores word positions at indexing time in order to efficiently compute proximity at query time. We define the distance between two words A and B as the <i>shortest</i> distance between any A and B in the record (A and B may appear more than once). We increase the distance by 1 if the match with the shortest distance is not in the queried order.</p>
+<p>The computed proximity between two words is capped at <b>8</b>. If the words &#8220;apple&#8221; and &#8220;iphone&#8221; are separated by a distance of 10 or 100 words, the distance will still be 8. The goal is to avoid creating different proximity values for words that are not used in remotely the same context. In practice, 8 words is a sizeable distance between any 2 words, even when it’s mostly common words between them. Capping the maximum proximity has two other advantages:</p>
+<ol>
+<li>It helps our tie-breaking algorithm. A maximum distance of 8 means that we don&#8217;t know if a distance between words of 10 is better than 100, and usually we don’t want to (it’s just noise). Capping the proximity at a small number prevents introducing false positives into the relevance calculation. More importantly, it lets the other criteria in the ranking formula take over when proximity values are not meaningfully differentiated.</li>
+<li>It enables a lot of optimizations on the storage and computation side, as we will see.</li>
+</ol>
+<p><a name="2.3.1"></a></p>
+<h5>2.3.1 How word positions are stored</h5>
+<p>As we index a document, we assign an integer position to each occurrence of each word. For example the string <i>&#8220;Fast and Furious&#8221;</i> would be indexed as:</p>
+<ul>
+<li><i>&#8220;Fast&#8221;</i> at position 0</li>
+<li><i>&#8220;and&#8221;</i> at position 1</li>
+<li><i>&#8220;Furious&#8221;</i> at position 2</li>
+</ul>
+<p>Additionally, we assign positions to some word prefixes as described in our<a href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/"> blog post about indexing prefixes</a>.</p>
+<p>The position is also used to efficiently store associated information:</p>
+<ul>
+<li>We use a single value to store the position of each word in the text and which attribute it came from. We keep the position of the first 1000 words inside each attribute and associate an number to each attribute (the first attribute will have positions 0-999, the second attribute will have positions 1000-1999, etc.)</li>
+<li>For multi-valued string attributes, we need to ensure that the last word of a string isn&#8217;t considered to be next to the first word of the next string. To do that, we increment the first position of each string by 8 each time we move from one string to another. For example if a record contains the following <i>“Actors”</i> attribute, we will store the word &#8220;Diesel&#8221; with a position of 1 and the word &#8220;Paul&#8221; with a position of 10 (+8 compared to the value in the same string). This will generate a proximity of 8 if you type &#8220;Diesel Paul&#8221;, which is the highest value for proximity.</li>
+</ul>
+<pre><b>{</b>
+ <b>"Actors"</b>: <b>[</b>
+   "Vin Diesel"<b>,</b>
+   "Paul Walker"
+<b> ]</b>
+<b>}</b></pre>
+<p><a name="2.3.2"></a></p>
+<h5>2.3.2 Bonus challenge: multi-word alternatives</h5>
+<p>Computing a proximity distance can be very complex when you support alternative word matching, e.g. synonyms. If you have a synonym that defines &#8220;NYC&#8221; = &#8220;New York City&#8221; = &#8220;New York&#8221; = &#8220;NY&#8221;, you would like to consider a record that contains &#8220;NYC&#8221; as strictly identical to a record that contains &#8220;New York&#8221;. We solve this tricky problem by rewriting all word positions at query time.</p>
+<p>Time for an example. Let&#8217;s say that you have two different articles that you want to be searchable via a query for the &#8220;New York subway&#8221;. You would like the proximity distance calculation to be the same between them. Here are the article titles:</p>
+<ol>
+<li>&#8220;<a href="http://www.theatlantic.com/technology/archive/2015/11/why-dont-we-know-where-all-the-trains-are/415152/#hn?single_page=true">Why New York Subway Lines Are Missing Countdown Clocks&#8221; </a></li>
+<li>&#8220;NYC subway math&#8221;</li>
+</ol>
+<p>When this query is run, the first record will be matched via three words (&#8220;<i>new</i>&#8221; at position 1, &#8220;<i>york</i>&#8221; at position 2 and &#8220;<i>subway</i>&#8221; at position 3) and the second record will be matched via two words (&#8220;<i>nyc</i>&#8221; at position 0 and &#8220;<i>subway</i>&#8221; at position 1).</p>
+<p>In order to avoid this inconsistency, we rewrite positions using a multi-word expansion. For the <i>&#8220;NYC subway”</i> query, we apply the following transformation:</p>
+<ul>
+<li><i>&#8220;Nyc&#8221; at position 0 became:</i>
+<ul>
+<li><i>Virtually &#8220;new&#8221; </i>at position 0</li>
+<li>Virtually &#8220;york&#8221; at position 1</li>
+</ul>
+</li>
+<li><i>&#8220;subway&#8221;</i> <i>at position 1 became:</i>
+<ul>
+<li>&#8220;Subway&#8221; at position 2 because we introduced &#8220;york&#8221; word at position 1.</li>
+</ul>
+</li>
+</ul>
+<p>After the transformation, we have exactly the same proximity measure between the two records. This rewriting is entirely cumulative. For the &#8220;New York&#8221; query, if a record contains &#8220;NYC&#8221; at positions 5 and 15, it means that all original positions greater than 15 will be increased by 2 and all original positions between 6 and 15 will be increased by 1.<br />
+<a href="https://blog.algolia.com/inside-the-algolia-enginepart-4-textual-relevance/multiwordsynonyms/" rel="attachment wp-att-5730"><img class="aligncenter  wp-image-5730" src="https://blog.algolia.com/wp-content/uploads/2016/07/MultiWordSynonyms.png" alt="Example of position rewriting" width="322" height="663" srcset="https://blog.algolia.com/wp-content/uploads/2016/07/MultiWordSynonyms.png 600w, https://blog.algolia.com/wp-content/uploads/2016/07/MultiWordSynonyms-86x178.png 86w, https://blog.algolia.com/wp-content/uploads/2016/07/MultiWordSynonyms-194x400.png 194w" sizes="(max-width: 322px) 100vw, 322px" /></a><a name="2.3.3"></a></p>
+<h5>2.3.3 Attribute-aware proximity</h5>
+<p>When computing the proximity score, we don’t want to be misled when different parts of the search expression are found in different attributes of the record.</p>
+<p>Say you’re looking for <i>&#8220;soup of the day&#8221;</i> and you have a record with <i>&#8220;soup&#8221;</i>, <i>&#8220;of the&#8221;</i> and <i>&#8220;the day&#8221;</i> separately in three different attributes. In this case we do not want to compute a total distance of 10 (<i>distance(soup, of)=8</i> + <i>distance(of, the)=1</i> + <i>distance(the, day)=1)</i> because it would mean <i>“of the day”</i> are close together, which is not the case. Instead, we want a total distance of 17 (<i>distance(soup, of)=8</i> + <i>distance(of, the)=1</i> + <i>distance(the, day)=8)</i>. The distance of 8 between <i>&#8220;the&#8221;</i> and <i>&#8220;day&#8221;</i> tells us that <i>&#8220;day&#8221;</i> was found in a different block than <i>&#8220;of the&#8221;</i>. We use a dynamic programing algorithm to do this computation efficiently with a cost of <i>O(N) </i>(N being the number of matched positions).</p>
+<h5>2.3.4 Proximity computation tuning</h5>
+<p>The <i>minProximity</i> index setting allows to change the minimum proximity to something that fits your data better. If you set <i>minProximity=2</i>, it would mean that the query <i>&#8220;New York City Subway&#8221;</i> will have the same proximity score whether the record contains <i>&#8220;New York City Subway&#8221;</i> or <i>&#8220;New York City&#8217;s newest subway&#8221;</i>. The distance would normally be 1+1+1 for the first record and 1+1+2 for the second, but setting <i>minProximity=2</i> means that all pairs of words with a distance less than or equal to <i>minProximity</i> are counted for 1. In this example, both records are given a proximity criterion score of 3.<br />
+<a name="2.4"></a></p>
+<h3><a id="2-4-computing-the-most-important-attributes" class="anchor" href="#2-4-computing-the-most-important-attributes" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2.4 Computing the most important attributes</h3>
+<p>As a reminder, the attribute criterion lets us say that a query match in some attributes is more important than others.</p>
+<p>Each attribute is indexed as <i>ordered</i> or <i>unordered</i> (this is configured in the index settings). Indexing an attribute as <i>ordered</i> means that the position of the best matched word inside the attribute is taken into account during ranking. So earlier words will matter more. Indexing as <i>unordered</i> means that the position within the attribute is not taken into account. Word position is not important.</p>
+<p>An example—if you index the <i>title</i> attribute as <i>ordered</i> and <i>description</i> attribute as <i>unordered</i>, the query <i>“Netflix”</i> will return the following 2 records in the order displayed.</p>
+<pre>1st record:
+
+<span style="text-decoration: underline;">Title</span>: “Cable fights <b>Netflix</b> to feed 'binge' TV viewers"
+
+<span style="text-decoration: underline;">attribute=2</span>: <strong>Netflix</strong> is the third word of the title attribute (title attribute is indexed with positions 0 to 999).</pre>
+<pre>2nd record:
+
+<span style="text-decoration: underline;">Title</span>: "Deborah Ann Woll Previews ‘Daredevil’ Season Two",
+
+<span style="text-decoration: underline;">Description</span>: "Deborah Ann Woll, who co-stars as Karen Page on the <b>Netflix</b> superhero series “Daredevil”
+
+<span style="text-decoration: underline;">attribute=1000</span>: <strong>Netflix</strong> is found in the description attribute (the description attribute is indexed with positions 1000 to 1999 because it is the second indexed attribute). The attribute criterion is set to 1000 because the description attribute is indexed as unordered.</pre>
+<h5>2.4.1 When proximity is before attribute in the ranking</h5>
+<p>There are two strategies to compute best-matched attributes and they depend on the relative position of <i>proximity</i> and <i>attribute</i> criteria in the ranking formula. Let&#8217;s illustrate them by using the query &#8220;VMware CEO&#8221; to retrieve the following record:</p>
+<pre><span style="text-decoration: underline;">Title</span>: "<b>VMware's</b> chief drives three-pronged focus for virtualization software maker",
+
+<span style="text-decoration: underline;">Description</span>: "<b>VMware CEO</b> Patrick Gelsinger, in an interview, lays out the software maker's future in software-defined data centers, cloud computing and managing user devices like PCs and smartphones."</pre>
+<ul>
+<li>If <i>proximity</i> is before <i>attribute</i> in the ranking formula, we first find the location with the best proximity in the record and we then compute the best attribute on this location. On the record below, the query <i>“VMware CEO”</i> will have an attribute criterion of 1000 as the best proximity is found in the description attribute instead of the title attribute.</li>
+<li>If <i>attribute</i> is before <i>proximity</i>, the best-matched attribute will be decided by the position of the best-matched word in the record. In this case, the query <i>“VMware CEO”</i> will have an attribute criterion of 0 as the best word is matched in the <i>title</i> attribute.</li>
+</ul>
+<p>We recommend keeping the proximity criterion before attribute criterion. Proximity usually leads to a better identification of the best-matched attribute.<br />
+<a name="2.5"></a></p>
+<h3><a id="2-5-computation-of-the-exactness-criterion" class="anchor" href="#2-5-computation-of-the-exactness-criterion" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2.5 Computation of the exactness criterion</h3>
+<p>The <i>exactness</i> criterion represents the number of words that match entirely, not one as a prefix of another. This criterion works well when the query contains several words but the one-word case requires a modified approach. In an instant search use case, if a user has typed “was”, there is a greater chance that he or she might be in the middle of typing a search for <i>“Washington”</i> and not just stopping at the verb <i>“was”</i>. Displaying <i>“was”</i> before <i>“Washington”</i> in the results at that moment would not be ideal.</p>
+<p>We have implemented three different ways to compute the exactness criterion for a single word query, each specified via the <i>exactOnSingleWordQuery</i> parameter:</p>
+<ul>
+<li><b>exactOnSingleWordQuery=none</b>: The exact criteria is set to 0 for all one-word queries.</li>
+<li><b>exactOnSingleWordQuery=attribute</b>: All records that have an attribute string exactly equal to the query will have exact=1. This option is the default as it works well for databases that contain names, brands, companies, etc.</li>
+<li><b>exactOnSingleWordQuery=word</b>: All records will have exact set to 1 if there is a word that matches exactly and is not in our stop word dictionary (see the <a href="https://www.algolia.com/doc/rest#param-removeStopWords-2"><i>removeStopWords</i></a> option for more information). For the query “<i>prince</i>”, a record with “<i>prince</i>” will have exact=1 and a record with “<i>princess</i>” will have exact=0. For a query “was”, both records containing “was” and “Washington” will have exact=0 because “was” is in the stop word dictionary.</li>
+</ul>
+<p>There is unfortunately no magic option that works well with all use cases, which is why we introduced the <i>exactOnSingleWordQuery</i> parameter. We recommend using <i>exactOnSingleWordQuery=attribute</i> if you have a database that contains lots of one-word entries like brand names, account names, movies, etc. We recommend using <i>exactOnSingleWordQuery=word </i>when you have content like titles that have a low probability of matching an entry using only one word.<br />
+<a name="2.6"></a></p>
+<h3><a id="2-6-designed-for-small-records" class="anchor" href="#2-6-designed-for-small-records" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2.6 Designed for small records</h3>
+<p>The five components of textual relevance we’ve discussed are uniquely designed for small, structured records. A few of them require some fairly complex processing, like the query-time rewriting of word positions for multi-word alternatives, but we think that having an approximation-free, exact value computation is worth it.</p>
+<p>If you don’t automatically have small, structured records—i.e. if you’re starting with documents or long blocks of text—we recommended splitting them into multiple, shorter records. One record per paragraph is a good rule of thumb. This is the approach used by our <a href="https://community.algolia.com/docsearch/">DocSearch</a> project, which crawls web pages containing technical documentation and can generate many records per page. DocSearch is now powering the search of 150+ open source projects, so there are lots of places you can <a href="https://github.com/algolia/docsearch-configs">try it out</a>.</p>
+<p>We’re constantly seeking more ways to customize relevance for advanced use cases. Some of the parameters presented in this post have been added to the API recently and several new parameters are currently being beta tested.</p>
+<p>A few weeks ago we were given a challenge: to index millions of articles of a popular news website and provide relevant results about the artist Prince’s death, even for queries with typos like &#8220;<i>Prinse</i>&#8220;. The query “<i>Prinse</i>” matches article with &#8220;Prince&#8221; in the title (typo=1, words=1, proximity=0, attribute=0, exact=0) but the results were being displayed below other articles about <i>&#8220;Sharon Prinsen&#8221;</i> (typo=0, words=1, proximity=0, attribute=1000, exact=0) because it matches a prefix without typo. To solve this issue, we introduced a new option to consider all prefix matches as a typo: now all articles with <i>“Prince”</i> in the title will be served first (typo=1, words=1, proximity=0, attribute=0, exact=0) and articles mentioning <i>&#8220;Sharon Prinsen&#8221;</i> will come after (typo=1, words=1, proximity=0, attribut=1000, exact=0). With this improvement, we were able to address the relevance problem of prefixes while maintaining a high quality instant search experience.</p>
+<p>Relevance is our passion and we love to be challenged. Feel free to contact us if you have a complex use case with relevance issues, we’d be happy to help!</p>
+<p>We recommend to read the other posts of this series:</p>
+<ul>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-1-indexing-vs-search/">Part 1 – indexing vs. search</a></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/">Part 2 – the indexing challenge of instant search</a></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-3-query-processing/">Part 3 – query processing</a></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux/">Part 5 – Highlighting, a Cornerstone of Search UX</a></li>
+<li><a href="https://blog.algolia.com/inside-the-engine-part-6-handling-synonyms-the-right-way/">Part 6 – Handling Synonyms the Right Way</a>
+<li><a href="https://blog.algolia.com/inside-the-engine-part-7-better-relevance-via-dedup-at-query-time/">Part 7 – Better relevance via dedup at query time</a></li>
+</ul>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-enginepart-4-textual-relevance%2F&amp;t=Inside+the+Algolia+Engine+Part+4+%E2%80%94+Textual+Relevance" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Inside+the+Algolia+Engine+Part+4+%E2%80%94+Textual+Relevance&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-enginepart-4-textual-relevance%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-enginepart-4-textual-relevance%2F&amp;title=Inside+the+Algolia+Engine+Part+4+%E2%80%94+Textual+Relevance&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                
+                
+<div id="disqus_thread">
+    </div>
+
+                                                  
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-enginepart-4-textual-relevance%2F&amp;t=Inside+the+Algolia+Engine+Part+4+%E2%80%94+Textual+Relevance" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Inside+the+Algolia+Engine+Part+4+%E2%80%94+Textual+Relevance&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-enginepart-4-textual-relevance%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-algolia-enginepart-4-textual-relevance%2F&amp;title=Inside+the+Algolia+Engine+Part+4+%E2%80%94+Textual+Relevance&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"5220 https:\/\/blog.algolia.com\/?p=5220","disqusShortname":"algoliablog","disqusTitle":"Inside the Algolia Engine Part 4 \u2014 Textual Relevance","disqusUrl":"https:\/\/blog.algolia.com\/inside-the-algolia-enginepart-4-textual-relevance\/","options":{"manualSync":false},"postId":"5220"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'5220',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '5220' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

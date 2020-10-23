@@ -1,0 +1,601 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>With Algolia Offline, Take your Search Bar Everywhere. - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; With Algolia Offline, Take your Search Bar Everywhere. Comments Feed" href="https://blog.algolia.com/with-algolia-offline-take-your-search-bar-everywhere/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=5933' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fwith-algolia-offline-take-your-search-bar-everywhere%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fwith-algolia-offline-take-your-search-bar-everywhere%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=24F5D8AFD52A0EBE27578276ADADE200');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="With Algolia Offline, Take your Search Bar Everywhere."/>
+  <meta property="og:url" content="https://blog.algolia.com/with-algolia-offline-take-your-search-bar-everywhere/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Mobile apps are everywhere, occupying an ever-growing part of our daily lives. Ironically, this pervasiveness has taken apps to areas where network coverage is still not that great: public transport, underground areas, big malls… or outside big cities. With offline usability becoming an increasingly"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2017/02/offline.png"/>
+  <meta property="article:published_time" content="2017-02-06T07:20:12+00:00"/>
+  <meta property="article:modified_time" content="2017-02-23T11:09:53+00:00" />
+  <meta property="og:updated_time" content="2017-02-23T11:09:53+00:00" />
+  <meta property="article:section" content="News"/>
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="With Algolia Offline, Take your Search Bar Everywhere."/>
+  <meta itemprop="description" content="Mobile apps are everywhere, occupying an ever-growing part of our daily lives. Ironically, this pervasiveness has taken apps to areas where network coverage is still not that great: public transport, underground areas, big malls… or outside big cities. With offline usability becoming an increasingly"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2017/02/offline.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="With Algolia Offline, Take your Search Bar Everywhere."/>
+  <meta name="twitter:url" content="https://blog.algolia.com/with-algolia-offline-take-your-search-bar-everywhere/"/>
+  <meta name="twitter:description" content="Mobile apps are everywhere, occupying an ever-growing part of our daily lives. Ironically, this pervasiveness has taken apps to areas where network coverage is still not that great: public transport, underground areas, big malls… or outside big cities. With offline usability becoming an increasingly"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2017/02/offline.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-5933 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-5933" class="cf post-5933 post type-post status-publish format-standard has-post-thumbnail hentry category-news category-technology" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">With Algolia Offline, Take your Search Bar Everywhere.</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/a1333c0aa8991ac198a4ec5b72fffa95?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">Clément Le Provost</span> |
+                    <time class="updated entry-time" datetime="2017-02-06" itemprop="datePublished">February 6, 2017</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/news/" rel="category tag">News</a>, <a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/with-algolia-offline-take-your-search-bar-everywhere/" title="With Algolia Offline, Take your Search Bar Everywhere.">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2017/02/offline.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2017/02/offline.png 720w, https://blog.algolia.com/wp-content/uploads/2017/02/offline-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2017/02/offline-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead"><i><span style="font-weight: 400;">Mobile apps are everywhere, occupying an ever-growing part of our daily lives. Ironically, this pervasiveness has taken apps to areas where network coverage is still not that great: public transport, underground areas, big malls… or outside big cities. With offline usability becoming an increasingly shared concern among users and developers alike—and justly so—, we at Algolia decided to work at improving both the online and offline search experience. Today we’re proud to introduce </span></i><a href="http://algolia.com/offline"><i><span style="font-weight: 400;">Algolia Offline</span></i></a><i><span style="font-weight: 400;">, the easiest way to add offline search to your mobile app.</span></i></p>
+<p style="text-align: left;"><span style="font-weight: 400;">Even a cool mobile application can quickly become frustrating without decent network connectivity. How many times have you been stuck staring at a spinning wheel while in the subway? Even when coverage is available, the latency inherent to mobile networks can make responsiveness an issue. An application that runs smooth as silk on Wi-Fi can inspire a ragged feeling when connected to 3G—or even 4G.</span></p>
+<p>Wouldn’t it be great if apps kept working, whatever the network conditions? Well, that’s definitely possible. Let’s see how!</p>
+<h2 style="text-align: left;"><span style="font-weight: 400;">Beyond caching and prefetching</span></h2>
+<p style="text-align: left;"><span style="font-weight: 400;">Apps traditionally approach offline usage through two basic techniques: </span><b>caching</b><span style="font-weight: 400;"> and </span><b>prefetching</b><span style="font-weight: 400;">.</span></p>
+<p style="text-align: left;"><span style="font-weight: 400;">Caching means saving content locally when the user accesses it online, so that it remains available while offline, or just loads faster, without the need for network access. A cache is usually limited in both size and lifespan. This is typically how your web browser handles images, for example.</span></p>
+<p style="text-align: left;"><span style="font-weight: 400;">Prefetching involves guessing what content the user might access later, and pre-downloading it so that it is readily available when needed. For example, a music app could download the next song in a playlist, or a news app could download today’s edition. Sometimes, the user explicitly chooses the content to synchronize—in Google Drive, for example, you can choose to pin documents for offline use; music apps typically sync favorite artists or albums.</span></p>
+<p style="text-align: left;"><span style="font-weight: 400;">Those techniques work well for direct access to content—you know which album you want to listen to, or which document you want to read—but what if directly accessing the content is too tedious? For example, you might not remember which folder the document is in. Or what if you don’t know exactly what you are looking for? For example, when browsing through your previous notes to try and recapture this great idea you had.</span></p>
+<p style="text-align: left;"><span style="font-weight: 400;">This is when you need </span><b>offline search</b><span style="font-weight: 400;">. Search makes content </span><i><span style="font-weight: 400;">accessible</span></i><span style="font-weight: 400;">, and is key to a great user experience—this is as true online as offline.</span></p>
+<h2 style="text-align: left;"><span style="font-weight: 400;">The difficulties of offline search</span></h2>
+<p style="text-align: left;"><span style="font-weight: 400;">Solving the offline search problem isn’t easy.</span></p>
+<p style="text-align: left;"><span style="font-weight: 400;">Powerful search technologies are usually online only, while embedded technologies (like </span><a href="https://sqlite.org/fts5.html"><span style="font-weight: 400;">SQLite’s FTS extension</span></a><span style="font-weight: 400;">) don’t provide the same experience for users (e.g. typo tolerance). And in any case, you need to code twice, once for online search, and a second time for offline search, with two different technologies, using different paradigms.</span></p>
+<p style="text-align: left;"><span style="font-weight: 400;">Today, great user experience comes at the cost of a rather painful (and costly) developer experience… Luckily, solving developer pains is Algolia’s </span><i><span style="font-weight: 400;">raison d’être</span></i><span style="font-weight: 400;">.</span></p>
+<h2 style="text-align: left;"><span style="font-weight: 400;">Algolia Offline: It’s like Algolia, but offline</span></h2>
+<p style="text-align: left;"><span style="font-weight: 400;">Quite simply, Algolia Offline is a full Algolia search engine embedded into your mobile app, directly on your users’ devices. We cross-compiled the same code that powers our </span><a href="https://www.algolia.com/product"><span style="font-weight: 400;">SaaS product </span></a><span style="font-weight: 400;">to iOS and Android, magically shrunk to fit in around 1MB (per CPU architecture), and made it available to all native applications. (“Hybrid” JavaScript-based applications are not yet supported by Algolia Offline.)</span></p>
+<p style="text-align: left;"><span style="font-weight: 400;">As you may know, Algolia started as an offline SDK, before we pivoted to a hosted cloud offering—this is a return to our roots.</span></p>
+<p style="text-align: left;"><span style="font-weight: 400;">All Algolia’s great features are now available without any network: typo tolerance, filtering, faceting, geosearch… </span></p>
+<p style="text-align: left;"><span style="font-weight: 400;">There are a few notable exceptions: in order to reduce data size, we have disabled some features, like plural dictionaries (which would incur over 48 MB of overhead!), or segmentation for Asian languages (5 MB overhead). You still get the core of Algolia’s magic: powerful textual and business relevance combined with unparalleled speed.</span></p>
+<h2 style="text-align: left;"><span style="font-weight: 400;">Seamless integration with our existing Mobile SDKs</span></h2>
+<p style="text-align: left;"><span style="font-weight: 400;">Algolia Offline synchronizes your online indices (or a part of them—you decide) to your user’s device. Once they are synced, they can be queried just like online indices, using the same </span><a href="https://www.algolia.com/doc/api-client/swift"><span style="font-weight: 400;">API Client</span></a><span style="font-weight: 400;"> that you already use to search online. In fact, Algolia will seamlessly transition from online to offline based on the responsiveness of the network. Alternatively, you can choose to explicitly search offline, which can be useful to build fast autocompletion, as we’ll see in the example below.</span></p>
+<p style="text-align: left;"><span style="font-weight: 400;">Our approach was centered around the idea that the developer should always be in control: </span></p>
+<ul style="text-align: left;">
+<li style="font-weight: 400;"><span style="font-weight: 400;">You can choose </span><i><span style="font-weight: 400;">what</span></i><span style="font-weight: 400;"> to sync: which indices, how many objects, which ones are the most relevant. </span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">You can also choose </span><i><span style="font-weight: 400;">when</span></i><span style="font-weight: 400;"> to sync: how frequently, or based on the current network conditions (e.g. only when connected to Wi-Fi)&#8230;</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">You control both storage and bandwidth usage—keeping your app in line with the recommended best practices.</span></li>
+</ul>
+<h2 style="text-align: left;"><span style="font-weight: 400;">It’s Easy. It’s Fast. What else do you need?</span></h2>
+<p style="text-align: left;"><span style="font-weight: 400;">The first obvious benefit is that you just need to </span><b>code once</b><span style="font-weight: 400;">, with a consistent API. It saves time, and also saves the sweat of duct-taping together heterogeneous search technologies.</span></p>
+<p style="text-align: left;"><span style="font-weight: 400;">Secondly, all the synchronization happens in the background: your UI responsiveness is not impacted (did we mention milliseconds matter?). You can even search during a sync and still get consistent results.</span></p>
+<p style="text-align: left;"><span style="font-weight: 400;">For users who want to search content that isn’t available online (by design or by requirement), Algolia Offline lets you create indices directly on the user’s device, without syncing with an online index. This is useful if you have user-generated content that is input on the phone.</span></p>
+<h2 style="text-align: left;"><span style="font-weight: 400;">Algolia Offline in action</span></h2>
+<p style="text-align: left;"><span style="font-weight: 400;">A good use case to start with is searching prefetched content, which we talked about earlier. Say you have a music app downloading favorite songs, or a news app fetching the latest articles before your user wakes up. With Algolia Offline, users can now search this content wherever they are—be it quietly sipping a coffee at home, backed up by a good Wi-Fi, or wandering through the subway, enduring an intermittent, laggy connection.</span></p>
+<p style="text-align: left;"><span style="font-weight: 400;">A second, more subtle use case, is to improve UI responsiveness. Even when network coverage is available, latency may be too high to accommodate instantaneous, as-you-type search experiences. But when your online index is synced locally, you can provide instant results at each keystroke. It doesn’t have to be the complete data: you may use the local index as an autocomplete source, for example. Any strategy is imaginable: you could provide offline as-you-type results, then go online when the user stops typing or presses the “Search” key.</span></p>
+<h2 style="text-align: left;"><span style="font-weight: 400;">We want to see what you dream up!</span></h2>
+<p style="text-align: left;"><span style="font-weight: 400;">We truly believe that the potentialities of Algolia Offline go well beyond what could be described in this article. You will probably come up with many more interesting use cases.</span></p>
+<p style="text-align: left;"><span style="font-weight: 400;">So, go ahead! </span><a href="https://www.algolia.com/offline"><span style="font-weight: 400;">Try it now</span></a><span style="font-weight: 400;">, and share your feedback with the </span><a href="https://discourse.algolia.com/tags/offline"><span style="font-weight: 400;">community</span></a><span style="font-weight: 400;">, so that we can keep improving on this product. And stay tuned for updates: this is just v1; more awesome features are to be expected in the future.</span></p>
+<h1 style="text-align: left;"></h1>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fwith-algolia-offline-take-your-search-bar-everywhere%2F&amp;t=With+Algolia+Offline%2C+Take+your+Search+Bar+Everywhere." title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=With+Algolia+Offline%2C+Take+your+Search+Bar+Everywhere.&amp;url=https%3A%2F%2Fblog.algolia.com%2Fwith-algolia-offline-take-your-search-bar-everywhere%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fwith-algolia-offline-take-your-search-bar-everywhere%2F&amp;title=With+Algolia+Offline%2C+Take+your+Search+Bar+Everywhere.&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-562">
+        <div id="dsq-comment-header-562" class="dsq-comment-header">
+            <cite id="dsq-cite-562">
+                <span id="dsq-author-user-562">Shivi Aggarwal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-562" class="dsq-comment-body">
+            <div id="dsq-comment-message-562" class="dsq-comment-message"><p>Wow!! That&#8217;s a treat 😀</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                                  
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fwith-algolia-offline-take-your-search-bar-everywhere%2F&amp;t=With+Algolia+Offline%2C+Take+your+Search+Bar+Everywhere." title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=With+Algolia+Offline%2C+Take+your+Search+Bar+Everywhere.&amp;url=https%3A%2F%2Fblog.algolia.com%2Fwith-algolia-offline-take-your-search-bar-everywhere%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fwith-algolia-offline-take-your-search-bar-everywhere%2F&amp;title=With+Algolia+Offline%2C+Take+your+Search+Bar+Everywhere.&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"5933 https:\/\/blog.algolia.com\/?p=5933","disqusShortname":"algoliablog","disqusTitle":"With Algolia Offline, Take your Search Bar Everywhere.","disqusUrl":"https:\/\/blog.algolia.com\/with-algolia-offline-take-your-search-bar-everywhere\/","options":{"manualSync":false},"postId":"5933"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'5933',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '5933' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

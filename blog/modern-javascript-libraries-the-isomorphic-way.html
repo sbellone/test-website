@@ -1,0 +1,868 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Modern JavaScript libraries: the isomorphic way - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Modern JavaScript libraries: the isomorphic way Comments Feed" href="https://blog.algolia.com/modern-javascript-libraries-the-isomorphic-way/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=3643' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fmodern-javascript-libraries-the-isomorphic-way%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fmodern-javascript-libraries-the-isomorphic-way%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=625248BBB99F095FF6D09B7BD7BDBF91');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Modern JavaScript libraries: the isomorphic way"/>
+  <meta property="og:url" content="https://blog.algolia.com/modern-javascript-libraries-the-isomorphic-way/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Algolia&#039;s DNA is really about performance. We want our search engine to answer relevant results as fast as possible.
+
+To achieve the best end-to-end performance we&#039;ve decided to go with JavaScript since the total beginning of Algolia. Our end-users search using our REST API directly from their bro"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2015/04/js-update.png"/>
+  <meta property="article:published_time" content="2015-05-06T15:49:19+00:00"/>
+  <meta property="article:modified_time" content="2015-05-06T17:25:55+00:00" />
+  <meta property="og:updated_time" content="2015-05-06T17:25:55+00:00" />
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Modern JavaScript libraries: the isomorphic way"/>
+  <meta itemprop="description" content="Algolia&#039;s DNA is really about performance. We want our search engine to answer relevant results as fast as possible.
+
+To achieve the best end-to-end performance we&#039;ve decided to go with JavaScript since the total beginning of Algolia. Our end-users search using our REST API directly from their bro"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2015/04/js-update.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Modern JavaScript libraries: the isomorphic way"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/modern-javascript-libraries-the-isomorphic-way/"/>
+  <meta name="twitter:description" content="Algolia&#039;s DNA is really about performance. We want our search engine to answer relevant results as fast as possible.
+
+To achieve the best end-to-end performance we&#039;ve decided to go with JavaScript since the total beginning of Algolia. Our end-users search using our REST API directly from their bro"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2015/04/js-update.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-3643 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-3643" class="cf post-3643 post type-post status-publish format-standard has-post-thumbnail hentry category-technology tag-javascript" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Modern JavaScript libraries: the isomorphic way</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/d27b84b2f345cee4af097edb753d42b5?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person"><a href="https://github.com/vvo/" title="Visit Vincent&#8217;s website" rel="author external">Vincent</a></span> |
+                    <time class="updated entry-time" datetime="2015-05-06" itemprop="datePublished">May 6, 2015</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/modern-javascript-libraries-the-isomorphic-way/" title="Modern JavaScript libraries: the isomorphic way">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2015/04/js-update-720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2015/04/js-update.png 720w, https://blog.algolia.com/wp-content/uploads/2015/04/js-update-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2015/04/js-update-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">Algolia&#8217;s DNA is really about performance. We want our search engine to answer relevant results as fast as possible.</p>
+<p>To achieve the best end-to-end performance we&#8217;ve decided to go with JavaScript since the total beginning of Algolia. Our end-users search using our REST API directly from their browser &#8211; with JavaScript &#8211; without going through the websites&#8217; backends.</p>
+<p>Our JavaScript &amp; Node.js API clients were implemented 2 years ago and were now lacking of all modern best practices:</p>
+<ul>
+<li>not following the <a href="http://fredkschott.com/post/2014/03/understanding-error-first-callbacks-in-node-js/">error-first</a> or <a href="http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony">callback-last</a> conventions;</li>
+<li>inconsistent API between the Node.js and the browser implementations;</li>
+<li>no <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a> support;</li>
+<li>Node.js module named <a href="https://www.npmjs.com/package/algolia-search">algolia-search</a>, browser module named <a href="https://www.npmjs.com/package/algoliasearch">algoliasearch</a>;</li>
+<li>cannot use the same module in Node.js or the browser (obviously);</li>
+<li>browser module could not be used with <a href="http://browserify.org/">browserify</a> or <a href="http://webpack.github.io/">webpack</a>. It was exporting multiple properties directly in the window object.</li>
+</ul>
+<p>This blog post is a summary of the three main challenges we faced while modernizing our JavaScript client.</p>
+<h2><a id="tldr" class="anchor" href="#tldr" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>tl;dr;</h2>
+<p>Now the good news: we have a new isomorphic <a title="Algolia JavaScript API Client" href="http://github.com/algolia/algoliasearch-client-js" target="_blank">JavaScript API client</a>.</p>
+<blockquote><p>Isomorphic JavaScript apps are JavaScript applications that can run both client-side and server-side.<br />
+The backend and frontend share the same code.</p>
+<p><a href="http://isomorphic.net/">isomorphic.net</a></p></blockquote>
+<p>Here are the main features of this new API client:</p>
+<ul>
+<li>works in <a href="https://nodejs.org/">Node.js</a> 0.10, 0.12, <a href="https://iojs.org/en/index.html">iojs</a> and from Internet Explorer 8 up to modern browsers;</li>
+<li>has a <a href="https://github.com/algolia/algoliasearch-client-js#callback-convention">Promise + callback</a> API;</li>
+<li>is available at <a title="AlgoliaSearch JavaScript client on npmjs" href="https://www.npmjs.com/package/algoliasearch">npmjs.com/algoliasearch</a> and on <a title="We are also on jsdelivr for easy &lt;script&gt; inclusio" href="http://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js">cdn.jsdelivr.net</a>;</li>
+<li>has <a href="https://github.com/algolia/algoliasearch-client-js/tree/master/dist">builds</a> for jQuery, AngularJS and Parse.com;</li>
+<li>is compatible with all module loaders like <a href="http://browserify.org/">browserify</a> or <a href="http://webpack.github.io/">webpack</a>;</li>
+<li>is fully <a href="https://github.com/algolia/algoliasearch-client-js/tree/master/test">tested</a> in all supported environments.</li>
+</ul>
+<p>If you were using our previous libraries, we have migration guides for both <a href="https://github.com/algolia/algoliasearch-client-js/wiki/Node.js-v1.x.x-migration-guide">Node.js</a> and <a href="https://github.com/algolia/algoliasearch-client-js/wiki/Migration-guide-from-2.x.x-to-3.x.x">the browser</a>.</p>
+<h1><a id="" class="anchor" href="#" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span id="more-3643"></span></h1>
+<h1><a id="challenge-1-testing" class="anchor" href="#challenge-1-testing" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Challenge #1: testing</h1>
+<p>Before being able to merge the Node.js and browser module, we had to remember how the current code is working. An easy way to understand what a code is doing is to read the tests. Unfortunately, in the previous version of the library, we had <a href="https://github.com/algolia/algoliasearch-client-js/tree/ba71a68005945c73f7157a8222a9c758e332eceb/test">only one test</a>. One test was not enough to rewrite our library. Let&#8217;s go testing!</p>
+<h2><a id="unit-integration" class="anchor" href="#unit-integration" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Unit? Integration?</h2>
+<p>When no tests are written on a library of <a href="https://github.com/algolia/algoliasearch-client-js/blob/ba71a68005945c73f7157a8222a9c758e332eceb/src/algoliasearch.js#L1484">~1500+ LOC</a>, what are the tests you should write first?</p>
+<p>Unit testing would be too close to the implementation. As we are going to rewrite a lot of code later on, we better not go too far on this road right now.</p>
+<p>Here&#8217;s the flow of our JavaScript library when doing a search:</p>
+<ul>
+<li>initialize the library with <code>algoliasearch()</code></li>
+<li>call <code>index.search('something', callback)</code></li>
+<li>browser issue an HTTP request</li>
+<li><code>callback(err, content)</code></li>
+</ul>
+<p>From a testing point of view, this can be summarized as:</p>
+<ul>
+<li>input: method call</li>
+<li>output: HTTP request</li>
+</ul>
+<p>Integration testing for a JavaScript library doing HTTP calls is interesting but does not scale well.</p>
+<p>Indeed, having to reach Algolia servers in each test would introduce a shared testing state amongst developers and continuous integration. It would also have a slow TDD feedback because of heavy network usage.</p>
+<p>Our strategy for testing our JavaScript API client was to mock (do not run away right now) the <a href="https://xhr.spec.whatwg.org/">XMLHttpRequest</a> object. This allowed us to test our module as a black box, providing a good base for a complete rewrite later on.</p>
+<p>This is not unit testing nor integration testing, but in between. We also planned in the coming weeks on doing a separate full integration testing suite that will go from the browser to our servers.</p>
+<h2><a id="faux-jax-to-the-rescue" class="anchor" href="#faux-jax-to-the-rescue" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>faux-jax to the rescue</h2>
+<p>Two serious candidates showed up to help in testing HTTP request based libraries</p>
+<ul>
+<li><a href="https://github.com/pgte/nock">pgte/nock </a></li>
+<li>and <a href="http://sinonjs.org/docs/#server">Sinon.js fake XMLHttpRequest</a>.</li>
+</ul>
+<p>Unfortunately, none of them met all our requirements. Not to mention, the AlgoliaSearch JavaScript client had a really smart failover request strategy:</p>
+<ul>
+<li>use <a href="https://xhr.spec.whatwg.org/">XMLHttpRequest</a> for browsers supporting CORS,</li>
+<li>or use <a href="https://msdn.microsoft.com/en-us/library/ie/cc288060%28v=vs.85%29.aspx">XDomainRequest</a> for <a href="http://caniuse.com/#feat=cors">IE &lt; 10</a>,</li>
+<li>or use <a href="https://blog.algolia.com/jsonp-still-mandatory/">JSONP</a> in situations where none of the preceding is available.</li>
+</ul>
+<p>This seems complex but we really want to be available and compatible with every browser environment.</p>
+<ul>
+<li><strong>Nock</strong> works by mocking calls to the Node.js <a href="https://nodejs.org/api/http.html">http module</a>, but we directly use the XMLHttpRequest object.</li>
+<li><strong>Sinon.js</strong> was doing a good job but <a href="https://github.com/cjohansen/Sinon.JS/pull/600#issuecomment-74000915">was lacking</a> some <a href="https://msdn.microsoft.com/en-us/library/ie/cc288060%28v=vs.85%29.aspx">XDomainRequest</a> feature detections. Also it was really tied to Sinon.js.</li>
+</ul>
+<p>As a result, we created <a href="https://github.com/algolia/faux-jax">algolia/faux-jax</a>. It is now pretty stable and can mock XMLHttpRequest, XDomainRequest and even http module from Node.js. It means <strong>faux-jax</strong> is an isomorphic HTTP mock testing tool. It was not designed to be isomorphic. It was easy to add the Node.js support thanks to <a href="https://github.com/moll/node-mitm">moll/node-mitm</a>.</p>
+<h2><a id="testing-stack" class="anchor" href="#testing-stack" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Testing stack</h2>
+<p>The testing stack is composed of:</p>
+<ul>
+<li><a href="https://github.com/substack/tape/">substack/tape</a>, isomorphic testing and assertion framework</li>
+<li><a href="https://github.com/defunctzombie/zuul/">defunctzombie/zuul</a>, local and continuous integration test runner</li>
+<li><a href="https://github.com/algolia/faux-jax">algolia/faux-jax</a>, isomorphic HTTP mocking library</li>
+</ul>
+<p>The fun part is done, now onto the tedious one: <strong>writing tests</strong>.</p>
+<h2><a id="spliting-tests-cases" class="anchor" href="#spliting-tests-cases" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Spliting tests cases</h2>
+<p>We divided our tests in two categories:</p>
+<ul>
+<li><strong>simple test cases</strong>: check that an API command will generate the corresponding HTTP call</li>
+<li><strong>advanced tests</strong>: timeouts, keep-alive, JSONP, request strategy, DNS fallback, ..</li>
+</ul>
+<h3><a id="simple-test-cases" class="anchor" href="#simple-test-cases" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Simple test cases</h3>
+<p>Simple test cases were written as <a href="https://github.com/golang/go/wiki/TableDrivenTests">table driven tests</a>:</p>
+<div id="attachment_3646" style="width: 1276px" class="wp-caption alignnone"><a href="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-161853_1266x829_scrot.png"><img class="wp-image-3646 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-161853_1266x829_scrot.png" alt="It's a simple JavaScript file, exporting test cases as an array" width="1266" height="829" srcset="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-161853_1266x829_scrot.png 1266w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-161853_1266x829_scrot-272x178.png 272w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-161853_1266x829_scrot-611x400.png 611w" sizes="(max-width: 1266px) 100vw, 1266px" /></a><p class="wp-caption-text">It&#8217;s a simple JavaScript file, <a href="https://github.com/algolia/algoliasearch-client-js/blob/1c8df9d09d683915a414e7df87a14236e50dd53c/test/spec/common/index/test-cases/addUserKey.js#L1">exporting test cases as an array</a></p></div>
+<p>Creating a testing stack that understands theses test-cases was some work. But the reward was worth it: the TDD feedback loop is great. Adding a new feature is easy: fire editor, add test, implement annnnnd done.</p>
+<h3><a id="advanced-tests" class="anchor" href="#advanced-tests" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Advanced tests</h3>
+<p>Complex test cases like JSONP fallback, timeouts and errors, were handled in separate, <a href="https://github.com/algolia/algoliasearch-client-js/blob/1c8df9d09d683915a414e7df87a14236e50dd53c/test/spec/browser/request-strategy/use-JSONP-when-XHR-error.js">more advanced tests</a>:</p>
+<div id="attachment_3647" style="width: 1268px" class="wp-caption alignnone"><a href="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-162229_1258x982_scrot.png"><img class="wp-image-3647 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-162229_1258x982_scrot.png" alt="Our testing stack rely on substack/tape" width="1258" height="982" srcset="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-162229_1258x982_scrot.png 1258w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-162229_1258x982_scrot-228x178.png 228w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-162229_1258x982_scrot-512x400.png 512w" sizes="(max-width: 1258px) 100vw, 1258px" /></a><p class="wp-caption-text">Here we test that we are using JSONP when XHR fails</p></div>
+<h2><a id="testing-workflow" class="anchor" href="#testing-workflow" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Testing workflow</h2>
+<p>To be able to run our tests we chose <a href="https://github.com/defunctzombie/zuul/">defunctzombie/zuul</a>.</p>
+<h3><a id="local-development" class="anchor" href="#local-development" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Local development</h3>
+<p>For local development, we have an <strong>npm test</strong> task that will:</p>
+<ul>
+<li>launch the browser tests using <a href="http://phantomjs.org/">phantomjs</a>,</li>
+<li>run the Node.js tests,</li>
+<li>lint using <a href="http://eslint.org/">eslint</a>.</li>
+</ul>
+<p>You can <a href="https://github.com/algolia/algoliasearch-client-js/blob/1c8df9d09d683915a414e7df87a14236e50dd53c/package.json#L12">see the task</a> in the package.json. Once run it looks like this:</p>
+<div id="attachment_3648" style="width: 986px" class="wp-caption alignnone"><a href="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-170339_976x845_scrot.png"><img class="wp-image-3648 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-170339_976x845_scrot.png" alt="640 passing assertions and counting!" width="976" height="845" srcset="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-170339_976x845_scrot.png 976w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-170339_976x845_scrot-206x178.png 206w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-170339_976x845_scrot-462x400.png 462w" sizes="(max-width: 976px) 100vw, 976px" /></a><p class="wp-caption-text">640 passing assertions and counting!</p></div>
+<p>But phantomjs is no real browser so it should not be the only answer to &#8220;Is my module working in browsers?&#8221;. To solve this, we have an <a href="https://github.com/algolia/algoliasearch-client-js/blob/1c8df9d09d683915a414e7df87a14236e50dd53c/package.json#L16">npm run dev</a> task that will expose our tests in a simple web server accessible by any browser:</p>
+<div id="attachment_3649" style="width: 1298px" class="wp-caption alignnone"><a href="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-170757_1288x486_scrot.png"><img class="wp-image-3649 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-170757_1288x486_scrot.png" alt="All of theses features are provided by defunctzombie/zuul" width="1288" height="486" srcset="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-170757_1288x486_scrot.png 1288w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-170757_1288x486_scrot-320x121.png 320w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-170757_1288x486_scrot-720x272.png 720w" sizes="(max-width: 1288px) 100vw, 1288px" /></a><p class="wp-caption-text">All of theses features are provided by defunctzombie/zuul</p></div>
+<p>Finally, if you have <a href="https://www.virtualbox.org/">virtual machines</a>, you can test in any browser you want, all locally:</p>
+<div id="attachment_3650" style="width: 1306px" class="wp-caption alignnone"><a href="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-171034_1296x385_scrot.png"><img class="wp-image-3650 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-171034_1296x385_scrot.png" alt="Here's a VirtualBox setup created with xdissent/ievms" width="1296" height="385" srcset="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-171034_1296x385_scrot.png 1296w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-171034_1296x385_scrot-320x95.png 320w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-171034_1296x385_scrot-720x214.png 720w" sizes="(max-width: 1296px) 100vw, 1296px" /></a><p class="wp-caption-text">Here&#8217;s a VirtualBox setup created with <a href="https://github.com/xdissent/ievms">xdissent/ievms</a></p></div>
+<p>What comes next after setting up a good local development workflow? Continuous integration setup!</p>
+<h3><a id="continuous-integration" class="anchor" href="#continuous-integration" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Continuous integration</h3>
+<p><a href="https://github.com/defunctzombie/zuul/">defunctzombie/zuul</a> supports running tests using <a href="https://saucelabs.com/">Saucelabs</a> browsers. Saucelabs provides browsers as a service (manual testing or Selenium automation). It also has a nice OSS plan called <a href="https://saucelabs.com/opensauce/">Opensauce</a>. We patched our <a href="https://github.com/algolia/algoliasearch-client-js/blob/1c8df9d09d683915a414e7df87a14236e50dd53c/.zuul.yml">.zuul.yml</a> configuration file to specify what browsers we want to test. You can find all the details in <a href="https://github.com/defunctzombie/zuul/wiki/Cloud-testing">zuul&#8217;s wiki</a>.</p>
+<p>Now there&#8217;s only one missing piece: <a href="https://travis-ci.org/">Travis CI</a>. Travis runs our tests in all browsers defined in our .zuul.yml file. Our <a href="https://github.com/algolia/algoliasearch-client-js/blob/1c8df9d09d683915a414e7df87a14236e50dd53c/.travis.yml">travis.yml</a> looks like this:</p>
+<div id="attachment_3651" style="width: 1258px" class="wp-caption alignnone"><a href="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-172249_1248x868_scrot.png"><img class="wp-image-3651 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-172249_1248x868_scrot.png" alt="All platforms are tested using travis matrixes" width="1248" height="868" srcset="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-172249_1248x868_scrot.png 1248w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-172249_1248x868_scrot-256x178.png 256w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-172249_1248x868_scrot-575x400.png 575w" sizes="(max-width: 1248px) 100vw, 1248px" /></a><p class="wp-caption-text">All platforms are tested using a <a href="http://docs.travis-ci.com/user/build-configuration/#The-Build-Matrix">travis build matrix</a></p></div>
+<p>Right now tests are taking a bit too long so we will soon split them between desktop and mobile.</p>
+<p>We also want to to tests on pull requests using only latest stable versions of all browsers. So that it does not takes too long. As a reward, we get a <a href="https://docs.saucelabs.com/reference/status-images/">nice badge</a> to display in our Github <a href="https://github.com/algolia/algoliasearch-client-js#algolia-search-api-client-for-javascript">readme</a>:</p>
+<div id="attachment_3653" style="width: 930px" class="wp-caption alignnone"><a href="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-174139_920x306_scrot.png"><img class="wp-image-3653 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-174139_920x306_scrot.png" alt="Gray color means the test is currently running" width="920" height="306" srcset="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-174139_920x306_scrot.png 920w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-174139_920x306_scrot-320x106.png 320w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-27-174139_920x306_scrot-720x239.png 720w" sizes="(max-width: 920px) 100vw, 920px" /></a><p class="wp-caption-text">Gray color means the test is currently running</p></div>
+<h1><a id="challenge-2-redesign-and-rewrite" class="anchor" href="#challenge-2-redesign-and-rewrite" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Challenge #2: redesign and rewrite</h1>
+<p>Once we had a usable testing stack, we started our rewrite, the <a href="https://github.com/algolia/algoliasearch-client-js/issues?q=milestone%3AV3">V3 milestone</a> on Github.</p>
+<h2><a id="initialization" class="anchor" href="#initialization" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Initialization</h2>
+<p>We dropped the <strong>new AlgoliaSearch()</strong> usage in favor of just <strong>algoliasearch()</strong>. It allows us to hide implementation details to our API users.</p>
+<p>Before:</p>
+<blockquote><p>new AlgoliaSearch(applicationID, apiKey, opts);</p></blockquote>
+<p>After:</p>
+<blockquote><p>algoliasearch(applicationID, apiKey, opts);</p></blockquote>
+<h2><a id="callback-convention" class="anchor" href="#callback-convention" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Callback convention</h2>
+<p>Our JavaScript client now follows the <a href="http://fredkschott.com/post/2014/03/understanding-error-first-callbacks-in-node-js/">error-first</a> and <a href="http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony">callback-last</a> conventions. We had to break some methods to do so.</p>
+<p>Before:</p>
+<blockquote><p>client.method(param, callback, param, param);</p></blockquote>
+<p>After:</p>
+<blockquote><p>client.method(params, param, param, params, callback);</p></blockquote>
+<p>This allows our callback lovers to use libraries like <a href="https://github.com/caolan/async">caolan/async</a> very easily.</p>
+<h2><a id="promises-and-callbacks-support" class="anchor" href="#promises-and-callbacks-support" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Promises and callbacks support</h2>
+<p>Promises are a great way to handle the asynchronous flow of your application.</p>
+<blockquote class="twitter-tweet" lang="en"><p>Promise partisan? Callback connoisseur? My API now lets you switch between the two! <a href="http://t.co/uPhej2yAwF">http://t.co/uPhej2yAwF</a> (thanks <a href="https://twitter.com/NickColley">@NickColley</a>!)</p>
+<p>— pouchdb (@pouchdb) <a href="https://twitter.com/pouchdb/status/575310959947956224">March 10, 2015</a></p></blockquote>
+<p><script src="//platform.twitter.com/widgets.js" async="" charset="utf-8"></script></p>
+<p>We implemented both promises and callbacks, it was nearly a no-brainer. In every command, if you do not provide a callback, you get a <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>. We use native promises in <a href="http://caniuse.com/#feat=promises">compatible environments</a> and <a href="https://github.com/jakearchibald/es6-promise/">jakearchibald/es6-promise</a> as a polyfill.</p>
+<h2><a id="algoliasearchhelper-removal" class="anchor" href="#algoliasearchhelper-removal" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>AlgoliaSearchHelper removal</h2>
+<p>The main library was also previously exporting window.AlgoliaSearchHelper to ease the development of awesome search UIs. We externalized this project and it now has now has a new home at <a href="https://github.com/algolia/algoliasearch-helper-js">algolia/algoliasearch-helper-js</a>.</p>
+<h2><a id="umd" class="anchor" href="#umd" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>UMD</h2>
+<blockquote><p>UMD: JavaScript modules that run anywhere</p></blockquote>
+<p>The previous version was directly exporting multiple properties in the <strong>window</strong> object. As we wanted our new library to be easily compatible with a broad range of module loaders, we made it <a href="https://github.com/umdjs/umd">UMD</a> compatible. It means our library can be used:</p>
+<ul>
+<li>with a simple &lt;script&gt;, it will export <strong>algoliasearch</strong> in the <strong>window</strong> object</li>
+<li>using <a href="http://browserify.org/">browserify</a>, <a href="http://webpack.github.io/">webpack</a>, <a href="http://requirejs.org/">requirejs</a>: any module loader</li>
+<li>in <a href="https://nodejs.org/">Node.js</a></li>
+</ul>
+<p>This was achieved by writing our code in a <a href="http://en.wikipedia.org/wiki/CommonJS">CommonJS</a> style and then use the standalone build feature of browserify.</p>
+<div id="attachment_3658" style="width: 1136px" class="wp-caption alignnone"><a href="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-224616_1126x129_scrot.png"><img class="wp-image-3658 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-224616_1126x129_scrot.png" alt="see browserify usage" width="1126" height="129" srcset="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-224616_1126x129_scrot.png 1126w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-224616_1126x129_scrot-320x37.png 320w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-224616_1126x129_scrot-720x82.png 720w" sizes="(max-width: 1126px) 100vw, 1126px" /></a><p class="wp-caption-text">see <a href="https://github.com/substack/node-browserify#usage">browserify usage</a></p></div>
+<h2><a id="multiple-builds" class="anchor" href="#multiple-builds" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Multiple builds</h2>
+<p>Our JavaScript client isn&#8217;t only one build, we have multiple builds:</p>
+<ul>
+<li>vanilla JavaScript using native xhrs and Promises</li>
+<li>jQuery build using <a href="http://api.jquery.com/jquery.ajax/">jQuery.ajax</a> and returns <a href="https://api.jquery.com/category/deferred-object/">jQuery promises</a></li>
+<li>AngularJS build is using <a href="https://docs.angularjs.org/api/ng/service/$http">$http</a> service and returns <a href="https://docs.angularjs.org/api/ng/service/$q">AngularJS promises</a></li>
+<li><a href="https://parse.com/">Parse.com</a> build is using parse cloud <a href="https://parse.com/docs/cloud_code_guide#networking">http</a> and <a href="https://parse.com/docs/js_guide#promises">promises</a></li>
+<li>Node.js, iojs are using the <a href="https://nodejs.org/api/http.html">http module</a> and native Promises</li>
+</ul>
+<p>Previously this was all handled in the main JavaScript file, leading to unsafe <a href="https://github.com/algolia/algoliasearch-client-js/blob/ba71a68005945c73f7157a8222a9c758e332eceb/src/algoliasearch.js#L541-L553">code like this</a>:</p>
+<a href="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-225743_1629x497_scrot.png"><img class="alignnone wp-image-3659 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-225743_1629x497_scrot.png" alt="2015-04-28-225743_1629x497_scrot" width="1629" height="497" srcset="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-225743_1629x497_scrot.png 1629w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-225743_1629x497_scrot-320x98.png 320w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-225743_1629x497_scrot-720x220.png 720w" sizes="(max-width: 1629px) 100vw, 1629px" /></a>
+<p>How do we solve this? Using inheritance! JavaScript prototypal inheritance is the new code smell in 2015. For us it was a good way to share most of the code between our builds. As a result every entry point of our builds are inheriting from the <a href="https://github.com/algolia/algoliasearch-client-js/blob/1c8df9d09d683915a414e7df87a14236e50dd53c/src/AlgoliaSearch.js">src/AlgoliaSearch.js</a>.</p>
+<p>Every build then need to define how to:</p>
+<ul>
+<li>do http request through <a href="https://github.com/algolia/algoliasearch-client-js/blob/1c8df9d09d683915a414e7df87a14236e50dd53c/src/browser/builds/algoliasearch.js#L46-L150">AlgoliaSearch.prototype._request</a></li>
+<li>return promises with <a href="https://github.com/algolia/algoliasearch-client-js/blob/1c8df9d09d683915a414e7df87a14236e50dd53c/src/browser/builds/algoliasearch.js#L167-L179">AlgoliaSearch.prototype._promise</a></li>
+<li>use a request fallback where needed with <a href="https://github.com/algolia/algoliasearch-client-js/blob/1c8df9d09d683915a414e7df87a14236e50dd53c/src/browser/builds/algoliasearch.js#L152-L165">AlgoliaSearch.prototype._request.fallback</a></li>
+</ul>
+<p>Using a simple inheritance pattern we were able to solve a great challenge.</p>
+<div id="attachment_3660" style="width: 1163px" class="wp-caption alignnone"><a href="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-232019_1153x526_scrot.png"><img class="wp-image-3660 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-232019_1153x526_scrot.png" alt="Example of the vanilla JavaScript build" width="1153" height="526" srcset="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-232019_1153x526_scrot.png 1153w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-232019_1153x526_scrot-320x146.png 320w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-232019_1153x526_scrot-720x328.png 720w" sizes="(max-width: 1153px) 100vw, 1153px" /></a><p class="wp-caption-text">Example of the vanilla JavaScript build</p></div>
+<p>Finally, we have <a href="https://github.com/algolia/algoliasearch-client-js/blob/1c8df9d09d683915a414e7df87a14236e50dd53c/scripts/build">a build script</a> that will generate all the needed files for each environment.</p>
+<h2><a id="challenge-3-backward-compatibility" class="anchor" href="#challenge-3-backward-compatibility" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Challenge #3: backward compatibility</h2>
+<p>We could not completely modernize our JavaScript clients while keeping a full backward compatibility between versions. We had to break some of the previous usages to level up our JavaScript stack.</p>
+<p>But we also wanted to provide a good experience for our previous users when they wanted to upgrade:</p>
+<ul>
+<li>we re-exported previous constructors like window.AlgoliaSearch*. But we now <strong>throw</strong> if it&#8217;s used</li>
+<li>we wrote a clear <a href="https://github.com/algolia/algoliasearch-client-js/wiki/Migration-guide-from-2.x.x-to-3.x.x">migration guide</a> for our existing Node.js and JavaScript users</li>
+<li>we used <a href="https://docs.npmjs.com/cli/deprecate">npm deprecate</a> on our previous Node.js module to inform our current user base that we moved to a new client</li>
+<li>we created legacy branches so that we can continue to push critical updates to previous versions when needed</li>
+</ul>
+<h2><a id="make-it-isomorphic" class="anchor" href="#make-it-isomorphic" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Make it isomorphic!</h2>
+<p>Our final step was to make our JavaScript client work in both Node.js and the browser.</p>
+<p>Having separated the builds implementation helped us a lot, because the Node.js build is a regular build only using the http module from Node.js.</p>
+<p>Then we only had to tell module loaders to load <strong>index.js</strong> on the server and <strong>src/browser/..</strong> in browsers.</p>
+<p>This last step was done by configuring browserify in <a href="https://github.com/algolia/algoliasearch-client-js/blob/1c8df9d09d683915a414e7df87a14236e50dd53c/package.json#L5-L8">our package.json</a>:</p>
+<div id="attachment_3661" style="width: 1285px" class="wp-caption alignnone"><a href="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-232444_1275x569_scrot.png"><img class="wp-image-3661 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-232444_1275x569_scrot.png" alt="the browser field from browserify also works in webpack" width="1275" height="569" srcset="https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-232444_1275x569_scrot.png 1275w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-232444_1275x569_scrot-320x143.png 320w, https://blog.algolia.com/wp-content/uploads/2015/04/2015-04-28-232444_1275x569_scrot-720x321.png 720w" sizes="(max-width: 1275px) 100vw, 1275px" /></a><p class="wp-caption-text">the <a href="https://github.com/substack/node-browserify#browser-field">browser field</a> from browserify also works in webpack</p></div>
+<p>If you are using the <strong>algoliasearch</strong> module with browserify or webpack, you will get our browser implementation automatically.</p>
+<p>The <strong>faux-jax</strong> library is released under MIT like all our open source projects. Any feedback or improvement idea are welcome, we are dedicated to make our JS client your best friend 🙂</p>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fmodern-javascript-libraries-the-isomorphic-way%2F&amp;t=Modern+JavaScript+libraries%3A+the+isomorphic+way" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Modern+JavaScript+libraries%3A+the+isomorphic+way&amp;url=https%3A%2F%2Fblog.algolia.com%2Fmodern-javascript-libraries-the-isomorphic-way%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fmodern-javascript-libraries-the-isomorphic-way%2F&amp;title=Modern+JavaScript+libraries%3A+the+isomorphic+way&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                <div class="tags-container"><ul class="tags"><li><a href="https://blog.algolia.com/tag/javascript/" rel="tag">JavaScript</a></li></ul></div>
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-191">
+        <div id="dsq-comment-header-191" class="dsq-comment-header">
+            <cite id="dsq-cite-191">
+                <span id="dsq-author-user-191">g3124388@trbvm.com</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-191" class="dsq-comment-body">
+            <div id="dsq-comment-message-191" class="dsq-comment-message"><p>really great post. thanks for the insights.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-197">
+        <div id="dsq-comment-header-197" class="dsq-comment-header">
+            <cite id="dsq-cite-197">
+                <a id="dsq-author-user-197" href="http://function.fr/" target="_blank" rel="nofollow">Vincent Voyer</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-197" class="dsq-comment-body">
+            <div id="dsq-comment-message-197" class="dsq-comment-message"><p>Thanks @g3124388trbvmcom:disqus!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-193">
+        <div id="dsq-comment-header-193" class="dsq-comment-header">
+            <cite id="dsq-cite-193">
+                <span id="dsq-author-user-193">Michael Finocchiaro</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-193" class="dsq-comment-body">
+            <div id="dsq-comment-message-193" class="dsq-comment-message"><p>Very impressive!</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-196">
+        <div id="dsq-comment-header-196" class="dsq-comment-header">
+            <cite id="dsq-cite-196">
+                <a id="dsq-author-user-196" href="http://function.fr/" target="_blank" rel="nofollow">Vincent Voyer</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-196" class="dsq-comment-body">
+            <div id="dsq-comment-message-196" class="dsq-comment-message"><p>Thanks @michaelfinocchiaro:disqus!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-195">
+        <div id="dsq-comment-header-195" class="dsq-comment-header">
+            <cite id="dsq-cite-195">
+                <span id="dsq-author-user-195">olvlvl</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-195" class="dsq-comment-body">
+            <div id="dsq-comment-message-195" class="dsq-comment-message"><p>Very nice article, but you should check your own page. Energy impact goes through the roof 🙁</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-201">
+        <div id="dsq-comment-header-201" class="dsq-comment-header">
+            <cite id="dsq-cite-201">
+                <a id="dsq-author-user-201" href="http://www.thefas-solutions.com/" target="_blank" rel="nofollow">Alice Scott</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-201" class="dsq-comment-body">
+            <div id="dsq-comment-message-201" class="dsq-comment-message"><p>Thank you for this open and easy to use development environment for multi-platform development.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-205">
+        <div id="dsq-comment-header-205" class="dsq-comment-header">
+            <cite id="dsq-cite-205">
+                <a id="dsq-author-user-205" href="http://tbassetto.github.com/" target="_blank" rel="nofollow">Thomas</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-205" class="dsq-comment-body">
+            <div id="dsq-comment-message-205" class="dsq-comment-message"><p>Finally found the time to read this article. Really interesting feedback 🙂</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-208">
+        <div id="dsq-comment-header-208" class="dsq-comment-header">
+            <cite id="dsq-cite-208">
+                <a id="dsq-author-user-208" href="http://function.fr/" target="_blank" rel="nofollow">Vincent Voyer</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-208" class="dsq-comment-body">
+            <div id="dsq-comment-message-208" class="dsq-comment-message"><p>Thanks @tbassetto:disqus 🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-515">
+        <div id="dsq-comment-header-515" class="dsq-comment-header">
+            <cite id="dsq-cite-515">
+                <a id="dsq-author-user-515" href="http://rasinbekkevold.blogspot.nl/" target="_blank" rel="nofollow">Rasin Bekkevold</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-515" class="dsq-comment-body">
+            <div id="dsq-comment-message-515" class="dsq-comment-message"><p>Outstanding post! Thanks for sharing your great experience through this effective and helpful tips. <a href="http://goo.gl/LPE17D" rel="nofollow">http://goo.gl/LPE17D</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/need-performance-on-mobile-use-c-cpp/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/need-performance-on-mobile-use-c-cpp/'>C/C++ is still the only way to have high performance on Mobile</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/jsonp-still-mandatory/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/05/jsonp-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/05/jsonp-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/05/jsonp-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/jsonp-still-mandatory/'>Why JSONP is still Mandatory</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fmodern-javascript-libraries-the-isomorphic-way%2F&amp;t=Modern+JavaScript+libraries%3A+the+isomorphic+way" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Modern+JavaScript+libraries%3A+the+isomorphic+way&amp;url=https%3A%2F%2Fblog.algolia.com%2Fmodern-javascript-libraries-the-isomorphic-way%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fmodern-javascript-libraries-the-isomorphic-way%2F&amp;title=Modern+JavaScript+libraries%3A+the+isomorphic+way&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"3643 https:\/\/blog.algolia.com\/?p=3643","disqusShortname":"algoliablog","disqusTitle":"Modern JavaScript libraries: the isomorphic way","disqusUrl":"https:\/\/blog.algolia.com\/modern-javascript-libraries-the-isomorphic-way\/","options":{"manualSync":false},"postId":"3643"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'3643',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '3643' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

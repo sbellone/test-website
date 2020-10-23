@@ -1,0 +1,797 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Improving Search for Twitter Handles - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="The VP of Engineering at Algolia believes he can improve how users search for Twitter handles with better typo tolerance and relevance rankings. Here&#039;s how!"/>
+<meta name="robots" content="noodp"/>
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Improving Search for Twitter Handles Comments Feed" href="https://blog.algolia.com/improving-ranking-twitter-handles-search/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=1781' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fimproving-ranking-twitter-handles-search%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fimproving-ranking-twitter-handles-search%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=90ABB7A7A7066C1D8F8BF847A05DBE76');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Improving Search for Twitter Handles"/>
+  <meta property="og:url" content="https://blog.algolia.com/improving-ranking-twitter-handles-search/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Hello Twitter,
+
+I have been using your service for awhile, and I love it!
+
+At first, I was skeptical about what you could offer: Broadcasting to all my friends that I was eating a pizza, or taking a walk, is not really my cup of tea. But 3 years ago I figured out what Twitter was really meant fo"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png"/>
+  <meta property="article:published_time" content="2014-01-06T11:46:45+00:00"/>
+  <meta property="article:modified_time" content="2015-04-06T23:09:30+00:00" />
+  <meta property="og:updated_time" content="2015-04-06T23:09:30+00:00" />
+  <meta property="article:section" content="Design"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Improving Search for Twitter Handles"/>
+  <meta itemprop="description" content="Hello Twitter,
+
+I have been using your service for awhile, and I love it!
+
+At first, I was skeptical about what you could offer: Broadcasting to all my friends that I was eating a pizza, or taking a walk, is not really my cup of tea. But 3 years ago I figured out what Twitter was really meant fo"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Improving Search for Twitter Handles"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/improving-ranking-twitter-handles-search/"/>
+  <meta name="twitter:description" content="Hello Twitter,
+
+I have been using your service for awhile, and I love it!
+
+At first, I was skeptical about what you could offer: Broadcasting to all my friends that I was eating a pizza, or taking a walk, is not really my cup of tea. But 3 years ago I figured out what Twitter was really meant fo"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-1781 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-1781" class="cf post-1781 post type-post status-publish format-standard has-post-thumbnail hentry category-design tag-auto-completion tag-ranking tag-relevance tag-twitter" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Improving Search for Twitter Handles</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/15705b7092e32cd80c32b0510ba59673?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">Sylvain Utard</span> |
+                    <time class="updated entry-time" datetime="2014-01-06" itemprop="datePublished">January 6, 2014</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/design/" rel="category tag">Design</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/improving-ranking-twitter-handles-search/" title="Improving Search for Twitter Handles">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency.png 720w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">Hello Twitter,</p>
+<p>I have been using your service for awhile, and I love it!</p>
+<p>At first, I was skeptical about what you could offer: Broadcasting to all my friends that I was eating a pizza, or taking a walk, is not really my cup of tea. But 3 years ago I figured out what Twitter was really meant for and how it could help me in a totally different way from what I first thought:</p>
+<ul>
+<li>sharing interesting articles,</li>
+<li>checking if /replace by the service provider you want/ is down,</li>
+<li>or catching up on HackerNews.</li>
+</ul>
+<p>More recently, I discovered you had a feature that could help me even more: I can now ask for support by tweeting. Tweeting is often faster and more productive than sending an email. You taught me to include the recipient&#8217;s Handle in my tweets, and your current Handle auto-completion implementation works pretty well: but what if you could provide a <strong>better typo-tolerance and ranking</strong>? (I&#8217;m NOT speaking about your official OSX/iOS native clients and its <a title="Why Autocomplete in Twitter Mobile App Sucks" href="http://blog.algolia.com/why-autocomplete-in-twitter-on-mobile-sucks/">totally unusable auto-completion feature</a>&#8230; btw, could you explain me why it is different from the one on your website?).</p>
+<p>I have been leading a search-engine development team over the last 5 years and I&#8217;m now VP of engineering at Algolia. I am aware that considering my job, I have kind of an &#8220;expert&#8221; point of view about search. But search has become so essential that I am convinced it <b>must </b>be irreproachable. Did you know that<strong> 1.7M+ people are currently following <a href="https://twitter.com/twittersearch">@twittersearch</a></strong>: I&#8217;m not the only one expecting great things from your search-engine, Twitter 🙂 Here is how I would improve search for Twitter handles:</p>
+<p>For example, it would be nice if I could find President <a href="https://twitter.com/barackobama">@barackobama</a> with his last name:</p>
+<p style="text-align: center;"><a href="https://blog.algolia.com/wp-content/uploads/2013/12/Screen-Shot-2013-12-23-at-11.40.09.png"><img class="aligncenter" src="https://blog.algolia.com/wp-content/uploads/2013/12/Screen-Shot-2013-12-23-at-11.40.09-263x300.png" alt="Search for Twitter handles including @obama yields less-than-stellar results." width="263" height="300" /></a></p>
+<p>Same for Justin:</p>
+<p style="text-align: center;"><a href="https://blog.algolia.com/wp-content/uploads/2013/12/Screen-Shot-2013-12-23-at-11.42.01.png"><img class="aligncenter" src="https://blog.algolia.com/wp-content/uploads/2013/12/Screen-Shot-2013-12-23-at-11.42.01-262x300.png" alt="Search for Twitter handles that could be Justin Bieber's yields less-than-stellar results." width="262" height="300" /></a></p>
+<p>Typo-tolerance is now a must-have, especially because we&#8217;re all using smartphones and tablets:</p>
+<p style="text-align: center;"><a href="https://blog.algolia.com/wp-content/uploads/2013/12/Screen-Shot-2013-12-23-at-11.38.19.png"><img class="aligncenter wp-image-1783 size-medium" src="https://blog.algolia.com/wp-content/uploads/2013/12/Screen-Shot-2013-12-23-at-11.38.19-263x300.png" alt="Search for Twitter handles should have typo tolerance." width="263" height="300" srcset="https://blog.algolia.com/wp-content/uploads/2013/12/Screen-Shot-2013-12-23-at-11.38.19-263x300.png 263w, https://blog.algolia.com/wp-content/uploads/2013/12/Screen-Shot-2013-12-23-at-11.38.19.png 302w" sizes="(max-width: 263px) 100vw, 263px" /></a></p>
+<p>&nbsp;</p>
+<p>More and more handles are now prefixed/suffixed by &#8220;official&#8221;, which makes finding <a href="https://twitter.com/officialadele">@OfficialAdele</a> just impossible:</p>
+<p style="text-align: center;"><a href="https://blog.algolia.com/wp-content/uploads/2013/12/Screen-Shot-2013-12-23-at-11.47.52.png"><img class="aligncenter wp-image-1787 size-medium" src="https://blog.algolia.com/wp-content/uploads/2013/12/Screen-Shot-2013-12-23-at-11.47.52-257x300.png" alt="Search for Twitter handles that start with @official is broken." width="257" height="300" /></a></p>
+<p>&nbsp;</p>
+<p><strong>For sure we can improve it, let&#8217;s code!</strong></p>
+<p>First of all Twitter, I need your Handles database 🙂</p>
+<ul>
+<li>I used your <a href="https://dev.twitter.com/docs/streaming-apis" target="_blank">Streaming API</a> to crawl about 20M+ accounts in ~2 weeks: it&#8217;s not blazing fast but I must admit it does the job (and it&#8217;s free). That&#8217;s about 5 lines of Ruby with <a href="https://github.com/tweetstream/tweetstream" target="_blank">TweetStream</a>, good job guys!</li>
+<li>and <a href="https://github.com/bmc/daemonize" target="_blank">Daemonize</a> to create a <span class="lang:default decode:true  crayon-inline ">bin/crawler</span> executable.</li>
+</ul>
+<pre class="lang:ruby decode:true" title="Crawler">#! /usr/bin/env ruby
+
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+
+daemon = TweetStream::Daemon.new('crawler', :log_output =&gt; true)
+daemon.on_inited do
+  ActiveRecord::Base.connection.reconnect!
+  ActiveRecord::Base.logger = Logger.new(File.join(Rails.root, 'log/stream.log'), 'w+')
+end
+daemon.on_error do |message|
+  puts "Error: #{message}"
+end
+daemon.sample do |status|
+  Handle.create_from_status(status)
+end</pre>
+<p>For each new tweet you send to me, I store the author (name + screen_name + description + followers_count) and all his/her user mentions.</p>
+<pre class="lang:ruby decode:true">class Handle &lt; ActiveRecord::Base
+
+  def self.create_from_user(user)
+    h = Handle.find_or_initialize_by(screen_name: user.screen_name)
+    puts h.screen_name if h.new_record?
+    h.name = user.name
+    h.description = (user.description || "")[0..255]
+    h.followers_count = user.followers_count
+    h.updated_at ||= DateTime.now
+    h.save
+    h
+  end
+
+  def self.create_from_status(status)
+    Handle.create_from_user(status.user)
+    status.user_mentions.each do |mention|
+      m = Handle.find_or_initialize_by(screen_name: mention.screen_name)
+      m.updated_at ||= DateTime.now
+      m.name = mention.name
+      m.mentions_count ||= 0
+      m.mentions_count += 1
+      m.save
+    end
+  end
+
+end</pre>
+<p>And every minute, I re-index the last-updated accounts with a batch request using <a href="https://github.com/algolia/algoliasearch-rails">algoliasearch-rails</a>, scheduled by <a href="https://github.com/javan/whenever" target="_blank">Whenever</a>:</p>
+<pre class="lang:ruby decode:true">every 1.minute, roles: [:cron] do
+  runner "Handle.where('updated_at &gt;= ?', 1.minute.ago).reindex!"
+end</pre>
+<p>The result order is based on several criteria:</p>
+<ul>
+<li>the number of typos,</li>
+<li>the matching attributes: the name/handle is more important than the description,</li>
+<li>the proximity between matched words,</li>
+<li>and the followers count (I also use the &#8220;mentions count&#8221; if my crawler didn&#8217;t get the followers count yet).</li>
+</ul>
+<p>I could have improved the results by using the user&#8217;s list of followers/following but I was limited by your <a href="https://dev.twitter.com/docs/rate-limiting/1.1">Rate Limits</a>. <strong>Instead, I chose to emphasize your top-users </strong>(accounts having 10M+ followers).</p>
+<p>Here is the configuration I used</p>
+<pre class="lang:ruby decode:true" title="Algolia configuration">class Handle &lt; ActiveRecord::Base
+
+  include AlgoliaSearch
+  algoliasearch per_environment: true, auto_index: false, auto_remove: false do
+    # add an extra score attribute
+    add_attribute :score
+
+    # add an extra full_name attribute: screen_name + name
+    add_attribute :full_name
+
+    # do not take `full_name`'s words order into account, `full_name` is more important than `description`
+    attributesToIndex ['unordered(full_name)', :description]
+
+    # list of attributes to highlight
+    attributesToHighlight [:screen_name, :name, :description]
+
+    # use followers_count OR mentions_count to sort results (last sort criteria)
+    customRanking ['desc(score)']
+
+    # @I_love_you
+    separatorsToIndex '_'
+
+    # tag top-users
+    tags do
+      followers_count &gt; 10000000 ? ['top'] : []
+    end
+  end
+
+  def full_name
+    # consider screen_name and name equal
+    # the name should not match exact so we concatenate it with the screen_name
+    [screen_name, "#{screen_name} #{name}"]
+  end
+
+  # the custom score
+  def score
+    return followers_count if followers_count &gt; 0
+    if mentions_count &lt; 10
+      mentions_count
+    elsif mentions_count &lt; 100
+      mentions_count * 10
+    elsif mentions_count &lt; 1000
+      mentions_count * 100
+    else
+      mentions_count * 1000
+    end
+  end
+
+end</pre>
+<p>The user query is composed by 2 backend queries:</p>
+<ul>
+<li>the first one retrieves all matching top-users (could be replaced by a query targeting your followers/following only)</li>
+<li>the second one the others.</li>
+</ul>
+<p><a title="Twitter Handles Search" href="http://twittersearch.algolia.io/" target="_blank"><strong>Try it for yourself</strong></a>, and enjoy relevant and highlighted results after the first keystroke: <a href="http://twittersearch.algolia.io/" target="_blank">Twitter Handles Search</a>.</p>
+<p>&nbsp;</p>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fimproving-ranking-twitter-handles-search%2F&amp;t=Improving+Search+for+Twitter+Handles" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Improving+Search+for+Twitter+Handles&amp;url=https%3A%2F%2Fblog.algolia.com%2Fimproving-ranking-twitter-handles-search%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fimproving-ranking-twitter-handles-search%2F&amp;title=Improving+Search+for+Twitter+Handles&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                <div class="tags-container"><ul class="tags"><li><a href="https://blog.algolia.com/tag/auto-completion/" rel="tag">auto-completion</a></li><li><a href="https://blog.algolia.com/tag/ranking/" rel="tag">ranking</a></li><li><a href="https://blog.algolia.com/tag/relevance/" rel="tag">relevance</a></li><li><a href="https://blog.algolia.com/tag/twitter/" rel="tag">Twitter</a></li></ul></div>
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-94">
+        <div id="dsq-comment-header-94" class="dsq-comment-header">
+            <cite id="dsq-cite-94">
+                <span id="dsq-author-user-94">@DCoullet</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-94" class="dsq-comment-body">
+            <div id="dsq-comment-message-94" class="dsq-comment-message"><p>The first result should be the full search string if found as an handle 😉</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-95">
+        <div id="dsq-comment-header-95" class="dsq-comment-header">
+            <cite id="dsq-cite-95">
+                <span id="dsq-author-user-95">Sylvain</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-95" class="dsq-comment-body">
+            <div id="dsq-comment-message-95" class="dsq-comment-message"><p>Yes, that&#8217;s the expected behavior. Which query did you try? Since the crawler has only indexed 30M handles so far, maybe it was not part of our index yet.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-98">
+        <div id="dsq-comment-header-98" class="dsq-comment-header">
+            <cite id="dsq-cite-98">
+                <span id="dsq-author-user-98">@DCoullet</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-98" class="dsq-comment-body">
+            <div id="dsq-comment-message-98" class="dsq-comment-message"><p>Easy, if I search for @dcollet, I found @dcollett86 as first result, then @dcollet as second. Because @dcollett86  has 1,624 followers and @dcollet 14 🙂 Not the worst example as I found results when the &#8220;good one&#8221; is as far as the 5th or more&#8230; 😉</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-99">
+        <div id="dsq-comment-header-99" class="dsq-comment-header">
+            <cite id="dsq-cite-99">
+                <span id="dsq-author-user-99">Sylvain</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-99" class="dsq-comment-body">
+            <div id="dsq-comment-message-99" class="dsq-comment-message"><p>Agree. I was concatenating the &#8220;name&#8221; and &#8220;screen_name&#8221; of the user to consider both attributes equal in terms of relevancy. But you spot it right, it breaks the &#8220;exact&#8221; match criteria. I&#8217;ve patched my code to use a multi-valued attribute instead of a concatenated string in order to keep the &#8220;exact&#8221; match feature. Currently reindexing. See <a href="https://github.com/algolia/twitter-search/commit/b279fd51d9baa093182bbec39472c651fc661935" rel="nofollow">https://github.com/algolia/twitter-search/commit/b279fd51d9baa093182bbec39472c651fc661935</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-96">
+        <div id="dsq-comment-header-96" class="dsq-comment-header">
+            <cite id="dsq-cite-96">
+                <span id="dsq-author-user-96">Timothy Meade</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-96" class="dsq-comment-body">
+            <div id="dsq-comment-message-96" class="dsq-comment-message"><p>Could you please do this for Disqus as well? Auto completion is a mobile must.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-97">
+        <div id="dsq-comment-header-97" class="dsq-comment-header">
+            <cite id="dsq-cite-97">
+                <span id="dsq-author-user-97">Sylvain</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-97" class="dsq-comment-body">
+            <div id="dsq-comment-message-97" class="dsq-comment-message"><p>Yes that would be cool! Any chance a Disqus guy is reading us? Just let me know, Algolia can help you.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'>Online Search in the Cloud: Version is in Beta!</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/results-of-the-evernote-devcup/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/results-of-the-evernote-devcup/'>Results of the Evernote DevCup</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fimproving-ranking-twitter-handles-search%2F&amp;t=Improving+Search+for+Twitter+Handles" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Improving+Search+for+Twitter+Handles&amp;url=https%3A%2F%2Fblog.algolia.com%2Fimproving-ranking-twitter-handles-search%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fimproving-ranking-twitter-handles-search%2F&amp;title=Improving+Search+for+Twitter+Handles&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"1781 http:\/\/blog.algolia.com\/?p=1781","disqusShortname":"algoliablog","disqusTitle":"Improving Search for Twitter Handles","disqusUrl":"https:\/\/blog.algolia.com\/improving-ranking-twitter-handles-search\/","options":{"manualSync":false},"postId":"1781"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'1781',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '1781' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

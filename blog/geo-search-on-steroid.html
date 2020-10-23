@@ -1,0 +1,981 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Geo-Search on steroid! - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Geo-Search on steroid! Comments Feed" href="https://blog.algolia.com/geo-search-on-steroid/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=4127' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fgeo-search-on-steroid%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fgeo-search-on-steroid%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=6015EE2D56DA1298434CC4E6342A0A2E');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Geo-Search on steroid!"/>
+  <meta property="og:url" content="https://blog.algolia.com/geo-search-on-steroid/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Geo-search is playing an important role in user experience, especially on mobile applications. Therefore we&#039;ve never stopped challenging it and we are excited today to announce a big improvement!
+
+This new geo-search release simplifies most of the use cases, adds several features, and maintains ba"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2015/09/geosearch.png"/>
+  <meta property="article:published_time" content="2015-10-01T09:43:44+00:00"/>
+  <meta property="article:modified_time" content="2016-04-14T11:24:19+00:00" />
+  <meta property="og:updated_time" content="2016-04-14T11:24:19+00:00" />
+  <meta property="article:section" content="News"/>
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Geo-Search on steroid!"/>
+  <meta itemprop="description" content="Geo-search is playing an important role in user experience, especially on mobile applications. Therefore we&#039;ve never stopped challenging it and we are excited today to announce a big improvement!
+
+This new geo-search release simplifies most of the use cases, adds several features, and maintains ba"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2015/09/geosearch.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Geo-Search on steroid!"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/geo-search-on-steroid/"/>
+  <meta name="twitter:description" content="Geo-search is playing an important role in user experience, especially on mobile applications. Therefore we&#039;ve never stopped challenging it and we are excited today to announce a big improvement!
+
+This new geo-search release simplifies most of the use cases, adds several features, and maintains ba"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2015/09/geosearch.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-4127 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-4127" class="cf post-4127 post type-post status-publish format-standard has-post-thumbnail hentry category-news category-technology" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Geo-Search on steroid!</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/25760a5d4e793e491f26da5db64bb738?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">julien</span> |
+                    <time class="updated entry-time" datetime="2015-10-01" itemprop="datePublished">October 1, 2015</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/news/" rel="category tag">News</a>, <a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/geo-search-on-steroid/" title="Geo-Search on steroid!">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2015/09/geosearch.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2015/09/geosearch.png 720w, https://blog.algolia.com/wp-content/uploads/2015/09/geosearch-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2015/09/geosearch-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">Geo-search is playing an important role in user experience, especially on mobile applications. Therefore we&#8217;ve never stopped challenging it and we are excited today to announce a big improvement!</p>
+<p>This new geo-search release simplifies most of the use cases, adds several features, and maintains backward-compatibility! And because we are hardcore when it comes to performance, we&#8217;ve made sure this update won&#8217;t impact anything. Better yet, all queries will actually be faster!</p>
+<p>&nbsp;</p>
+<a href="https://blog.algolia.com/wp-content/uploads/2015/09/auto-radius.jpg"><img class="alignnone wp-image-4255 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/09/auto-radius.jpg" alt="auto-radius" width="588" height="278" srcset="https://blog.algolia.com/wp-content/uploads/2015/09/auto-radius.jpg 588w, https://blog.algolia.com/wp-content/uploads/2015/09/auto-radius-320x151.jpg 320w" sizes="(max-width: 588px) 100vw, 588px" /></a>
+<h2><a id="the-end-of-the-radius-pain" class="anchor" href="#the-end-of-the-radius-pain" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The end of the radius pain!</h2>
+<p>The most used geo-search feature was the retrieval of records around a specific geolocation. It is widely used by mobile applications via the device&#8217;s GPS position. On browsers, you can use our <a href="https://www.algolia.com/doc/ruby#aroundLatLngViaIP">IP based geolocation feature</a>. This feature requires a maximum distance called &#8220;radius&#8221; to perform the search, which was set by default to 10km. Because radius has an impact on performance, it is important to keep it low. In reality, it may become extremely cumbersome for our users to set it as the radius would depend on the area&#8217;s information density!</p>
+<p>Fortunately, we have removed this pain in our new geo-search! While you can still manually define the radius, you can now let the system adjust it according to the density of the area for you &#8230; without doing anything! Just leave the <code>aroundRadius</code> query parameter unset! The radius will adapt itself to collect a few thousand records. Its value will also be returned in the result set (in the <code>automaticRadius</code> attribute). This information can help you display your map at the best scale. If you want to have a minimum radius size, we also introduced a query parameter called <code>minimumAroundRadius</code> that configures the minimum value that can be accepted as a radius.</p>
+<p>We hope this new feature will help you and will make it super easy to have a good geo-search!</p>
+<p>&nbsp;</p>
+<img class="alignnone wp-image-4254 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/09/multi-geo.jpg" alt="multi-geo" width="212" height="194" srcset="https://blog.algolia.com/wp-content/uploads/2015/09/multi-geo.jpg 212w, https://blog.algolia.com/wp-content/uploads/2015/09/multi-geo-195x178.jpg 195w" sizes="(max-width: 212px) 100vw, 212px" />
+<h2><a id="several-geolocations-per-record" class="anchor" href="#several-geolocations-per-record" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Several geolocations per record</h2>
+<p>Our previous geo-search was limited to only one geolocation per record. No more! Our new version now supports an arbitrary number of geolocations per record. You have just to use an array syntax.</p>
+<p>Example of a record with one geolocation:</p>
+<pre class="prettyprint"><code class="language-js">
+{
+    "title": "Example",
+    "_geoloc": { "lat": 47.279430, "lng": 5.106450 }
+}
+</code></pre>
+<p>Example of a record with several geolocations:</p>
+<pre class="prettyprint"><code class="language-js">
+{
+    "title": "Example",
+    "_geoloc": [
+        { "lat": 47.279430, "lng": 5.106450 },
+        { "lat": 47.293228, "lng": 5.004570 },
+        { "lat": 47.316669, "lng": 5.016670 }
+    ]
+}
+</code></pre>
+<p>If your records contain several geolocations, you will be able to retrieve the matched geolocation and the distance in meters by requesting the ranking information (<code>getRankingInfo=true</code> query parameter).</p>
+<p>Here is an example of a hit with several geolocations:</p>
+<pre class="prettyprint"><code class="language-js">
+{
+    "title": "Example",
+    "objectID": "20",
+    [...]
+    "_rankingInfo": {
+        [...]
+        "matchedGeoLocation": {
+            "lat": 47.316669,
+            "lng": 5.016670,
+            "distance": 1257
+        }
+    }
+}
+</code></pre>
+<p>&nbsp;</p>
+<img class="alignnone wp-image-4253 size-full" src="https://blog.algolia.com/wp-content/uploads/2015/09/polygon-or.jpg" alt="polygon-or" width="637" height="294" srcset="https://blog.algolia.com/wp-content/uploads/2015/09/polygon-or.jpg 637w, https://blog.algolia.com/wp-content/uploads/2015/09/polygon-or-320x148.jpg 320w" sizes="(max-width: 637px) 100vw, 637px" />
+<h2><a id="new-ways-to-filter" class="anchor" href="#new-ways-to-filter" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>New ways to filter</h2>
+<p>In the past months, we have received several requests to improve the number of operators supported to filter by geolocation. We were only supporting filtering by a bounding box but we are now excited to offer three new types of filtering!</p>
+<ul>
+<li>Filter by a polygon (defined by a list of point), you can look at the documentation of the insidePolygon query parameter</li>
+<li>Filter by a OR between several bounding boxes, you have just to pass several times the insideBoundingBox query parameter</li>
+<li>Filter by a OR between several polygons, you have just to pass several times the insidePolygon query parameter</li>
+</ul>
+<h2><a id="we-need-your-feedback" class="anchor" href="#we-need-your-feedback" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>We need your feedback!</h2>
+<p>We see an increasing number of users having geo-search needs, especially on mobile. We hope you will like this big evolution of our geo-search feature and that it will simplify your life! We would love to have your feedback and ideas on how to improve it, feel free to contact us anytime!</p>
+<p><a class="btn-cta" style="text-align: center; width: 380px; margin: 0 auto; display: block; float: none;" href="https://www.algolia.com/doc/geo-search/geo-search-overview">Get started with our tutorial</a></p>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fgeo-search-on-steroid%2F&amp;t=Geo-Search+on+steroid%21" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Geo-Search+on+steroid%21&amp;url=https%3A%2F%2Fblog.algolia.com%2Fgeo-search-on-steroid%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fgeo-search-on-steroid%2F&amp;title=Geo-Search+on+steroid%21&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-429">
+        <div id="dsq-comment-header-429" class="dsq-comment-header">
+            <cite id="dsq-cite-429">
+                <span id="dsq-author-user-429">Huy Nguyễn</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-429" class="dsq-comment-body">
+            <div id="dsq-comment-message-429" class="dsq-comment-message"><p>Great improvements. Good job guys.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-430">
+        <div id="dsq-comment-header-430" class="dsq-comment-header">
+            <cite id="dsq-cite-430">
+                <span id="dsq-author-user-430">SeanCheng</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-430" class="dsq-comment-body">
+            <div id="dsq-comment-message-430" class="dsq-comment-message"><p>Hi, &#8220;automaticRadius&#8221; is a really useful feature for geo search. However, the radius range is determined by this: &#8220;The radius will adapt itself to collect a few thousand records. &#8221; In my case, i might only want to collect twenty to hundreds results. Thousand records is way too much. Is there a setting parameter so that I can determine how many records is &#8220;enough&#8221; for automaticRadius?</p>
+<p>Thanks!</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-431">
+        <div id="dsq-comment-header-431" class="dsq-comment-header">
+            <cite id="dsq-cite-431">
+                <a id="dsq-author-user-431" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-431" class="dsq-comment-body">
+            <div id="dsq-comment-message-431" class="dsq-comment-message"><p>The backend will identify thousands of hits, but you can control how many you want to retrieve via the hitsPerPage query parameter.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-432">
+        <div id="dsq-comment-header-432" class="dsq-comment-header">
+            <cite id="dsq-cite-432">
+                <span id="dsq-author-user-432">SeanCheng</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-432" class="dsq-comment-body">
+            <div id="dsq-comment-message-432" class="dsq-comment-message"><p>Thanks for reply. Hope the case below will clarify my concern.</p>
+<p>The case is: &#8220;Users want to search nearby recommended restaurants with keyword &#8216;steak&#8217;. This will be sorted by &#8216;recommend_count&#8217; and 20~40 restaurants (within 1~5km) should be enough for normal case.&#8221;</p>
+<p>However, if automaticRadius will expand to the radius with total 1000 results. The users might get some restaurants which are &#8220;far away (50~100km) but highly recommended (100 recommend_count)&#8221;, but they might only want to get some nearby (1~5km) restaurants with acceptable recommend count (10 recommend_count maybe).</p>
+<p>My imagination case:<br />
+1. Search in Palo Alto: auto expand radius to 10km and get 20 results.<br />
+(not auto expand to 100km and get 1000 results but in San Francisco)<br />
+2. Search in San Francisco: auto expand radius to 500m~1km and get 20~40 results.<br />
+(not auto expand to 100km and get 1000 results but in Oakland)</p>
+<p>Therefore I think if we can set a parameter to determine the number of &#8220;enough records&#8221; then it will be great.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-433">
+        <div id="dsq-comment-header-433" class="dsq-comment-header">
+            <cite id="dsq-cite-433">
+                <a id="dsq-author-user-433" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-433" class="dsq-comment-body">
+            <div id="dsq-comment-message-433" class="dsq-comment-message"><p>By default our geo-search is returning results sorted by distance, so using the hitsPerPage parameter will be really similar.</p>
+<p>For example for the query &#8216;steak&#8217;, if the auto-radius identify 1000 results and you request hitsPerPage=10, you will have the 10 results closest to your locations (&#8216;geo&#8217; is one of the first parameter of ranking, just after typos).</p>
+<p>Maybe in your use case you want to have a maximum radius size rather than &#8220;enough records&#8221;which would introduce complexity as it is a bit redundant with hitsPerPage</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-486">
+        <div id="dsq-comment-header-486" class="dsq-comment-header">
+            <cite id="dsq-cite-486">
+                <span id="dsq-author-user-486">Sharad Agarwal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-486" class="dsq-comment-body">
+            <div id="dsq-comment-message-486" class="dsq-comment-message"><p>Julien &#8211; we are facing this issue and does not seem the auto-radius to 1000 hits is working. Please see comments above &#8211; </p>
+<p>We are using automaticRadius and it seems its failing to be for us. </p>
+<p>We have a &#8220;Phone&#8221; listed in New York and a &#8220;Phone&#8221; listed in Seattle in our records. During query mode we call searching for &#8220;Phone&#8221; around the Lat/Long of San Francisco. (Note &#8211; we do not have any phone listed in San Francisco, infact the only two phones we have listed in our data is in Seattle and New York). </p>
+<p>We expected the New York and Seattle products in the result set as well &#8211; though lower in the rank list. What we are seeing is that New York and Seattle records are not being returned at all. </p>
+<p>Should we be setting minimumAroundRadius or aroundRadius to force this behavior? Ideally we do not want to do it and just pass the lat / long and let Algolia handle it at their end. </p>
+<p>Also &#8211; in our search log &#8211; we see automatic radius got set to 4609 (30 miles or so). </p>
+<p>Based on how you describe this, we expected the Algolia engine to continue expanding the search beyond SF till the NY &amp; Seattle records we found. </p>
+<p>Can you confirm &#8211; is this a bug?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-453">
+        <div id="dsq-comment-header-453" class="dsq-comment-header">
+            <cite id="dsq-cite-453">
+                <span id="dsq-author-user-453">Sharad Agarwal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-453" class="dsq-comment-body">
+            <div id="dsq-comment-message-453" class="dsq-comment-message"><p>Two questions &#8211; </p>
+<p>My use case is there is a record with </p>
+<p>&#8211; array of locations (loc 1, loc 2, loc 3)<br />
+&#8211; array of radius (r1 corresponding to loc1, r2 corresponding to loc2, r3 corresponding to loc3)</p>
+<p>During search I pass &#8211; search_loc and s_radius</p>
+<p>Results I am expecting &#8211; </p>
+<p>1) Match all records where</p>
+<p>     A) distance between search_loc and loc_1 &lt; s_radius + r1 OR</p>
+<p>     B) distance between search_loc and loc_2 &lt; s_radius + r2 OR</p>
+<p>    C) distance between search_loc and loc_3 &lt; s_radius + r3</p>
+<p>2) results attribs I am expecting back is for the nearest matched record &#8211; matched location (loc 1 OR  loc 2 OR loc 3), distance between search_loc and matched location (loc 1 OR  loc 2 OR loc 3)</p>
+<p>Is this feasible?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-455">
+        <div id="dsq-comment-header-455" class="dsq-comment-header">
+            <cite id="dsq-cite-455">
+                <a id="dsq-author-user-455" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-455" class="dsq-comment-body">
+            <div id="dsq-comment-message-455" class="dsq-comment-message"><p>As most search engine, we index points and not geo-shapes. In your case you want to index a geo-shape and not a point. Your use case seems more GIS oriented, you should probably have a look to something like PostGIS</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-454">
+        <div id="dsq-comment-header-454" class="dsq-comment-header">
+            <cite id="dsq-cite-454">
+                <span id="dsq-author-user-454">Sharad Agarwal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-454" class="dsq-comment-body">
+            <div id="dsq-comment-message-454" class="dsq-comment-message"><p>Second Q &#8211; Can we have two different kinds of locations in the same record.</p>
+<p>Eg &#8211; user is posting something to sell. </p>
+<p>Loc 1 &#8211; where is the user posting from.<br />
+Loc 2 &#8211; Where does the user want to sell the product.</p>
+<p>thanks,<br />
+Sharad</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-485">
+        <div id="dsq-comment-header-485" class="dsq-comment-header">
+            <cite id="dsq-cite-485">
+                <span id="dsq-author-user-485">Sharad Agarwal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-485" class="dsq-comment-body">
+            <div id="dsq-comment-message-485" class="dsq-comment-message"><p>We are using automaticRadius and it seems its failing to be for us. </p>
+<p>We have a &#8220;Phone&#8221; listed in New York and a &#8220;Phone&#8221; listed in Seattle in our records. During query mode we call searching for &#8220;Phone&#8221; around the Lat/Long of San Francisco. (Note &#8211; we do not have any phone listed in San Francisco, infact the only two phones we have listed in our data is in Seattle and New York). </p>
+<p>We expected the New York and Seattle products in the result set as well &#8211; though lower in the rank list. What we are seeing is that New York and Seattle records are not being returned at all. </p>
+<p>Should we be setting minimumAroundRadius or aroundRadius to force this behavior? Ideally we do not want to do it and just pass the lat / long and let Algolia handle it at their end. </p>
+<p>Also &#8211; in our search log &#8211; we see automatic radius got set to 4609 (30 miles or so). </p>
+<p>Based on how you describe this, we expected the Algolia engine to continue expanding the search beyond SF till the NY &amp; Seattle records we found. </p>
+<p>Can you confirm &#8211; is this a bug?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-487">
+        <div id="dsq-comment-header-487" class="dsq-comment-header">
+            <cite id="dsq-cite-487">
+                <a id="dsq-author-user-487" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-487" class="dsq-comment-body">
+            <div id="dsq-comment-message-487" class="dsq-comment-message"><p>The automatic radius is adapted to the number of records around the latitude/longitude you specified. The goal is to be sure there is enough content around you.<br />
+This computation is done on the full index to identify the radius that is then applied as a filter with the textual query.</p>
+<p>In your case this behavior is expected because you have records in the requested region. You can indeed use minimumAroundRadius to workaround this case or maybe you want to apply a sort by geo-distance on the result without filtering by geo (this is a new parameter we plan to introduce in the API).</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-488">
+        <div id="dsq-comment-header-488" class="dsq-comment-header">
+            <cite id="dsq-cite-488">
+                <span id="dsq-author-user-488">Sharad Agarwal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-488" class="dsq-comment-body">
+            <div id="dsq-comment-message-488" class="dsq-comment-message"><p>Thanks for the quick reply. Immensely helpful to understand what&#8217;s going on under the search engine.</p>
+<p>Couple of quick q&#8217;s &#8211; though currently in our test data we have 100 or records around San Francisco &#8211; in the long term is does not seem we can rely on the way we have implemented algolia.</p>
+<p>As a workaround &#8211; we will set the minimumAroundRadius to say (breadth of US &#8211; 3000 miles) since our app is US based currently and we cover coast to coast that ways. Quick q &#8211; do you expect performance degradation because of setting this?<br />
+If yes &#8211; what would you recommend as the max value of minimumAroundRadius before performance degradation happens?</p>
+<p>Re: sort by geo on the result without applying geo filters &#8211;<br />
+1) so basically in this case &#8211; we would send the query param &#8211; &#8220;phone&#8221; and Lat/long .. And then algolia would first match against phone and then give us a sorted result based on the Lat / long we send?<br />
+2) will the distance between the hits and the search loc be provided if we have ranking info on?<br />
+3) we are also using around precision for some requirements. For sorting &#8211; can aroundPrecision be also passed in this new param.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-489">
+        <div id="dsq-comment-header-489" class="dsq-comment-header">
+            <cite id="dsq-cite-489">
+                <span id="dsq-author-user-489">Sharad Agarwal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-489" class="dsq-comment-body">
+            <div id="dsq-comment-message-489" class="dsq-comment-message"><p>Also &#8211;<br />
+4) when&#8217;s the expected release &#8211; we are going live next month.</p>
+<p>Finally &#8211; we have 100 or so test records in SF .. So for 1000 hits it should have expanded to NY right? Or 1000 count changes as per density.</p>
+<p>Happy to share out test account if you think some scrutiny is needed.</p>
+<p>Again, thanks for the help and quick response.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-490">
+        <div id="dsq-comment-header-490" class="dsq-comment-header">
+            <cite id="dsq-cite-490">
+                <a id="dsq-author-user-490" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-490" class="dsq-comment-body">
+            <div id="dsq-comment-message-490" class="dsq-comment-message"><p>Yes the sort by latitude/longitude will match against the query and sort results by geo-distance, you will be able to use geoPrecision and see the distance in the _rankingInfo inside each hit.</p>
+<p>The automatic radius should take far more than 100 records, you can see how many it has took if you remove the textual query on your hit.</p>
+<p>We unfortunately don&#8217;t have any precise ETA for the moment for this feature. In the meantime, as a workaround, I recommend to use the minimumAroundRadius with a high value.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-491">
+        <div id="dsq-comment-header-491" class="dsq-comment-header">
+            <cite id="dsq-cite-491">
+                <span id="dsq-author-user-491">Sharad Agarwal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-491" class="dsq-comment-body">
+            <div id="dsq-comment-message-491" class="dsq-comment-message"><p>Super helpful. Looking forward to the new Api. For now &#8211; we will tinker with the minimum radius setting. </p>
+<p>Will look into how many records were taken &#8211; will send you a note if I see a small #.</p>
+<p>Thanks again,<br />
+Sharad</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-3" id="dsq-comment-555">
+        <div id="dsq-comment-header-555" class="dsq-comment-header">
+            <cite id="dsq-cite-555">
+                <span id="dsq-author-user-555">BambangLuPS</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-555" class="dsq-comment-body">
+            <div id="dsq-comment-message-555" class="dsq-comment-message"><p>&#8220;or maybe you want to apply a sort by geo-distance on the result without filtering by geo (this is a new parameter we plan to introduce in the API).&#8221;</p>
+<p>is this new parameter ready to use?where I can find the documentation?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-556">
+        <div id="dsq-comment-header-556" class="dsq-comment-header">
+            <cite id="dsq-cite-556">
+                <a id="dsq-author-user-556" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-556" class="dsq-comment-body">
+            <div id="dsq-comment-message-556" class="dsq-comment-message"><p>Yes, this parameter is &#8220;aroundRadius=all&#8221;. The documentation is available here: <a href="https://www.algolia.com/doc/api-client/php/parameters/#aroundradius" rel="nofollow">https://www.algolia.com/doc/api-client/php/parameters/#aroundradius</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-557">
+        <div id="dsq-comment-header-557" class="dsq-comment-header">
+            <cite id="dsq-cite-557">
+                <span id="dsq-author-user-557">BambangLuPS</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-557" class="dsq-comment-body">
+            <div id="dsq-comment-message-557" class="dsq-comment-message"><p>thanks @speedblue:disqus , it&#8217;s works..<br />
+I want to ask one more question. Is there any setting in algolia to disable geosearch for temporary fix? Our code have deploy in production and some of our vendor name not displayed in search result.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-558">
+        <div id="dsq-comment-header-558" class="dsq-comment-header">
+            <cite id="dsq-cite-558">
+                <a id="dsq-author-user-558" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-558" class="dsq-comment-body">
+            <div id="dsq-comment-message-558" class="dsq-comment-message"><p>The best to activate/desactivate the geo-search is to do it at the query level. If you have already deployed your code in production that perform a geo-filter (aroundLatLng for example), the only way is to remove or change the filter is to change the query.</p>
+<p>If you have in production a sort by distance and want to temporary disable it because of missing geo data in your records, you can just remove the &#8220;geo&#8221; criterion in your ranking formula.</p>
+<p>Does it answer your question?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-559">
+        <div id="dsq-comment-header-559" class="dsq-comment-header">
+            <cite id="dsq-cite-559">
+                <span id="dsq-author-user-559">BambangLuPS</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-559" class="dsq-comment-body">
+            <div id="dsq-comment-message-559" class="dsq-comment-message"><p>I already tried to remove &#8220;geo&#8221; from our ranking formula before. But nothing changes. The enginee not display correct search result.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-560">
+        <div id="dsq-comment-header-560" class="dsq-comment-header">
+            <cite id="dsq-cite-560">
+                <a id="dsq-author-user-560" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-560" class="dsq-comment-body">
+            <div id="dsq-comment-message-560" class="dsq-comment-message"><p>I think the best would be to contact our support at <a href="mailto:support@algolia.com">support@algolia.com</a> to describe your problem in details. I am afraid the blog is really not the best to have a good support experience.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-561">
+        <div id="dsq-comment-header-561" class="dsq-comment-header">
+            <cite id="dsq-cite-561">
+                <span id="dsq-author-user-561">BambangLuPS</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-561" class="dsq-comment-body">
+            <div id="dsq-comment-message-561" class="dsq-comment-message"><p>I have tried. But there isn&#8217;t answer yet. I search on google and found this blog. Will wait for their response @speedblue:disqus . Thank you very much ya..<br />
+😀</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/search-your-market-place-like-a-boss/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2015/08/marketplace3-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2015/08/marketplace3-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2015/08/marketplace3-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/search-your-market-place-like-a-boss/'>Search Your Marketplace Like a Boss</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/synonym-search-engine/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/05/synonyms-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/05/synonyms-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/05/synonyms-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/synonym-search-engine/'>A New Way to Handle Synonyms in a Search Engine</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fgeo-search-on-steroid%2F&amp;t=Geo-Search+on+steroid%21" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Geo-Search+on+steroid%21&amp;url=https%3A%2F%2Fblog.algolia.com%2Fgeo-search-on-steroid%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fgeo-search-on-steroid%2F&amp;title=Geo-Search+on+steroid%21&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"4127 https:\/\/blog.algolia.com\/?p=4127","disqusShortname":"algoliablog","disqusTitle":"Geo-Search on steroid!","disqusUrl":"https:\/\/blog.algolia.com\/geo-search-on-steroid\/","options":{"manualSync":false},"postId":"4127"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'4127',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '4127' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

@@ -1,0 +1,623 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Inside the Algolia Engine Part 6 — Handling Synonyms the Right Way - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Inside the Algolia Engine Part 6 — Handling Synonyms the Right Way Comments Feed" href="https://blog.algolia.com/inside-the-engine-part-6-handling-synonyms-the-right-way/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=5759' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Finside-the-engine-part-6-handling-synonyms-the-right-way%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Finside-the-engine-part-6-handling-synonyms-the-right-way%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=4B9EDF8136EF96A1F521E42FE0F8CA55');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Inside the Algolia Engine Part 6 — Handling Synonyms the Right Way"/>
+  <meta property="og:url" content="https://blog.algolia.com/inside-the-engine-part-6-handling-synonyms-the-right-way/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="In any search engine, adding synonyms is one of the most important customization to introduce domain-specific knowledge. Synonyms make it possible to tune search results without having to make major changes to records.
+
+Supporting synonyms is no easy task especially for multi-word expressions, whi"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2016/11/synonyms2.png"/>
+  <meta property="article:published_time" content="2016-11-21T01:34:38+00:00"/>
+  <meta property="article:modified_time" content="2017-04-21T03:55:15+00:00" />
+  <meta property="og:updated_time" content="2017-04-21T03:55:15+00:00" />
+  <meta property="article:section" content="Guides"/>
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Inside the Algolia Engine Part 6 — Handling Synonyms the Right Way"/>
+  <meta itemprop="description" content="In any search engine, adding synonyms is one of the most important customization to introduce domain-specific knowledge. Synonyms make it possible to tune search results without having to make major changes to records.
+
+Supporting synonyms is no easy task especially for multi-word expressions, whi"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2016/11/synonyms2.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Inside the Algolia Engine Part 6 — Handling Synonyms the Right Way"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/inside-the-engine-part-6-handling-synonyms-the-right-way/"/>
+  <meta name="twitter:description" content="In any search engine, adding synonyms is one of the most important customization to introduce domain-specific knowledge. Synonyms make it possible to tune search results without having to make major changes to records.
+
+Supporting synonyms is no easy task especially for multi-word expressions, whi"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2016/11/synonyms2.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-5759 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-5759" class="cf post-5759 post type-post status-publish format-standard has-post-thumbnail hentry category-guides category-technology" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Inside the Algolia Engine Part 6 — Handling Synonyms the Right Way</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/25760a5d4e793e491f26da5db64bb738?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">julien</span> |
+                    <time class="updated entry-time" datetime="2016-11-21" itemprop="datePublished">November 21, 2016</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/guides/" rel="category tag">Guides</a>, <a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/inside-the-engine-part-6-handling-synonyms-the-right-way/" title="Inside the Algolia Engine Part 6 — Handling Synonyms the Right Way">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2016/11/synonyms2-720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2016/11/synonyms2-720x400.png 720w, https://blog.algolia.com/wp-content/uploads/2016/11/synonyms2-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2016/11/synonyms2-768x427.png 768w, https://blog.algolia.com/wp-content/uploads/2016/11/synonyms2-340x189.png 340w, https://blog.algolia.com/wp-content/uploads/2016/11/synonyms2.png 1440w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">In any search engine, adding synonyms is one of the most important customization to introduce domain-specific knowledge. Synonyms make it possible to tune search results without having to make major changes to records.</p>
+<p>Supporting synonyms is no easy task especially for multi-word expressions, which introduce complexity in the handling of the proximity measure between matched words. We will describe in this post how we handle this complexity via a rewriting of word positions at query time.</p>
+<h1><a id="different-types-of-synonyms" class="anchor" href="#different-types-of-synonyms" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Different types of synonyms</h1>
+<p>The most common way to define synonyms is to use a set of expressions that are all identical. We call such a set an <b>N-way Synonym</b> because any expression of the synonym set is a synonym of another expression.</p>
+<p>For example, if New York is unambiguously a City in your use case, you probably want to have a synonym set containing &#8220;<i>NY&#8221; = &#8220;NYC&#8221; = &#8220;New York&#8221; = &#8220;New York City&#8221;</i>. This synonym set is configured as N-way, which means that:</p>
+<ul>
+<li><i>&#8220;NY&#8221;</i> in the query also matches <i>&#8220;NYC&#8221;</i> or <i>&#8220;New York&#8221;</i> or<i> &#8220;New York City&#8221;</i></li>
+<li><i>&#8220;NYC&#8221;</i> in the query also matches <i>&#8220;NY&#8221;</i> or <i>&#8220;New York&#8221;</i> or <i>&#8220;New York City&#8221;</i></li>
+<li><i>&#8220;New York&#8221;</i> in the query also matches <i>&#8220;NY&#8221;</i> or <i>&#8220;NYC&#8221;</i> or <i>&#8220;New York&#8221; </i>or <i>&#8220;New York City&#8221;</i></li>
+<li><i>&#8220;New York City&#8221;</i> in the query also matches<i> &#8220;NY&#8221;</i> or <i>&#8220;NYC&#8221; </i>or <i>&#8220;New York&#8221;</i></li>
+</ul>
+<p>Less common but still used are asymmetrical synonyms, in which you want to apply an equivalency only in one direction &#8211; we call this a <b>1-way Synonym</b>. For example, <i>&#8220;smartphone&#8221; = [&#8220;iphone&#8221;, &#8220;android&#8221;] </i>means that you want the <i>&#8220;smartphone&#8221;</i> query to be expended in <i>&#8220;iphone&#8221;</i> and <i>&#8220;android&#8221;</i> because you can have a record containing iphone without having the word smartphone. That said, you do not want the query <i>&#8220;iphone&#8221;</i> to returns all records containing the word <i>&#8220;smartphone&#8221;</i> &#8211; that wouldn’t be relevant for the user.</p>
+<p>The Algolia engine supports both 1-way and N-way synonyms, and both types can contain any type of expression (one word or multiple words like <i>&#8220;New York City&#8221;</i>).</p>
+<h1><a id="the-dangers-of-generic-synonym-sets" class="anchor" href="#the-dangers-of-generic-synonym-sets" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The dangers of generic synonym sets</h1>
+<p>We are often asked by users when we will include a standard synonym dictionary in the engine. The question is understandable &#8211; after all, we are taught in school that most words have synonyms, so it seems easy to package all this knowledge into one generic resource (per language). Unfortunately, it’s not that simple.</p>
+<p>There are varying degrees to which two words or phrases are synonymous. For example, <i>&#8220;substitute&#8221;</i> is a stronger synonym to <i>&#8220;alternative&#8221;</i> than <i>&#8220;choice&#8221;</i> even if you can find both in a standard English synonym dictionary. Adding <i>&#8220;substitute&#8221;</i> as a synonym of <i>&#8220;alternative&#8221;</i> can be a very good idea for a website that compares technologies or offers; that being said, it can easily add noise on other use cases, especially if the name of a technology contains <i>&#8220;substitute&#8221;</i> in the name like the <a href="https://github.com/comex/substitute/">Substitute</a> or <a href="https://github.com/drzax/jquery-substitute/">jquery-substitute</a> open source projects.</p>
+<p>Polysemy is present in all Natural languages, which means that a word can have different meanings depending on the context. For example, the word <i>&#8220;crane&#8221;</i> can be a bird or a construction equipment and the context is required to select the correct meaning. Our customers are all in a specific semantic context and the dictionary need to be specific to give the best results. If you are on a tech website you don&#8217;t want to have a generic synonym of the word<i> &#8220;push&#8221;</i> because there is a strong meaning in tech and using synonyms for the verb or the noun <i>&#8220;push&#8221;</i> would lead to weird results.</p>
+<p>The most useful synonyms are always very specific to your domain. This is the case of the synonym set <i>[&#8220;NY&#8221; = &#8220;NYC&#8221; = &#8220;New York&#8221; = &#8220;New York City&#8221;]</i> we mentioned before. This synonym set is valid if you only have cities in your use data set, it could introduce a bad relevance if you also have States!</p>
+<p>Even specific synonyms can have a different meaning in another use case. For example, I saw the synonym <i>T-shirt = Tee </i>on several ecommerce websites. This synonym makes sense as a lot of users are typing <i>&#8220;tee&#8221;</i> to search for a <i>t-shirt</i>. That said, this synonym is dangerous if you have a sports website as you can have a query for <i>&#8220;tee ball&#8221;</i> or <i>&#8220;golf tee&#8221;</i> and won&#8217;t like to return <i>t-shirt</i>!</p>
+<p>With all those constraints in mind, it is close to impossible to package a set of synonyms that would make sense for all use cases as it is too much use case dependent. In practice it would lead to a bad relevance and results would be hard to understand for your users.</p>
+<p>This is why we do not plan to package a generic synonym dictionary in the engine. That said, there are other resources that we already package in a generic way like the singular/plural forms of a language that we expose in the <i>ignorePlurals</i> feature. We plan to continue introducing such resource in the future that provides a lot of value without having the drawback described before.</p>
+<h1><a id="computing-synonym-at-indexing-or-query" class="anchor" href="#computing-synonym-at-indexing-or-query" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Computing synonym at indexing or query</h1>
+<p>One of the main question with synonyms is to make the choice between pre-computation at indexing time or expansion at search time. Both approaches have advantage and drawbacks:</p>
+<p>With pre-computation at<b> Indexing time</b>, if you have a synonym &#8220;NY&#8221; = &#8220;NYC&#8221;, you will index the document with both words when one of the two words is found in a record. This method is the best for performance as there is no OR between the two synonym words at search time. The biggest issue with this approach is to introduce the support of multi-words synonyms, which require introducing a new knowledge in the inverted list.</p>
+<p>For example, if you have the text &#8220;New York Subway&#8221;, the word &#8220;New&#8221; will be indexed as position 0, the word &#8220;York&#8221; will be indexed at position 1 and the word &#8220;Subway&#8221; will be indexed at position 2. If you have a synonym &#8220;New York&#8221; = &#8220;NY&#8221;, you will have to introduce in your index the token &#8220;NY&#8221; at position 0 with a padding of 2 positions so that the query &#8220;NY subway&#8221; will have correct positions. This additional information has a big impact on the index size and performance that usually nullify a lot the gain of indexing in most use cases.</p>
+<p>Conversely, with computation at <b>search time</b>, you will search for all synonyms at query time with an OR operand between them. The big advantage of this approach is that you can compute the exact position of each matching synonym with a post-processing task (see next section for details). The disadvantage is that it requires more CPU as we have to compute the OR between several inverted lists.</p>
+<p>Lastly, A <b>hybrid</b> approach is a mix of both approaches where all synonyms are searched at query time but some expensive computations are precomputed in one inverted list. Most of the time the expensive computation that is indexed is the search of consecutive words (phrase query). For example, the &#8220;New York&#8221; synonym would be indexed as one inverted list. The complexity of this implementation is to make it work with prefix search as we will describe below.</p>
+<p>The implementation of synonyms in the Algolia engine is fully done at search time as we want to have an exact computation of the proximity (see next chapter for more details). We plan to implement a hybrid approach in the future where phrase queries will be pre-indexed in order to improve performance and have the best of both worlds.</p>
+<h1><a id="handling-multi-words-synonyms-is-hard" class="anchor" href="#handling-multi-words-synonyms-is-hard" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Handling multi-words synonyms is hard</h1>
+<p>Even if our implementation is currently fully done at search time, we are still forced to rewrite the matched word position in order to have an exact computation of the relevance. <i>We have explained in details this process in part 4 of this series in </i><a href="https://blog.algolia.com/inside-the-algolia-enginepart-4-textual-relevance/#2.3.2"><i>section 2.3.2</i></a><i>.</i></p>
+<p>Without this processing, having a synonym <i>&#8220;NY&#8221; = &#8220;New York&#8221;</i> would lead to different proximity for the query <i>&#8220;New York Subway&#8221;</i> on those two records:</p>
+<pre>{<span style="text-decoration: underline;">"Title"</span>:“Why New York Subway Lines Are Missing Countdown Clocks”}
+{<span style="text-decoration: underline;">"Title"</span>:“NYC subway math”}</pre>
+<p>&nbsp;</p>
+<p>The complexity is that <i>&#8220;New York&#8221;</i> is identified as position 1 and 2 in the first record, followed by <i>&#8220;Subway&#8221;</i> at position 3, whereas the second record contains <i>&#8220;NY&#8221;</i> at position 0, followed by <i>&#8220;subway&#8221;</i> at position 1. Rewriting this will ensure the proximity measure between the matched word will be identical for both records. This process essentially considers that <i>&#8220;NYC&#8221;</i> was composed of the two original words <i>&#8220;new&#8221;</i> and <i>&#8220;york&#8221;</i> and will increase all following positions.</p>
+<p>The following diagram shows the transformation done on the position of words to have an exactly identical proximity computation for records with a different number of words in the synonym (Note: words are indexed starting at position 0. For example, the first record is indexed with <i>&#8220;why&#8221;</i> at position 0, <i>&#8220;new&#8221;</i> at position 1, etc.)</p>
+<a href="https://blog.algolia.com/inside-the-engine-part-6-handling-synonyms-the-right-way/multiwordsynonyms-2/" rel="attachment wp-att-5760"><img class="aligncenter wp-image-5760" src="https://blog.algolia.com/wp-content/uploads/2016/11/MultiWordSynonyms.png" alt="" width="331" height="682" srcset="https://blog.algolia.com/wp-content/uploads/2016/11/MultiWordSynonyms.png 600w, https://blog.algolia.com/wp-content/uploads/2016/11/MultiWordSynonyms-86x178.png 86w, https://blog.algolia.com/wp-content/uploads/2016/11/MultiWordSynonyms-194x400.png 194w" sizes="(max-width: 331px) 100vw, 331px" /></a>
+<h1><a id="reducing-noise-in-results" class="anchor" href="#reducing-noise-in-results" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Reducing noise in results</h1>
+<p>Synonyms are just one of the various alternative expressions that are added on the queries. We also add typo tolerance, concatenation &amp; split of query terms, transliteration and lemmatization. All those alternative expressions are described in <a href="https://blog.algolia.com/inside-the-algolia-engine-part-3-query-processing/#alternatives">the part 3 of this series</a>.</p>
+<p>In order to avoid adding noise, we do not apply the other alternative expressions on synonyms. This is the big reason why a search for <i>&#8220;New York&#8221;</i> won&#8217;t give the same number of hits than <i>&#8220;NY&#8221;</i> when you have a synonym <i>&#8220;NY&#8221; = &#8220;New York&#8221;</i>, records containing<i> &#8220;NY&#8221;</i> and <i>&#8220;New York&#8221;</i> will be retrieved in both cases but the record containing <i>&#8220;NewYork&#8221;</i> for example will be only returned for the <i>&#8220;New York&#8221;</i> query via the concatenation expression.</p>
+<p>The following diagram explains the way we add alternative expressions, all steps are computed at the same time and are not re-entrant. In other words, we do not use the output of one alternative expression to feed the input of another step.</p>
+<a href="https://blog.algolia.com/inside-the-engine-part-6-handling-synonyms-the-right-way/alternativeexpressions/" rel="attachment wp-att-5761"><img class="aligncenter wp-image-5761" src="https://blog.algolia.com/wp-content/uploads/2016/11/AlternativeExpressions.png" alt="" width="564" height="357" srcset="https://blog.algolia.com/wp-content/uploads/2016/11/AlternativeExpressions.png 1226w, https://blog.algolia.com/wp-content/uploads/2016/11/AlternativeExpressions-281x178.png 281w, https://blog.algolia.com/wp-content/uploads/2016/11/AlternativeExpressions-768x487.png 768w, https://blog.algolia.com/wp-content/uploads/2016/11/AlternativeExpressions-631x400.png 631w" sizes="(max-width: 564px) 100vw, 564px" /></a>
+<h1><a id="prefix-match-on-synonyms" class="anchor" href="#prefix-match-on-synonyms" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Prefix match on synonyms</h1>
+<p>Handling synonyms correctly in an instant search use case is pretty complex. Most engines fall short in this respect and have a bad user experience because of this processing. For example, let&#8217;s say you have 5 records containing<i> &#8220;NY&#8221;</i> and 5 records containing <i>&#8220;New York&#8221;</i> and have defined the synonym <i>&#8220;NY&#8221; = &#8220;New York&#8221;</i>:</p>
+<ul>
+<li>the query &#8220;n&#8221; will match all words starting with &#8220;n&#8221;, so records containing<i> &#8220;NY&#8221;</i> and <i>&#8220;New York&#8221;</i> will be matched: the 10 records are found</li>
+<li>the query <i>&#8220;ne&#8221;, &#8220;new&#8221;, &#8220;new y&#8221;, &#8220;new yo&#8221;, &#8220;new yor&#8221; </i>will only match the 5 records containing <i>&#8220;New York&#8221;</i> as the synonym is not triggered</li>
+<li>The synonym will only be triggered when the query contains <i>&#8220;New York&#8221;</i>, returning the 10 records</li>
+</ul>
+<p>In order to avoid this flickering of search results, we consider that the last word of an expression is allowed to match as a prefix. So the synonym will be triggered as soon as the query contains <i>&#8220;new y&#8221;</i> (of course the synonym will also be triggered for the query <i>&#8220;new yo&#8221;, &#8220;new yor&#8221;</i> and <i>&#8220;new york&#8221;</i>). This approach reduces a lot the problem of flickering as the synonym is added as soon as the last word is started and deliver an intuitive behavior:</p>
+<ul>
+<li>It would be very complex to understand that the query <i>&#8220;ne&#8221;</i> match <i>&#8220;NY&#8221;</i> because we match a prefix of the expression <i>&#8220;New York&#8221; </i>(would be the case if we allow to match the complete synonym as a prefix)</li>
+<li>It is pretty easy to understand that the query <i>&#8220;new y&#8221;</i> is matching as a prefix of <i>&#8220;New York&#8221;</i></li>
+</ul>
+<p>This is why, in the Algolia engine, the final word of a synonym expression can be matched as a prefix. Of course, we continue to add the synonym when the expression is only a part of the query, so the query <i>&#8220;New York subway&#8221;</i> will still match the synonym <i>&#8220;New York&#8221; = &#8220;NY&#8221;</i> and records containing <i>&#8220;NY&#8221; </i>and<i> &#8220;subway&#8221;</i> will match. This recognition of expressions at any position of the search query is not performed by most engines.</p>
+<h1><a id="difference-between-original-terms-and-synonyms" class="anchor" href="#difference-between-original-terms-and-synonyms" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Difference between original terms and synonyms</h1>
+<p>Most users want to consider synonyms exactly identical to the search terms but this is not always the case, as we described before there is several degrees of synonyms and some synonyms are closer than others.</p>
+<p>We have several tunings available in the engine to let you configure the way to define the expressions that should be considered as identical or not:</p>
+<p><b><i>alternativesAsExact</i></b> is an index setting that specifies the type of alternatives that should be counted in the &#8220;exact&#8221; criterion of the ranking formula. As we explained in detail in <a href="https://blog.algolia.com/inside-the-algolia-enginepart-4-textual-relevance/#2.5">part 4 of this series</a>, it counts the number of terms that exactly match the query. By default, this settings is set to [<i>&#8220;ignorePlurals&#8221;, &#8220;monoWordSynonym&#8221;</i>], which means that the singular/plural alternative and the synonyms containing one word are considered as exact but a synonym containing several words won&#8217;t be considered as exact as they are often semantically farther. You can consider them as exact by adding <i>&#8220;multiWordsSynonym&#8221;</i> in the array.</p>
+<p>The synonyms dictionary also contains <a href="https://www.algolia.com/doc/guides/relevance/synonyms#alternative-corrections">alternative corrections</a> that are different semantically and should be considered as one or two typos. The spelling can be very far from the original words and so won&#8217;t be cached by the typo detection, so you can define them manually. For the moment this feature is limited to single-word expressions.</p>
+<h1><a id="implementation-details-matter" class="anchor" href="#implementation-details-matter" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Implementation details matter!</h1>
+<p>The configuration of synonyms is a key aspect of the search relevance and should be configured in most use cases. We have seen in this post that there are a lot of implementation details in the way synonyms are handled that have a direct consequence on the user experience or the ranking.</p>
+<p>As with most of the features we introduce in the engine, we have spent a lot of time designing synonyms and how they should behave. This is why we introduced their support progressively: we started with <a href="https://blog.algolia.com/synonym-search-engine/">support of single-word synonyms</a> in May 2014, followed by multi-word synonyms in April 2015 and a <a href="https://blog.algolia.com/brand-new-synonyms-api/">dedicated API to handle synonyms</a> in June 2016.</p>
+<p>We took the time to think about these implementation details and to our knowledge we are the engine that goes the deepest in terms of supporting as-you-type synonyms and multi-word synonym positions to have a perfectly identical ranking. We still have improvements to the way we handle the synonyms in our roadmap &#8211; like the hybrid indexing of multi-word synonyms to improve performance.</p>
+<p>If you have any other ideas of improvements, we would be very interested to discuss them with you!</p>
+<p>We recommend to read the other posts of this series:</p>
+<ul>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-1-indexing-vs-search/">Part 1 – indexing vs. search</a></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-2-the-indexing-challenge-of-instant-search/">Part 2 – the indexing challenge of instant search</a></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-3-query-processing/">Part 3 – query processing</a></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-enginepart-4-textual-relevance/">Part 4 – textual relevance</a></li>
+<li><a href="https://blog.algolia.com/inside-the-algolia-engine-part-5-highlighting-a-cornerstone-to-search-ux/">Part 5 – Highlighting, a Cornerstone of Search UX</a></li>
+<li><a href="https://blog.algolia.com/inside-the-engine-part-7-better-relevance-via-dedup-at-query-time/">Part 7 – Better relevance via dedup at query time</a></li>
+</ul>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Finside-the-engine-part-6-handling-synonyms-the-right-way%2F&amp;t=Inside+the+Algolia+Engine+Part+6+%E2%80%94+Handling+Synonyms+the+Right+Way" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Inside+the+Algolia+Engine+Part+6+%E2%80%94+Handling+Synonyms+the+Right+Way&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-engine-part-6-handling-synonyms-the-right-way%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-engine-part-6-handling-synonyms-the-right-way%2F&amp;title=Inside+the+Algolia+Engine+Part+6+%E2%80%94+Handling+Synonyms+the+Right+Way&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                
+                
+<div id="disqus_thread">
+    </div>
+
+                                                  
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Finside-the-engine-part-6-handling-synonyms-the-right-way%2F&amp;t=Inside+the+Algolia+Engine+Part+6+%E2%80%94+Handling+Synonyms+the+Right+Way" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Inside+the+Algolia+Engine+Part+6+%E2%80%94+Handling+Synonyms+the+Right+Way&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-engine-part-6-handling-synonyms-the-right-way%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Finside-the-engine-part-6-handling-synonyms-the-right-way%2F&amp;title=Inside+the+Algolia+Engine+Part+6+%E2%80%94+Handling+Synonyms+the+Right+Way&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"5759 https:\/\/blog.algolia.com\/?p=5759","disqusShortname":"algoliablog","disqusTitle":"Inside the Algolia Engine Part 6 \u2014 Handling Synonyms the Right Way","disqusUrl":"https:\/\/blog.algolia.com\/inside-the-engine-part-6-handling-synonyms-the-right-way\/","options":{"manualSync":false},"postId":"5759"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'5759',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '5759' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

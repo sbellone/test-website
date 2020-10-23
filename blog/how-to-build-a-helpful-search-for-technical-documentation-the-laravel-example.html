@@ -1,0 +1,776 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>How to Build a Helpful Search for Technical Documentation : The Laravel Example - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; How to Build a Helpful Search for Technical Documentation : The Laravel Example Comments Feed" href="https://blog.algolia.com/how-to-build-a-helpful-search-for-technical-documentation-the-laravel-example/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=3973' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fhow-to-build-a-helpful-search-for-technical-documentation-the-laravel-example%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fhow-to-build-a-helpful-search-for-technical-documentation-the-laravel-example%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=D77E0C576DE4D44F80DE74E6768EC59D');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="How to Build a Helpful Search for Technical Documentation : The Laravel Example"/>
+  <meta property="og:url" content="https://blog.algolia.com/how-to-build-a-helpful-search-for-technical-documentation-the-laravel-example/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="You can offer the best technology in the world, but if you don’t document it properly, the only engineers that will use it are the ones that are paid to do it, or that enjoy adventure. Sure enough, your goal is to attract every type of developer.
+
+Building a great documentation search seems very e"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2015/08/search-in-doc.png"/>
+  <meta property="article:published_time" content="2015-09-11T19:33:17+00:00"/>
+  <meta property="article:modified_time" content="2016-05-17T05:22:27+00:00" />
+  <meta property="og:updated_time" content="2016-05-17T05:22:27+00:00" />
+  <meta property="article:section" content="Guides"/>
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="How to Build a Helpful Search for Technical Documentation : The Laravel Example"/>
+  <meta itemprop="description" content="You can offer the best technology in the world, but if you don’t document it properly, the only engineers that will use it are the ones that are paid to do it, or that enjoy adventure. Sure enough, your goal is to attract every type of developer.
+
+Building a great documentation search seems very e"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2015/08/search-in-doc.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="How to Build a Helpful Search for Technical Documentation : The Laravel Example"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/how-to-build-a-helpful-search-for-technical-documentation-the-laravel-example/"/>
+  <meta name="twitter:description" content="You can offer the best technology in the world, but if you don’t document it properly, the only engineers that will use it are the ones that are paid to do it, or that enjoy adventure. Sure enough, your goal is to attract every type of developer.
+
+Building a great documentation search seems very e"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2015/08/search-in-doc.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-3973 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-3973" class="cf post-3973 post type-post status-publish format-standard has-post-thumbnail hentry category-guides category-technology tag-documentation tag-laravel" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">How to Build a Helpful Search for Technical Documentation : The Laravel Example</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/25760a5d4e793e491f26da5db64bb738?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">julien</span> |
+                    <time class="updated entry-time" datetime="2015-09-11" itemprop="datePublished">September 11, 2015</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/guides/" rel="category tag">Guides</a>, <a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/how-to-build-a-helpful-search-for-technical-documentation-the-laravel-example/" title="How to Build a Helpful Search for Technical Documentation : The Laravel Example">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2015/08/search-in-doc.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2015/08/search-in-doc.png 720w, https://blog.algolia.com/wp-content/uploads/2015/08/search-in-doc-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2015/08/search-in-doc-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead">You can offer the best technology in the world, but if you don’t document it properly, the only engineers that will use it are the ones that are paid to do it, or that enjoy adventure. Sure enough, your goal is to attract every type of developer.</p>
+<p>Building a great documentation search seems very easy at first but there are several pitfalls that you need to be aware of and avoid. This blog post explains those pitfalls and describes the recipe we have used to develop the <a href="http://laravel.com/docs/5.1">Laravel documentation search</a>.</p>
+<p style="border-left: 4px solid #f0ad4e; padding: 5px 10px; color: #8a6d3b; background: rgba(240,173,78,0.08);">
+  <strong>UPDATE</strong>: we have launched <a href="https://community.algolia.com/docsearch/">DocSearch</a>, the easiest and fastest way to add search to your documentation. Take a look, it&#8217;s free!
+</p>
+<h2><a id="pitfall-n%c2%ba1%c2%a0the-web-page-as-the-default%c2%a0entry" class="anchor" href="#pitfall-n%c2%ba1%c2%a0the-web-page-as-the-default%c2%a0entry" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Pitfall Nº1: the web page as the default entry</h2>
+<p>Developer documentations often mean lengthy pages filled with a lot of content. Most people try to index the complete page as one entry in their search engine. But, they discover later on that there were a lot of edge cases and they try to fix them through relevance tuning but it quickly becomes an endless story as the issue comes from the actual indexing itself:</p>
+<ol>
+<li>
+<h3><a id="1-relevant-content-only" class="anchor" href="#1-relevant-content-only" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1. Relevant content only</h3>
+</li>
+</ol>
+<p>For example the query <code>"composer upgrade"</code> will match the <a href="http://laravel.com/docs/4.2/quick">QuickStart page</a> because the menu contains <code>"Upgrade Guide"</code> and the first paragraph contains the <code>"composer"</code> word. This is not the kind of match that provides a good user experience.</p>
+<a href="https://blog.algolia.com/how-to-build-a-helpful-search-for-technical-documentation-the-laravel-example/illu4/" rel="attachment wp-att-3991"><img class="aligncenter size-full wp-image-3991" src="https://blog.algolia.com/wp-content/uploads/2015/08/illu4.png" alt="illu4" width="1882" height="1246" srcset="https://blog.algolia.com/wp-content/uploads/2015/08/illu4.png 1882w, https://blog.algolia.com/wp-content/uploads/2015/08/illu4-269x178.png 269w, https://blog.algolia.com/wp-content/uploads/2015/08/illu4-604x400.png 604w" sizes="(max-width: 1882px) 100vw, 1882px" /></a>
+<h3><a id="2-pages-contain-too-long-pieces-of%c2%a0text" class="anchor" href="#2-pages-contain-too-long-pieces-of%c2%a0text" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2. Pages contain too long pieces of text</h3>
+<p>Developers don&#8217;t like to change web pages too often and they like to have long pages containing a lot of information. If such a page is indexed as one document, it will almost systematically trigger relevance issues. This is why we do not recommend to use a standard web crawler, but rather a scrapper to have access to the original content (most of the time available in Markdown).</p>
+<p>For example, querying <code>"cache incrementing value"</code> will match the <a href="http://laravel.com/docs/4.2/queries">Query Builder</a> page because it contains a paragraph with the word <code>"cache"</code> and another paragraph with the words <code>"incrementing"</code> and <code>"value"</code>. This is a false positive because it is not relevant: the more text you have on a page, the more irrelevant results you will get.</p>
+<a href="https://blog.algolia.com/how-to-build-a-helpful-search-for-technical-documentation-the-laravel-example/illu3/" rel="attachment wp-att-3986"><img class="aligncenter size-full wp-image-3986" src="https://blog.algolia.com/wp-content/uploads/2015/08/illu3.png" alt="illu3" width="1372" height="468" srcset="https://blog.algolia.com/wp-content/uploads/2015/08/illu3.png 1372w, https://blog.algolia.com/wp-content/uploads/2015/08/illu3-320x109.png 320w, https://blog.algolia.com/wp-content/uploads/2015/08/illu3-720x246.png 720w" sizes="(max-width: 1372px) 100vw, 1372px" /></a> <a href="https://blog.algolia.com/how-to-build-a-helpful-search-for-technical-documentation-the-laravel-example/illu2/" rel="attachment wp-att-3987"><img class="aligncenter size-full wp-image-3987" src="https://blog.algolia.com/wp-content/uploads/2015/08/illu2.png" alt="illu2" width="1406" height="802" srcset="https://blog.algolia.com/wp-content/uploads/2015/08/illu2.png 1406w, https://blog.algolia.com/wp-content/uploads/2015/08/illu2-312x178.png 312w, https://blog.algolia.com/wp-content/uploads/2015/08/illu2-701x400.png 701w" sizes="(max-width: 1406px) 100vw, 1406px" /></a>
+<h3><a id="3-the-right-anchored-section" class="anchor" href="#3-the-right-anchored-section" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>3. The right anchored section</h3>
+<p>In order to deliver the best user experience, it is key to open the page  at the exact position of the match. This is made very difficult if you only index one document per page. That&#8217;s why there are so many documentation searches that just open the page at the top and the user needs to scroll or use the search of his browser to jump to the right section. This not always easy and is a waste of time.</p>
+<a href="https://blog.algolia.com/how-to-build-a-helpful-search-for-technical-documentation-the-laravel-example/screen-shot-2015-08-13-at-22-15-00/" rel="attachment wp-att-3989"><img class="aligncenter size-full wp-image-3989" src="https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-13-at-22.15.00.png" alt="Screen Shot 2015-08-13 at 22.15.00" width="1384" height="612" srcset="https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-13-at-22.15.00.png 1384w, https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-13-at-22.15.00-320x142.png 320w, https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-13-at-22.15.00-720x318.png 720w" sizes="(max-width: 1384px) 100vw, 1384px" /></a>
+<h2><a id="pitfall-n%c2%ba2-indexing-titles-only" class="anchor" href="#pitfall-n%c2%ba2-indexing-titles-only" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Pitfall Nº2: indexing titles only</h2>
+<p>Indexing the titles of your documentation page will probably answer common queries but this is not enough. The underlying paragraphs contain most of the words your users will search for. To obtain a great level of relevance, it&#8217;s important to index the whole content, body text included.</p>
+<p>In this example, the text is required to correctly answer to the <code>"rememberForever"</code> or <code>"cache driver"</code> queries.</p>
+<a href="https://blog.algolia.com/how-to-build-a-helpful-search-for-technical-documentation-the-laravel-example/illu5/" rel="attachment wp-att-4026"><img class="aligncenter size-full wp-image-4026" src="https://blog.algolia.com/wp-content/uploads/2015/08/illu5.png" alt="illu5" width="1328" height="686" srcset="https://blog.algolia.com/wp-content/uploads/2015/08/illu5.png 1328w, https://blog.algolia.com/wp-content/uploads/2015/08/illu5-320x165.png 320w, https://blog.algolia.com/wp-content/uploads/2015/08/illu5-720x372.png 720w" sizes="(max-width: 1328px) 100vw, 1328px" /></a>
+<h2><a id="pitfall-n%c2%ba3-poor-relevance" class="anchor" href="#pitfall-n%c2%ba3-poor-relevance" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Pitfall Nº3: poor relevance</h2>
+<p>With most search engines, relevance is the trickiest part of the configuration because it is often defined by a unique and complex formula that mixes a lot of information almost impossible to manage. Engineers often adjust the formula or add some bonus/malus scoring to improve the results on one specific query. Since they don&#8217;t have any non-regression tools, they cannot measure the real impact for all queries. The consequences can be significant.</p>
+<p>In order to keep the ranking under control, it is key to split the ranking formula in several pieces that you understand and will tune independently. In practice we are able to split the ranking formula with a <strong>Tie-Breaking</strong> algorithm.</p>
+<p>Let&#8217;s imagine your ranking formula is split in 2 parts:</p>
+<ul>
+<li>the first one defines the textual relevance of a matching hit,</li>
+<li>the second one defines the importance of a matching hit (from a use-case/business POV).</li>
+</ul>
+<p>You can then first apply the textual relevance and only if two hits have the same value move to the use-case/business relevance (importance). This is the best way to ensure your end-users will always have relevant hits first (from a text POV, matching exactly their query words) and then &#8211; in terms of relevance equality &#8211; tie the results using the business relevance.</p>
+<p><span style="line-height: 1.5;">Since you&#8217;re not mixing together the text &amp; the business relevance (but applied them one after another), you can modify the business relevance without impacting how the text relevance is working.</span><br />
+<a class="btn-cta" style="text-align: center; width: 380px; margin: 0 auto; display: block; float: none;" href="https://www.algolia.com/doc/tutorials/getting-started-realtime-search">Getting Started With Realtime Search</a></p>
+<h1><a id="our%c2%a0recipe" class="anchor" href="#our%c2%a0recipe" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Our recipe</h1>
+<h2><a id="1-create-small-hierarchical-records" class="anchor" href="#1-create-small-hierarchical-records" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1. Create small hierarchical records</h2>
+<p>In order to solve all those pitfalls, we split the page in a lot of smaller chunks indexed as separate records by using the HTML structure of the page (H1, H2, H3, H4, P).</p>
+<p>See the <em>Validation</em> page of Laravel&#8217;s documentation:</p>
+<a href="https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-19-at-23.26.11.png"><img class="aligncenter wp-image-4064 size-large" src="https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-19-at-23.26.11-351x400.png" alt="Validation Laravel" width="351" height="400" srcset="https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-19-at-23.26.11-351x400.png 351w, https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-19-at-23.26.11-156x178.png 156w, https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-19-at-23.26.11.png 1492w" sizes="(max-width: 351px) 100vw, 351px" /></a>
+<p>The first record generated will be the <em>Validation</em> page title. It will be transformed into the following JSON object. The &#8220;link&#8221; attribute only contains the last part of the URL, the first part being easily rebuilt with the tag:</p>
+<pre class="prettyprint"><code class="language-js">{
+    "h1": "Validation", 
+    "link": "validation", 
+    "importance": 0, 
+    "_tags": [
+        "5.1"
+    ], 
+    "objectID": "master-validation-13148717f8faa9037f37d28971dfc219"
+}</code></pre>
+<p>Then, the first section of the page (The Introduction) will be turned into the following record. The link now contains an anchor text and that keeps the title of the page:</p>
+<pre class="prettyprint"><code class="language-php">{
+    "h1": "Validation", 
+    "h2": "Introduction", 
+    "link": "validation#introduction", 
+    "importance": 1, 
+    "_tags": [
+        "5.1"
+    ], 
+    "objectID": "master-validation#introduction-eeafb566c2af34e739e2685efdb45524"
+}</code></pre>
+<p>A paragraph of this page under a H3 section would be translated into the following record:</p>
+<pre class="prettyprint"><code class="language-php">{
+    "h1": "Validation", 
+    "h2": "Validation Quickstart", 
+    "h3": "Defining the Routes", 
+    "link": "validation#validation-quickstart", 
+    "content": "First, let's assume we have the following routes defined in out `app/Http/routes.php` file:", 
+    "importance": 6, 
+    "_tags": [
+        "5.1"
+    ], 
+    "objectID": "5.1-validation#validation-quickstart-380c9827712413dbe75b5db515cd3e59"
+}</code></pre>
+<p>This approach fixes pitfalls #1 and #2. We have solved the problem by indexing each chunk of text as an independent record while keeping the titles hierarchy in each record.</p>
+<h2><a id="2-use-a-tie-breaking-ranking-algorithm" class="anchor" href="#2-use-a-tie-breaking-ranking-algorithm" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2. Use a tie-breaking ranking algorithm</h2>
+<p>Algolia is designed natively to use a Tie-Breaking algorithm to make sure everyone understands &amp; is able to tune the ranking. Now,Pitfall #3 can be easily resolved by applying the settings we recommend for a documentation search implementation:</p>
+<a href="https://blog.algolia.com/how-to-build-a-helpful-search-for-technical-documentation-the-laravel-example/screen-shot-2015-08-14-at-14-10-11/" rel="attachment wp-att-4012"><img class="aligncenter size-full wp-image-4012" src="https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-14.10.11.png" alt="Screen Shot 2015-08-14 at 14.10.11" width="1750" height="704" srcset="https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-14.10.11.png 1750w, https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-14.10.11-320x129.png 320w, https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-14.10.11-720x290.png 720w" sizes="(max-width: 1750px) 100vw, 1750px" /></a>
+<p>Matching hits will now be sorted against those six ranking criteria: the first 5 are related to text relevance and the last one is the custom business relevance.</p>
+<h3><a id="ranking-criterion-n%c2%ba1%c2%a0number-of-matched-words-words" class="anchor" href="#ranking-criterion-n%c2%ba1%c2%a0number-of-matched-words-words" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Ranking criterion Nº1: number of matched words (words)</h3>
+<p>First, we sort the number of query words found in the records. We have decided to process the query with all words as mandatory (AND between query terms). If there are not enough matching words, we run the query again with all words as optional (OR between query terms). This process is configured with a single index setting and allows your to get the best of both worlds: AND guarantees to reduce the number of false positives while OR allows to return results even if the query is too narrow.<a href="https://blog.algolia.com/how-to-build-a-helpful-search-for-technical-documentation-the-laravel-example/screen-shot-2015-08-14-at-14-26-18/" rel="attachment wp-att-4013"><img class="aligncenter size-full wp-image-4013" src="https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-14.26.18.png" alt="Screen Shot 2015-08-14 at 14.26.18" width="1556" height="196" srcset="https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-14.26.18.png 1556w, https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-14.26.18-320x40.png 320w, https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-14.26.18-720x91.png 720w" sizes="(max-width: 1556px) 100vw, 1556px" /></a></p>
+<h3><a id="ranking-criterion-n%c2%ba2%c2%a0number-of-typos-typo" class="anchor" href="#ranking-criterion-n%c2%ba2%c2%a0number-of-typos-typo" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Ranking criterion Nº2: number of typos (typo)</h3>
+<p>If two records match with the same number of search terms, we use the number of typos as the differentiator (so we have exact matches first, then matches with 1 typo, then matches with 2 typos, &#8230;).</p>
+<p>For example if the query is &#8220;validator&#8221;, the record that contains &#8220;validate&#8221; will match with some typos but will be retrieved after the record containing &#8220;validator&#8221;.</p>
+<h3><a id="ranking-criterion-n%c2%ba3-proximity-between-query-terms-proximity" class="anchor" href="#ranking-criterion-n%c2%ba3-proximity-between-query-terms-proximity" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Ranking criterion Nº3: proximity between query terms (proximity)</h3>
+<p>When two records are identical for the <em>words</em> and <em>typos</em> ranking criteria, we then move to the next criteria which compares the proximity of the query terms in the record. It will basically count the number of words in between them until a limit is reached (after a certain point they are considered as &#8220;too far&#8221;).</p>
+<p>For example, the <code>"cache configuration"</code> query will have a proximity of 1 when it matches the sentence: <code>"The <strong>cache</strong> <strong>configuration</strong> is ..."</code> and will have a proximity of 2 when it matches the sentence <code>"... in the config/<strong>cache</strong>.php <strong>configuration</strong> file"</code>. We sort this value by increasing order as we prefer records that contains the query terms close together first.</p>
+<h3><a id="ranking-criterion-n%c2%ba4-the-matched-attribute-attribute" class="anchor" href="#ranking-criterion-n%c2%ba4-the-matched-attribute-attribute" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Ranking criterion Nº4: the matched attribute (attribute)</h3>
+<p>If two records are identical for the 3 first ranking criteria, we use the name of the matched attribute to determine which hit needs to be retrieved first. In the index settings, just order the attributes you want to search by order of importance:</p>
+<a href="https://blog.algolia.com/how-to-build-a-helpful-search-for-technical-documentation-the-laravel-example/screen-shot-2015-08-14-at-14-50-49/" rel="attachment wp-att-4016"><img class="aligncenter size-full wp-image-4016" src="https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-14.50.49.png" alt="Screen Shot 2015-08-14 at 14.50.49" width="1918" height="586" srcset="https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-14.50.49.png 1918w, https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-14.50.49-320x98.png 320w, https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-14.50.49-720x220.png 720w" sizes="(max-width: 1918px) 100vw, 1918px" /></a>
+<p>That means that if the match is identified inside h1, it will be better than in h2, better than in h3, etc. You can also notice there is an &#8220;unordered&#8221; flag on each attribute. It means that the position of the match inside the attribute is not considered in the ranking. That&#8217;s why the query <code>"cache" </code>will match with the same attribute score for a record that contains <code>"[<span style="text-decoration: underline;">Cache</span> Configuration]"</code> or  <code>"[Obtaining a <span style="text-decoration: underline;">cache</span> instance]"</code> for the same attribute.</p>
+<h3><a id="ranking-criterion-n%c2%ba5-the-number-of-terms-matching-exactly-exact" class="anchor" href="#ranking-criterion-n%c2%ba5-the-number-of-terms-matching-exactly-exact" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Ranking criterion Nº5: the number of terms matching exactly (exact)</h3>
+<p>If two records are identical for the first 4 criteria, then we use the number of query terms  that match exactly in the record to determine which hit needs to be retrieved first. Because we&#8217;re returning results after each keystroke, the last query term will mostly match as a prefix (it will match beginning of words). This criterion is used to rank an exact match before a prefix match.</p>
+<p>For example the query &#8220;valid&#8221; will retrieve the records containing &#8220;<strong>valid</strong>&#8221; before the ones containing &#8220;<strong>valid</strong>ation&#8221;.</p>
+<h3><a id="ranking-criterion-n%c2%ba6-business-ranking-custom" class="anchor" href="#ranking-criterion-n%c2%ba6-business-ranking-custom" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Ranking criterion Nº6: business ranking (custom)</h3>
+<p>There is still one important thing missing: your use-case/business criterion. If all previous criteria are identical for two records, we use the custom ranking which is defined by the user.</p>
+<p>For example, searching for <code>"Validation"</code> will match the two following records using the most important &#8220;h1&#8221; attribute. That results in a tie on all previous criteria but we want to retrieve the page title first because the other record is a paragraph. This is how the <code>"importance"</code> attribute plays out when added to the records.</p>
+<pre class="prettyprint"><code class="language-php">{
+    "h1": "Validation", 
+    "link": "validation", 
+    "importance": 0, 
+    "_tags": [
+        "5.1"
+    ], 
+    "objectID": "master-validation-13148717f8faa9037f37d28971dfc219"
+}</code></pre>
+<pre class="prettyprint"><code class="language-php">{
+    "h1": "Validation", 
+    "h2": "Working With Error Messages", 
+    "h3": "Custom Error Messages", 
+    "link": "validation#custom-error-messages", 
+    "content": "If needed, you may use custom error messages for validation instead of the defaults. There are several ways to specify custom messages. First, you may pass the custom messages as the third argument to the `Validator::make` method:", 
+    "importance": 6, 
+    "_tags": [
+        "5.1"
+    ], 
+    "objectID": "5.1-validation#custom-error-messages-380c9827712413dbe75b5db515cd3e59"
+}</code></pre>
+<p>The &#8220;importance&#8221; value is a integer that goes from 0 (page title) to 7 (text section under h4) and that we use in the custom ranking in an ascending order (the smaller, the better):</p>
+<a href="https://blog.algolia.com/how-to-build-a-helpful-search-for-technical-documentation-the-laravel-example/screen-shot-2015-08-14-at-15-02-33/" rel="attachment wp-att-4019"><img class="aligncenter size-full wp-image-4019" src="https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-15.02.33.png" alt="Screen Shot 2015-08-14 at 15.02.33" width="1874" height="226" srcset="https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-15.02.33.png 1874w, https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-15.02.33-320x39.png 320w, https://blog.algolia.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-14-at-15.02.33-720x87.png 720w" sizes="(max-width: 1874px) 100vw, 1874px" /></a>
+<p>The complete scale of importance is the following:</p>
+<ul>
+<li>0 for h1,</li>
+<li>1 for h2,</li>
+<li>2 for h3,</li>
+<li>3 for h4,</li>
+<li>4 for text under h1,</li>
+<li>5 for text under h2,</li>
+<li>6 for text under h3,</li>
+<li>and 7 for text under h4.</li>
+</ul>
+<h2><a id="this-is-a-generic-recipe" class="anchor" href="#this-is-a-generic-recipe" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>This is a generic recipe</h2>
+<p>We have successfully applied this recipe on several technical documentation,namely the <a href="http://laravel.com/docs">Laravel documentation</a> and <a href="https://bootstrap.algolia.com/">Bootstrap documentation</a> search. The way results are displayed differ but we use exactly the same approach and the same API.</p>
+<p><a class="btn-cta" style="text-align: center; width: 380px; margin: 0 auto; display: block; float: none;" href="https://community.algolia.com/docsearch/">Get DocSearch for your website</a></p>
+<p>One of our missions is to help all developers to better access and navigate technical documentations. If you are working on an open source project we&#8217;d be happy to help you! We will provide you with a free Algolia account and with any support to make your implementation a best-in-class reference. Drop us a note!</p>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fhow-to-build-a-helpful-search-for-technical-documentation-the-laravel-example%2F&amp;t=How+to+Build+a+Helpful+Search+for+Technical+Documentation+%3A+The+Laravel+Example" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=How+to+Build+a+Helpful+Search+for+Technical+Documentation+%3A+The+Laravel+Example&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhow-to-build-a-helpful-search-for-technical-documentation-the-laravel-example%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhow-to-build-a-helpful-search-for-technical-documentation-the-laravel-example%2F&amp;title=How+to+Build+a+Helpful+Search+for+Technical+Documentation+%3A+The+Laravel+Example&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                <div class="tags-container"><ul class="tags"><li><a href="https://blog.algolia.com/tag/documentation/" rel="tag">Documentation</a></li><li><a href="https://blog.algolia.com/tag/laravel/" rel="tag">Laravel</a></li></ul></div>
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-427">
+        <div id="dsq-comment-header-427" class="dsq-comment-header">
+            <cite id="dsq-cite-427">
+                <a id="dsq-author-user-427" href="http://kunalvarma.in" target="_blank" rel="nofollow">Kunal Varma</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-427" class="dsq-comment-body">
+            <div id="dsq-comment-message-427" class="dsq-comment-message"><p>Laravel&#8217;s documentation is a good example for others to learn from. Algolia is quite cool.<br />
+Cheers!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-428">
+        <div id="dsq-comment-header-428" class="dsq-comment-header">
+            <cite id="dsq-cite-428">
+                <span id="dsq-author-user-428">Rhoit</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-428" class="dsq-comment-body">
+            <div id="dsq-comment-message-428" class="dsq-comment-message"><p>Algolia is really cool, no doubt why HN choose it. Thanks a ton <a href="http://java67.blogspot.co.uk" rel="nofollow">Rohit</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-477">
+        <div id="dsq-comment-header-477" class="dsq-comment-header">
+            <cite id="dsq-cite-477">
+                <span id="dsq-author-user-477">mlbrgl</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-477" class="dsq-comment-body">
+            <div id="dsq-comment-message-477" class="dsq-comment-message"><p>Hi, following your advice I am considering using this approach for indexing long and structured articles (e.g <a href="http://devsante.org/base-documentaire/medecine/la-rage" rel="nofollow">http://devsante.org/base-documentaire/medecine/la-rage</a>). I still cannot get my head around a few couple of things though.</p>
+<p>Running the &#8220;validation&#8221; query on <a href="https://laravel.com/docs/5.2/validation" rel="nofollow">https://laravel.com/docs/5.2/validation</a>, I am being returned, in that order:</p>
+<p>&#8211; Validation (h1)<br />
+&#8211; Validation (h1) / Working with error messages (h2)<br />
+&#8211; Validation (h1) / Validation quickstart (h2)</p>
+<p>All of these are headings, no content outside of h1 and h2 is being returned as indexed for those records.</p>
+<p>The way I understand it, both the first and second result match on the h1 tag but the second looses against the first because of the importance criteria (being a h2, record, it gets 1 point instead of 0, lower is better).</p>
+<p>Now why is the third record being returned last even though it has &#8220;validation&#8221; in both attributes? Is it because it has the misfortune of matching on a h2, which somehow does not positively compound with fact that it matches on an h1 as well? Running that hypothesis on the next results does not make sense, as Validation (h1) / Introduction (h2) is returned in fifth position, after the presumably unfortunate Validation / Validation quickstart.</p>
+<p>So in short:</p>
+<p>&#8211; do attributes compound in the algorithm when matches are found in more than one (h1 and h2 in our example), and if so how?</p>
+<p>&#8211; how does this compare to not indexing the parent headings in the DOM, i.e. having h2 records not containing the parent h1 in our example:<br />
+  &#8211; Validation (h1)<br />
+  &#8211; Working with error messages (h2)<br />
+  &#8211; Validation quickstart (h1)<br />
+Is the reason on the relevance side or on the contextualisation of results side when returning suggestions?</p>
+<p>Thanks!</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-478">
+        <div id="dsq-comment-header-478" class="dsq-comment-header">
+            <cite id="dsq-cite-478">
+                <a id="dsq-author-user-478" href="http://www.algolia.com/" target="_blank" rel="nofollow">Julien Lemoine</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-478" class="dsq-comment-body">
+            <div id="dsq-comment-message-478" class="dsq-comment-message"><p>The ranking algorithm keeps the best match (so in your case all are equals since they all contains &#8220;Validation&#8221; in h1), the only difference between the result is in the custom ranking part (in this case the level and only it, but it can also take into account the popularity).</p>
+<p>Depending of your use case, you can indeed decide to do not index the parent in the DOM and only keep them to display the result (this is something we have seen several time and that can make sense). You can do that by adding a separated attributes that contains the text to index and only have this one in your attributes to index (and keep the h1, h2, h3 for the display of your result).</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+                                  <div class='rp4wp-related-posts'>
+<h3>What to read next</h3>
+<ul>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2014/03/latency-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2014/03/latency-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/our-saas-version-is-in-beta/'>Online Search in the Cloud: Version is in Beta!</a></div>
+</li>
+<li><div class='rp4wp-related-post-image'>
+<a href='https://blog.algolia.com/instant-search-blog-documentation-jekyll-plugin/'><img width="150" height="150" src="https://blog.algolia.com/wp-content/uploads/2015/07/jekyll-150x150.png" class="attachment-thumbnail size-thumbnail wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2015/07/jekyll-150x150.png 150w, https://blog.algolia.com/wp-content/uploads/2015/07/jekyll-125x125.png 125w" sizes="(max-width: 150px) 100vw, 150px" /></a></div>
+<div class='rp4wp-related-post-content'>
+<a href='https://blog.algolia.com/instant-search-blog-documentation-jekyll-plugin/'>Add instant search to your blog or documentation using our Jekyll plugin</a></div>
+</li>
+</ul>
+</div>
+                
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fhow-to-build-a-helpful-search-for-technical-documentation-the-laravel-example%2F&amp;t=How+to+Build+a+Helpful+Search+for+Technical+Documentation+%3A+The+Laravel+Example" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=How+to+Build+a+Helpful+Search+for+Technical+Documentation+%3A+The+Laravel+Example&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhow-to-build-a-helpful-search-for-technical-documentation-the-laravel-example%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fhow-to-build-a-helpful-search-for-technical-documentation-the-laravel-example%2F&amp;title=How+to+Build+a+Helpful+Search+for+Technical+Documentation+%3A+The+Laravel+Example&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"3973 https:\/\/blog.algolia.com\/?p=3973","disqusShortname":"algoliablog","disqusTitle":"How to Build a Helpful Search for Technical Documentation : The Laravel Example","disqusUrl":"https:\/\/blog.algolia.com\/how-to-build-a-helpful-search-for-technical-documentation-the-laravel-example\/","options":{"manualSync":false},"postId":"3973"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'3973',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '3973' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

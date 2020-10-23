@@ -1,0 +1,609 @@
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-GB" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#" class="no-js"><!--<![endif]-->
+
+	<head>
+		<meta charset="utf-8">
+
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<title>Keeping mobile apps lightweight: how we shrank Algolia Offline by 69% - Milliseconds Matter</title>
+
+				<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75"/>
+
+				<link rel="apple-touch-icon" href="https://blog.algolia.com/wp-content/themes/algolia/library/images/apple-touch-icon.png">
+		<link rel="icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.png">
+		<!--[if IE]>
+			<link rel="shortcut icon" href="https://blog.algolia.com/wp-content/themes/algolia/favicon.ico">
+		<![endif]-->
+				<meta name="msapplication-TileColor" content="#f01d4f">
+		<meta name="msapplication-TileImage" content="https://blog.algolia.com/wp-content/themes/algolia/library/images/win8-tile-icon.png">
+    <meta name="theme-color" content="#121212">
+
+		<link rel="pingback" href="https://blog.algolia.com/xmlrpc.php">
+
+        
+<!-- This site is optimized with the Yoast SEO plugin v4.5 - https://yoast.com/wordpress/plugins/seo/ -->
+
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Feed" href="https://blog.algolia.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Comments Feed" href="https://blog.algolia.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Milliseconds Matter &raquo; Keeping mobile apps lightweight: how we shrank Algolia Offline by 69% Comments Feed" href="https://blog.algolia.com/keeping-mobile-apps-lightweight-shrank-algolia-offline-69/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.algolia.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css' type='text/css' media='all' />
+<link rel='stylesheet' id='jquery-ui-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='algolia_styles-css'  href='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-crestafont-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/csscfont.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-wp-style-css'  href='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/css/cresta-wp-css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='cresta-social-googlefonts-css'  href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' type='text/css' media='all' />
+<link rel='stylesheet' id='googleFonts-css'  href='//fonts.googleapis.com/css?family=Raleway%3A400%2C600%2C700' type='text/css' media='all' />
+<link rel='stylesheet' id='custom-algolia-scripts-css'  href='https://blog.algolia.com/wp-content/themes/algolia/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bones-stylesheet-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/style.css' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='bones-ie-only-css'  href='https://blog.algolia.com/wp-content/themes/algolia/library/css/ie.css' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='https://blog.algolia.com/wp-content/plugins/jetpack/css/jetpack.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/jquery/jquery-ui.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/algolia/algoliasearch.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/hogan/hogan.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var settings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/lib/typeahead/typeahead.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var algoliaSettings = {"app_id":"latency","search_key":"6be0576ff61c053d5f9a3225e2a90f76","indices":[{"index_name":"wordpress_post","name":"Articles","order1":0,"order2":0}],"sorting_indices":[{"index_name":"wordpress_all_date_desc","label":""}],"index_name":"wordpress_","type_of_search":["instant"],"instant_jquery_selector":".algoliasearchcontainer","facets":[{"tax":"category","name":"","order":"19","type":"menu"}],"number_by_type":"3","number_by_page":"12","search_input_selector":"[name='s']","plugin_url":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/","theme":{"dir":"algolia","name":"New Algolia","screenshot":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","screenshot_autocomplete":"https:\/\/blog.algolia.com\/wp-content\/plugins\/algoliasearch-wordpress-master\/core\/..\/themes\/algolia\/screenshot.png","description":"","facet_types":{"menu":"Menu"}}};
+var searchState = {"page":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/front/main.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var themesSettings = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/algoliasearch-wordpress-master/themes/algolia/theme.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/libs/modernizr.custom.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js'></script>
+<link rel='https://api.w.org/' href='https://blog.algolia.com/wp-json/' />
+<link rel='shortlink' href='https://blog.algolia.com/?p=6207' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fkeeping-mobile-apps-lightweight-shrank-algolia-offline-69%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.algolia.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.algolia.com%2Fkeeping-mobile-apps-lightweight-shrank-algolia-offline-69%2F&#038;format=xml" />
+<style type='text/css'>
+			@media (max-width : 640px) {
+				#crestashareicon {
+					display:none !important;
+				}
+			}
+		#crestashareicon {position:fixed; top:30%; right:20px; float:left;z-index:99;}
+
+		#crestashareicon .sbutton {clear:both;display:none;}
+		#crestashareicon .sbutton {float:right;}.cresta-share-icon.first_style .cresta-the-count {left: -11px;}#crestashareiconincontent {float: none; margin: 0 auto; display: table;}</style><script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//blog.algolia.com/?wordfence_logHuman=1&hid=454DD418E191F56C494747B0182A106D');
+</script>		<style>
+		.gist table {
+			margin-bottom: 0 !important;
+			table-layout: auto !important;
+		}
+		.gist .line-numbers
+		{
+			width: 4em !important;
+		}
+		.gist .line,
+		.gist .line-number
+		{
+			font-size: 12px !important;
+			height: 18px !important;
+			line-height: 18px !important;
+		}
+		.gist .line
+		{
+			white-space: pre !important;
+			width: auto !important;
+			word-wrap: normal !important;
+		}
+		.gist .line span
+		{
+			word-wrap: normal !important;
+		}
+		</style>
+		<style type='text/css'>img#wpstats{display:none}</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+
+<!-- START - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+ <!-- Facebook Open Graph -->
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:site_name" content="Milliseconds Matter"/>
+  <meta property="og:title" content="Keeping mobile apps lightweight: how we shrank Algolia Offline by 69%"/>
+  <meta property="og:url" content="https://blog.algolia.com/keeping-mobile-apps-lightweight-shrank-algolia-offline-69/"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Earlier this year we announced the release of Algolia Offline, which compacted the power of Algolia down to an offline search experience while retaining most of its features. One of the biggest constraints of packaging a search engine into a mobile library is the “binary size”: how much space the co"/>
+  <meta property="og:image" content="https://blog.algolia.com/wp-content/uploads/2017/04/inside-offline.png"/>
+  <meta property="article:published_time" content="2017-04-21T05:25:36+00:00"/>
+  <meta property="article:modified_time" content="2017-04-21T05:25:36+00:00" />
+  <meta property="og:updated_time" content="2017-04-21T05:25:36+00:00" />
+  <meta property="article:section" content="Guides"/>
+  <meta property="article:section" content="Technology"/>
+ <!-- Google+ / Schema.org -->
+  <meta itemprop="name" content="Keeping mobile apps lightweight: how we shrank Algolia Offline by 69%"/>
+  <meta itemprop="description" content="Earlier this year we announced the release of Algolia Offline, which compacted the power of Algolia down to an offline search experience while retaining most of its features. One of the biggest constraints of packaging a search engine into a mobile library is the “binary size”: how much space the co"/>
+  <meta itemprop="image" content="https://blog.algolia.com/wp-content/uploads/2017/04/inside-offline.png"/>
+ <!-- Twitter Cards -->
+  <meta name="twitter:title" content="Keeping mobile apps lightweight: how we shrank Algolia Offline by 69%"/>
+  <meta name="twitter:url" content="https://blog.algolia.com/keeping-mobile-apps-lightweight-shrank-algolia-offline-69/"/>
+  <meta name="twitter:description" content="Earlier this year we announced the release of Algolia Offline, which compacted the power of Algolia down to an offline search experience while retaining most of its features. One of the biggest constraints of packaging a search engine into a mobile library is the “binary size”: how much space the co"/>
+  <meta name="twitter:image" content="https://blog.algolia.com/wp-content/uploads/2017/04/inside-offline.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@algolia"/>
+ <!-- SEO -->
+ <!-- Misc. tags -->
+<!-- END - Facebook Open Graph, Google+ and Twitter Card Tags 2.0.8 -->
+
+    
+        <link rel="stylesheet" href="https://blog.algolia.com/wp-content/themes/algolia/library/css/icons.css">
+
+	</head>
+
+	<body class="post-template-default single single-post postid-6207 single-format-standard custom-background" itemscope itemtype="http://schema.org/WebPage">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+    <!-- End Google Tag Manager -->
+
+		<div id="container">
+
+			<header class="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+
+				<div id="inner-header" class="wrap cf">
+          <ul id="links">
+            <li><a href="https://www.algolia.com/jobs">Jobs</a></li>
+            <li><a class="btn-primary" href="https://www.algolia.com/">Go to algolia.com</a></li>
+          </ul>
+          <a id="logo" href="/"><img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="130" alt="algolia"/></a>
+										<p id="title" class="h1" itemscope itemtype="http://schema.org/Organization"><a href="https://blog.algolia.com" rel="nofollow">Milliseconds Matter</a></p>
+
+										<p id="tagline">The Official Algolia Blog</p>
+
+
+					<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+						
+					</nav>
+
+				</div>
+
+			</header>
+			<div id="content">
+				<div id="inner-content" class="wrap cf">
+
+					<a class="single-back" href="#" onclick="goBack();">&lt;&nbsp;Back</a>
+
+					<div id="search-input-wrapper" class="hide">
+						<input id="search-input" placeholder="Search for posts, authors, ..." name="s" spellcheck="false"/>
+					</div>
+
+					<main id="main" class="d-all cf" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+						<div class="algoliasearchcontainer hide"></div>
+						<div class="post-content">
+							
+								
+              
+              <article id="post-6207" class="cf post-6207 post type-post status-publish format-standard has-post-thumbnail hentry category-guides category-technology" role="article" itemscope itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+
+                <header class="article-header entry-header">
+
+                  <h1 class="entry-title single-title" itemprop="headline" rel="bookmark">Keeping mobile apps lightweight: how we shrank Algolia Offline by 69%</h1>
+
+                  <p class="byline entry-meta vcard">
+                    <img class="author-avatar" src="https://secure.gravatar.com/avatar/a1333c0aa8991ac198a4ec5b72fffa95?s=96&d=mm&r=g" onerror="this.onerror=null;this.src='https://blog.algolia.com/wp-content/themes/algolia/library/images/avatar-algolia.png'" />
+                    <span class="entry-author author" itemprop="author" itemscope itemptype="http://schema.org/Person">Clément Le Provost</span> |
+                    <time class="updated entry-time" datetime="2017-04-21" itemprop="datePublished">April 21, 2017</time> |
+                    <span class="entry-categories"><a href="https://blog.algolia.com/category/guides/" rel="category tag">Guides</a>, <a href="https://blog.algolia.com/category/technology/" rel="category tag">Technology</a></span>
+                  </p>
+
+                                      <a href="https://blog.algolia.com/keeping-mobile-apps-lightweight-shrank-algolia-offline-69/" title="Keeping mobile apps lightweight: how we shrank Algolia Offline by 69%">
+                    <img width="720" height="400" src="https://blog.algolia.com/wp-content/uploads/2017/04/inside-offline-720x400.png" class="attachment-algolia-post-720 size-algolia-post-720 wp-post-image" alt="" srcset="https://blog.algolia.com/wp-content/uploads/2017/04/inside-offline-720x400.png 720w, https://blog.algolia.com/wp-content/uploads/2017/04/inside-offline-320x178.png 320w, https://blog.algolia.com/wp-content/uploads/2017/04/inside-offline-768x426.png 768w, https://blog.algolia.com/wp-content/uploads/2017/04/inside-offline-340x189.png 340w" sizes="(max-width: 720px) 100vw, 720px" />                    </a>
+                  
+                </header> 
+                <section class="entry-content cf" itemprop="articleBody">
+                  <p class="lead"><i><span style="font-weight: 400;">Earlier this year we announced the release of </span></i><a href="https://blog.algolia.com/with-algolia-offline-take-your-search-bar-everywhere/"><i><span style="font-weight: 400;">Algolia Offline</span></i></a><i><span style="font-weight: 400;">, which compacted the power of Algolia down to an offline search experience while retaining most of its features. One of the biggest constraints of packaging a search engine into a mobile library is the “binary size”: how much space the compiled library occupies. Fitting an entire search engine under 1 MB was an exciting adventure!</span></i></p>
+<p><span style="font-weight: 400;">On mobile, the binary size of your application is doubly important, because it impacts users twice: first when they download the app, and again by eating space on their device’s storage.</span></p>
+<p><span style="font-weight: 400;">On iOS, Apple prevents users from downloading an application “Over The Air” (i.e. from a mobile network, not Wi-Fi) </span><a href="https://www.macrumors.com/2013/09/18/apple-increases-over-the-air-app-store-download-limit-to-100mb/"><span style="font-weight: 400;">if it weighs over 100 MB</span></a><span style="font-weight: 400;"> compressed to prevent runaway fees on data connections—that limit used to be 50 MB prior to iOS 7.</span></p>
+<p><span style="font-weight: 400;">Even if you are below that threshold, many users are still reluctant to install apps if they are too big. Mobile storage is far from being the most affordable medium, and competition for space is fierce. Remember the last time your phone’s disk was full: probably the first thing you did was open up your application list and scroll through those taking the most space to look for apps you could afford to get rid of.</span></p>
+<p><span style="font-weight: 400;">As a result, mobile developers strive to make their apps as streamlined as possible. This constraint naturally translates to all mobile libraries, including Algolia Offline.</span></p>
+<h2><a id="trick-1-there-are-no-magic-tricks" class="anchor" href="#trick-1-there-are-no-magic-tricks" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Trick #1: There are no magic tricks</span></h2>
+<p><span style="font-weight: 400;">While Apple imposes restrictions on your applications, they also provide a useful tool to make them lighter for the end user: </span><a href="https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/AppThinning/AppThinning.html"><span style="font-weight: 400;">App Thinning</span></a><span style="font-weight: 400;">. Introduced with iOS 9, App Thinning ensures that users only download the code and resources that are relevant for their device (hardware architecture and resolution). It became almost inevitable with the advent of Retina HD displays, which come with 3x resolution, meaning 9x as many pixels!</span></p>
+<p><span style="font-weight: 400;">Unfortunately, Android has yet to come out with a similar tool. Google Play has a feature called “</span><a href="https://developer.android.com/google/play/publishing/multiple-apks.html"><span style="font-weight: 400;">Multiple APK</span></a><span style="font-weight: 400;">”, whereby you can publish different variations of your app for different device configurations. Contrary to App Thinning, however, it is entirely manual, making deployment a lot more cumbersome. The official documentation itself states that “</span><a href="https://developer.android.com/google/play/publishing/multiple-apks.html#SingleAPK"><span style="font-weight: 400;">[this] is not the normal procedure</span></a><span style="font-weight: 400;">”.</span></p>
+<p><span style="font-weight: 400;">Even with App Thinning, binary size is still a concern: the problem has been mitigated, not eliminated.</span></p>
+<h2><a id="cloud-and-mobile-two-different-species" class="anchor" href="#cloud-and-mobile-two-different-species" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Cloud and mobile: two different species</span></h2>
+<p><span style="font-weight: 400;">Back in 2012, Algolia started as an offline SDK, so one could be forgiven for thinking that shipping a small library was easy enough for us. However, from 2013 on we switched to a cloud-hosted engine, and its rules are very different from mobile: it’s a different animal altogether.</span></p>
+<p><span style="font-weight: 400;">With a cloud-hosted product, you control every part of your environment. You have big, fat servers with terabytes of disk: storage space is much less of an issue. Conversely, you have hundreds of thousands of customers to serve in milliseconds, so speed starts to be your main headache. It’s a well-known engineering problem: the </span><a href="https://en.wikipedia.org/wiki/Space%E2%80%93time_tradeoff"><span style="font-weight: 400;">space–time tradeoff</span></a><span style="font-weight: 400;">. With a cloud-hosted product, the cursor is set firmly on “time”.</span></p>
+<p><span style="font-weight: 400;">In addition, since our move to a cloud product, our search engine has been augmented with lots of new features. Each feature means more code, which means bigger binaries in the end.</span></p>
+<p><span style="font-weight: 400;">As a result, when we resurrected the Offline SDK to become Algolia Offline, it weighed around 3 MB. The challenge was now to bring it down to around 1 MB.</span></p>
+<h2><a id="trick-2-trust-your-compiler" class="anchor" href="#trick-2-trust-your-compiler" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Trick #2: Trust your compiler</span></h2>
+<p><span style="font-weight: 400;">We didn’t have to reinvent the wheel to shrink our application by two thirds. Compilers have been around for decades… since the times when binary size was </span><i><span style="font-weight: 400;">always</span></i><span style="font-weight: 400;"> an issue. Compilers provide lots of nice options to squeeze your code into the fewest possible bits.</span></p>
+<p><span style="font-weight: 400;">Our CTO Julien Lemoine posted a great article back in early 2013 explaining </span><a href="https://blog.algolia.com/android-ndk-how-to-reduce-libs-size/"><span style="font-weight: 400;">how to reduce binary size with the Android NDK</span></a><span style="font-weight: 400;">. A lot of the tricks he mentioned still apply. Let’s review them.</span></p>
+<p><span style="font-weight: 400;">The first obvious step is to ask the compiler to </span><b>optimize for space</b><span style="font-weight: 400;"> (<code>-Os</code> option, instead of the default <code>-O2</code>). In our case, this alone </span><b>saves 419 kB</b><span style="font-weight: 400;">.</span></p>
+<h2><a id="trick-3-resist-the-urge-to-inline" class="anchor" href="#trick-3-resist-the-urge-to-inline" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Trick #3: Resist the urge to inline</span></h2>
+<p><span style="font-weight: 400;">Next, let’s be careful with </span><b>inline expansion</b><span style="font-weight: 400;">. Inlining code can bring significant performance benefits, not only because it saves a function call, but also because it makes </span><i><span style="font-weight: 400;">other</span></i><span style="font-weight: 400;"> optimizations possible—optimizations which would have been impossible across a function boundary. As a consequence, though, the compiled size grows bigger, because the same code is duplicated in several places in your binary.</span></p>
+<p><span style="font-weight: 400;">Algolia relies heavily on inlining, even forcing it for specific functions (typically those used within tight loops). In Algolia Offline, however, we disable this behavior and let the compiler decide. This </span><b>saves another 144 kB</b><span style="font-weight: 400;">.</span></p>
+<h2><a id="tricks-4%e2%80%936-exorcise-that-dead-code" class="anchor" href="#tricks-4%e2%80%936-exorcise-that-dead-code" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Tricks #4–6: Exorcise that Dead Code</span></h2>
+<p><span style="font-weight: 400;">Optimized code is nice, but what if it’s not actually used? When a linker produces a library, it merely takes every object file (i.e. the machine code equivalent of every source file), and links them together. But what if some portions of the files are not actually used? </span><b>Dead code stripping</b><span style="font-weight: 400;"> is the answer. It removes from every object functions that are not useful to the library’s business. In our case, this </span><b>saves 312 kB</b><span style="font-weight: 400;">.</span></p>
+<p><span style="font-weight: 400;">There’s a twist to dead code stripping in the case of a dynamic library. In a static library, you only want to strip private symbols that are not useful to public functions. You cannot know </span><i><span style="font-weight: 400;">which</span></i><span style="font-weight: 400;"> of these functions will be used, because a static library is merely a collection of reusable pieces of compiled code. In a dynamic library, however, you know which public functions will be used: only the functions </span><i><span style="font-weight: 400;">exported</span></i><span style="font-weight: 400;"> by the library! An important step is therefore to ensure that you only export the minimum viable set of functions to serve your purpose. By tightly controlling the exports, we </span><b>save another 288 kB</b><span style="font-weight: 400;">.</span></p>
+<p><span style="font-weight: 400;">We can take dead code stripping one step further with </span><a href="https://en.wikipedia.org/wiki/Interprocedural_optimization"><span style="font-weight: 400;">Link-Time Optimization</span></a><span style="font-weight: 400;"> (LTO). By looking at the binary as a whole, LTO can optimize away dead code across object file boundaries, which a regular linkage cannot do. It results in a more compact binary: </span><b>57 kB saved</b><span style="font-weight: 400;">—at the cost of a significantly longer link phase during the build.</span></p>
+<h2><a id="trick-7-give-the-boot-to-bloat" class="anchor" href="#trick-7-give-the-boot-to-bloat" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Trick #7: Give the boot to bloat</span></h2>
+<p><span style="font-weight: 400;">We chose to ban the C++ standard I/O stream library from Algolia Offline, as it is still a major cause of bloat, especially on Android. We have compile- and link-time checks to make sure we don’t rely on it. The gain is far from negligible: </span><b>one single, seemingly innocuous <code>std::cout</code> in our code adds 144 kB to the binary size!</b></p>
+<p><span style="font-weight: 400;">It’s worth noting that we now use exceptions. We avoided them in the past because they require some limited form of Run-Time Type Information (RTTI), so compilers used to trigger full RTTI support when exceptions were enabled… and RTTI causes binary bloat. Modern compilers are better optimized, so we can enjoy exceptions without paying the price of full RTTI.</span></p>
+<h2><a id="clang-lagging-behind-on-android" class="anchor" href="#clang-lagging-behind-on-android" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Clang lagging behind on Android</span></h2>
+<p><span style="font-weight: 400;">I am a huge fan of Clang, </span><a href="http://llvm.org/"><span style="font-weight: 400;">LLVM</span></a><span style="font-weight: 400;">’s C/C++ compiler. LLVM is an awesome piece of software, one of the best surprises of the 2010 decade, when it started to get traction, in particular with Apple backing it.</span></p>
+<p><span style="font-weight: 400;">We’ve been compiling Algolia with Clang on Linux for months—it resulted in both a non-negligible performance increase (5%) and more compact binaries.</span></p>
+<p><span style="font-weight: 400;">Oddly enough, we are still stuck with GCC on Android! Although Clang is Android NDK’s default toolchain since r11 (latest version is r14), it still suffers from a number of drawbacks that are deterring us from relying on it at the moment. In particular, I had trouble making LTO work on our project with Clang—and without LTO, Clang cannot compete with GCC in terms of binary size.</span></p>
+<p><span style="font-weight: 400;">It is worth noting that we already use Clang’s Standard Template Library (STL), though.</span></p>
+<h2><a id="code-is-not-everything" class="anchor" href="#code-is-not-everything" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">Code is not everything</span></h2>
+<p><span style="font-weight: 400;">However smart they are, compilers can only act on your code. But when you dissect our library, you will see that code does not account for the entire size of the binary. A substantial part of it is occupied by data tables.</span></p>
+<p><span style="font-weight: 400;">Here, no compiler magic can save you; only proper software engineering can. (Remember that “Data Structures 101” course?)</span></p>
+<p><span style="font-weight: 400;">Our data falls into five broad categories: Unicode, HTML entities, stop words, plurals and CJK segmentation.</span></p>
+<p><span style="font-weight: 400;">Plurals and CJK segmentation are way too big to fit in a mobile library: </span><b>5 MB for segmentation and 48 MB for plurals.</b><span style="font-weight: 400;"> We had to discard those features altogether in Algolia Offline. (As you might have guessed, I did not include them in the initially advertised size of 3 MB…) With regard to the other three data tables, we found a way to make them more compact.</span></p>
+<p><span style="font-weight: 400;">The main idea behind the compaction of our data tables is to transform random access structures into a big blob with an auxiliary index. A random access data structure is typically an </span><i><span style="font-weight: 400;">array</span></i><span style="font-weight: 400;">: all elements have the same size; therefore, computing the address of a given element is trivial (a multiplication). But if elements have different intrinsic sizes, you are forced to make them as big as the biggest element, which results in a lot of wasted space.</span></p>
+<p><span style="font-weight: 400;">In a blob, by contrast, all elements are stored contiguously with no wasted space between them. This makes the structure more compact, but random access becomes impossible: computing the address of a given element is no longer easy. To solve that, we rely on an auxiliary structure (called an “index”, even if it has little to do with indices in Algolia’s engine) that contains the offset of each element in the BLOB. Because an offset is an integer and is typically much smaller than the actual element, this additional data structure doesn’t overcome the benefit of the blob.</span></p>
+<p><span style="font-weight: 400;">By applying this principle to our data, we saved:</span></p>
+<ul>
+<li style="font-weight: 400;"><span style="font-weight: 400;">96 kB on stop words</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">124 kB on HTML entities—the structure used in SaaS is extremely sparse for very fast lookup</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">476 kB on Unicode data</span></li>
+</ul>
+<p><span style="font-weight: 400;">Overall, the binary shrunk by 669 kB. Of course, we had to trade some CPU time for this: around 5% for Unicode and HTML entities—a lot more (around +50%) for stop words, but they are accessed only a few times per query, so their performance doesn’t really matter.</span></p>
+<h2><a id="a-streamlined-library" class="anchor" href="#a-streamlined-library" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span style="font-weight: 400;">A streamlined library</span></h2>
+<p><span style="font-weight: 400;">Combining all the above optimizations on both code and data brought the library back at around 1 MB per hardware architecture (with slight variations across architectures and platforms). While it might still sound big, it is actually an acceptable overhead in most use cases, especially these days where high-resolution images sometimes account for the major part of an application’s bundle.</span></p>
+<p><span style="font-weight: 400;">Here is a summary of our efforts:</span></p>
+<ul>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Initial size = 3,003 kB</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Optimize for space → -419 kB</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Don&#8217;t force inlining → -144 kB</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Dead code stripping → -312 kB</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Control exported symbols → -288 kB</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Link-Time Optimization → -57 kB</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Remove STL I/O streams → -144 kB</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Compact HTML entities data → -124 kB</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Compact stop words data → -96 kB</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Compact Unicode data → -476 kB</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Resulting size = 943 kB</span></li>
+</ul>
+<p><span style="font-weight: 400;">The above numbers are for the hardware architecture armeabi-v7a on Android but, despite small variations, they would be similar on iOS or for other hardware architectures.</span></p>
+<p><span style="font-weight: 400;">We hope that these tips &amp; tricks will be useful for reducing the size of your mobile libraries or applications. There are always trade-offs to be made between speed and space, but with sensible compiler and linker settings, and carefully crafted data structures, you can achieve dramatic space savings without sacrificing much of execution speed.</span></p>
+<p><span style="font-weight: 400;">In the end, Algolia Offline performs a typical search query under 50 ms on a mid-range device. That’s more than the cloud-hosted engine, of course; but thanks to the lack of any network transmission, the elapsed processing time is about the same. This makes instant search a reality on mobile—even offline.</span></p>
+<!--www.crestaproject.com Social Button in Content Start--><div id="crestashareiconincontent" class="cresta-share-icon first_style"><div class="sbutton  facebook-cresta-share" id="facebook-cresta-c"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fkeeping-mobile-apps-lightweight-shrank-algolia-offline-69%2F&amp;t=Keeping+mobile+apps+lightweight%3A+how+we+shrank+Algolia+Offline+by+69%25" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share" id="twitter-cresta-c"><a rel="nofollow" href="https://twitter.com/share?text=Keeping+mobile+apps+lightweight%3A+how+we+shrank+Algolia+Offline+by+69%25&amp;url=https%3A%2F%2Fblog.algolia.com%2Fkeeping-mobile-apps-lightweight-shrank-algolia-offline-69%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share" id="linkedin-cresta-c"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fkeeping-mobile-apps-lightweight-shrank-algolia-offline-69%2F&amp;title=Keeping+mobile+apps+lightweight%3A+how+we+shrank+Algolia+Offline+by+69%25&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div><div style="clear: both;"></div><!--www.crestaproject.com Social Button in Content End-->                </section> 
+                <!-- <footer class="article-footer">
+
+
+                </footer>-->
+                
+                
+<div id="disqus_thread">
+    </div>
+
+                                                  
+              </article> 
+							
+													</div>
+
+						<section id="subscribe-newsletter" class="cf">
+    <div id="mc4wp-form-1" class="form mc4wp-form">
+        <form action="https://go.pardot.com/l/139121/2016-06-09/f3kzm" method="post" role="form" lpformnum="1">
+            <p>
+                <input type="email" id="mc4wp_email" name="email" placeholder="Your email address" required="">
+            </p>
+            <p>
+                <input type="submit" value="Sign up">
+            </p>
+        </form>
+    </div>
+</section>
+
+					</main>
+
+					
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+
+				<div id="inner-footer" class="wrap cf">
+
+          <a class="footer-logo" href="https://www.algolia.com">
+            <img src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo-45a5b66b.svg" width="150" alt="algolia"/>
+          </a>
+
+          <p class="footer-tagline">We make instant and relevant search.<br>
+          Easy for developers, delightful for the users.
+          <p>
+
+          <ul class="social-links">
+            <li><a class="social-twitter" href="https://twitter.com/algolia"><i class="icon-twitter"></i></a></li>
+            <li><a class="social-googleplus" href="https://plus.google.com/+Algolia"><i class="icon-google-plus"></i></a></li>
+            <li><a class="social-facebook" href="https://www.facebook.com/algolia"><i class="icon-facebook2"></i></a></li>
+            <li><a class="social-linkedin" href="https://www.linkedin.com/company/algolia"><i class="icon-linkedin2"></i></a></li>
+            <li><a class="social-github" href="https://github.com/Algolia"><i class="icon-github2"></i></a></li>
+          </ul>
+
+					<p class="source-org copyright">&copy;Algolia - <a href="https://www.algolia.com/policies/privacy">Privacy Policy</a></p>
+
+				</div>
+
+			</footer>
+
+		</div>
+
+				<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            {{/featureImage}}
+            {{{ _highlightResult.title.value }}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="instant-content-template">
+    <div class="search-sorting">
+        <span class="label">Sort by</span>
+        <select id="index_to_use">
+            <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">Relevance</option>
+            {{#sorting_indices}}
+            <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+            {{/sorting_indices}}
+        </select>
+    </div>
+    <div class="cf spacer20"></div>
+    <div class="hits-wrapper">
+      {{#hits}}
+          {{^query}}
+              <div class="d-1of3 t-1of2" algolia-object-id="{{ objectID }}">
+                  <article class="grid-entry grid-entry--columns">
+                      <header class="article-header">
+                          <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                          <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+                      </header>
+                  </article>
+              </div>
+          {{/query}}
+
+          {{#query}}
+            <article class="grid-entry grid-entry--detailled" algolia-object-id="{{ objectID }}">
+                <div class="d-1of3 t-1of3">
+                    <a href="{{permalink}}"><img class="entry-illus" src="{{featureImage.sizes.medium.file}}"/></a>
+                </div>
+                <div class="d-2of3 t-2of3">
+                    <h1 class="h3 entry-title"><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+                    <span class="entry-author" data-tax="author" data-name="{{ author }}" >
+                        <img class="author-avatar" src="{{ avatar_url }}" onerror="this.onerror=null;this.style.border='1px solid rgb(0, 164, 255)';this.src='/wp-content/themes/algolia/library/images/avatar-algolia.png'"/>
+                        {{{ _highlightResult.author.value }}}
+                    </span>
+                    <span class="entry-date">{{#getDate}}{{date}}{{/getDate}}</span>
+                    <p class="entry-desc">...{{{ _snippetResult.content.value }}}...</p>
+
+                    <ul class="tags">
+                    {{#_highlightResult.post_tag}}
+                        <li class="match-{{matchLevel}}">{{{value}}}</li>
+                    {{/_highlightResult.post_tag}}
+                    </ul>
+                </div>
+                <div class="cf"></div>
+            </article>
+          {{/query}}
+
+      {{/hits}}
+    </div>
+    {{^hits.length}}
+    <div class="no-result">
+      <div>No posts nor authors matched your query <strong>{{ query }}</strong>.</div>
+      <div><a href="#" class="clear-button">clear search</a></div>
+    </div>
+    {{/hits.length}}
+</script>
+
+
+<script type="text/template" id="instant-facets-template">
+    {{#facets}}
+    {{#count}}
+    <div class="search-filters {{tax}}">
+        {{#facet_categorie_name}}
+            <span class="label">
+                {{ facet_categorie_name }}
+            </span>
+        {{/facet_categorie_name}}
+        <ul>
+            {{#sub_facets}}
+
+                {{#type.conjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet conjunctive related-tag {{#hidden}} hide {{/hidden}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}}
+                </li>
+                {{/type.conjunctive}}
+
+                {{#type.disjunctive}}
+                <li class="{{#checked}} checked {{/checked}} sub_facet disjunctive">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}} checked {{/checked}} data-name="{{name}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#count}}({{count}}){{/count}}
+                </li>
+                {{/type.disjunctive}}
+
+                {{#type.menu}}
+                <li data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet disjunctive menu {{#category}}category{{/category}}">
+                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    {{name}} {{#print_count}}{{#count}}<span class="facet-count">{{count}}</span>{{/count}}{{/print_count}}
+                </li>
+                {{/type.menu}}
+
+            {{/sub_facets}}
+        </ul>
+    </div>
+    {{/count}}
+    {{/facets}}
+</script>
+
+
+
+<script type="text/template" id="instant-pagination-template">
+    <div class="pagination-wrapper cf">
+        <ul class="pagination">
+            <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
+                    Previous
+                </a>
+            </li>
+
+            {{#pages}}
+            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
+                <a href="#" data-page="{{number}}">
+                    {{ number }}
+                </a>
+            </li>
+            {{/pages}}
+
+            <li {{^next_page}}class="disabled"{{/next_page}}>
+                <a href="#" data-page="{{next_page}}">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>
+<!--www.crestaproject.com Social Button Floating Start--><div id="crestashareicon" class="cresta-share-icon  first_style "><div class="sbutton  facebook-cresta-share float" id="facebook-cresta"><a rel="nofollow" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fblog.algolia.com%2Fkeeping-mobile-apps-lightweight-shrank-algolia-offline-69%2F&amp;t=Keeping+mobile+apps+lightweight%3A+how+we+shrank+Algolia+Offline+by+69%25" title="Share to Facebook" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-facebook"></i></a></div><div class="sbutton  twitter-cresta-share float noCount" id="twitter-cresta"><a rel="nofollow" href="https://twitter.com/share?text=Keeping+mobile+apps+lightweight%3A+how+we+shrank+Algolia+Offline+by+69%25&amp;url=https%3A%2F%2Fblog.algolia.com%2Fkeeping-mobile-apps-lightweight-shrank-algolia-offline-69%2F&amp;via=algolia" title="Share to Twitter" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-twitter"></i></a></div><div class="sbutton  linkedin-cresta-share float" id="linkedin-cresta"><a rel="nofollow" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.algolia.com%2Fkeeping-mobile-apps-lightweight-shrank-algolia-offline-69%2F&amp;title=Keeping+mobile+apps+lightweight%3A+how+we+shrank+Algolia+Offline+by+69%25&amp;source=https://blog.algolia.com/" title="Share to LinkedIn" onclick="window.open(this.href,'targetWindow','toolbars=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=640,height=320,left=200,top=200');return false;"><i class="cs c-icon-cresta-linkedin"></i></a></div><div style="clear: both;"></div></div>
+
+<!--www.crestaproject.com Social Button Floating End-->
+<link rel='stylesheet' id='hljstheme-css'  href='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/styles/monokai-sublime.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/cresta-social-share-counter/js/jquery.cresta-social-effect.js'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/comment-reply.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/themes/algolia/library/js/scripts.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-includes/js/wp-embed.min.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.common.pack.js'></script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/wp-code-highlightjs/highlight.custom.pack.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.5","language":""},"disqusIdentifier":"6207 https:\/\/blog.algolia.com\/?p=6207","disqusShortname":"algoliablog","disqusTitle":"Keeping mobile apps lightweight: how we shrank Algolia Offline by 69%","disqusUrl":"https:\/\/blog.algolia.com\/keeping-mobile-apps-lightweight-shrank-algolia-offline-69\/","options":{"manualSync":false},"postId":"6207"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/disqus.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"algoliablog"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://blog.algolia.com/wp-content/plugins/disqus-comment-system/media/js/count.js'></script>
+    <style>pre.hljs {padding: 5px;}
+pre.hljs code {}
+pre code.hljs { background: none; } </style>
+    <script type="text/javascript">
+    (function($, window) {
+        var init_fn_flag = false;
+        var init_fn = (function() {
+            if (init_fn_flag)
+                return;
+            init_fn_flag = true;
+             hljs.configure({"tabReplace":"    "});
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        $(document).ready(init_fn);
+        $(window).on("load", init_fn);
+    })(jQuery, window);
+    </script>
+<script type='text/javascript' src='https://stats.wp.com/e-201721.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'116008343',post:'6207',tz:'-7',srv:'blog.algolia.com'} ]);
+	_stq.push([ 'clickTrackerInit', '116008343', '6207' ]);
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->
