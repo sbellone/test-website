@@ -3,6 +3,7 @@
   <head>
     <title>Sylvain's Test Website</title>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@algolia/algoliasearch-netlify-frontend@0/dist/algoliasearchNetlify.css" />
     <style>
       * {
         box-sizing: border-box;
@@ -424,4 +425,13 @@
       >with algolia offline take your search bar everywhere</a
     >
   </body>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@algolia/algoliasearch-netlify-frontend@0/dist/algoliasearchNetlify.js"></script>
+  <script type="text/javascript">
+    algoliasearchNetlify({
+      appId: '6POV4M4SR3',
+      apiKey: '5ad1a8cb5cdc6e3dbf9d5e168d7100a9',
+      siteId: '26a080a9-32dd-4b90-a7a4-03458a0abe5f',
+      branch: 'master',
+    });
+  </script>
 </html>
